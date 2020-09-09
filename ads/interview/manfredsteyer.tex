@@ -1,0 +1,165 @@
+% !TeX root = ../../documentation.tex
+
+\section{Interview with Manfred Steyer}
+
+This paraphrase of the expert interview with Manfred Steyer.
+If any information of this is used in the thesis, its marked with \cite{Vogel.2020.Steyer}.
+\textbf{V} is the abbreviation for \textit{Nico Vogel} and \textbf{S} for \textit{Manfred Steyer}.
+
+\setspeaker{ManfredSteyer}[S]
+
+\begin{description}
+    \NicoVogel Have you worked with micro frontend application? Could you name general facts?
+
+    \ManfredSteyer Ich war ein early adopter und habe schon einige Kundenprojekte realisiert. Jedes Projekt sieht etwas anders aus. Ein Projekt war für eine große Bank und dort hatten wir entschieden, dass wir die Shell Application in Form von iFrames umsetzen. Auch wenn iFrames nicht so beliebte Elemente sind, war das für die Bank die beste Lösung auf Grund der Isolationsmöglichkeit. Wir haben es mit einem kleinen Framework abstrahiert, wodurch der Benutzer die iFrames nicht bemerkte. Isolation war notwendig, da die unterschiedlichen Micro Frontends von verschiedenen Zulieferern gebaut wurden. Außerdem fand das Projekt vor zwei Jahren statt, wo Web Components zumindest in Angular, damals noch in den Kinderschuhen waren. Zudem wird dieser Ansatz auch von dem SAP Luigi Framework verwendet.
+
+    \NicoVogel Wie viele Developer haben bei dem Projekt mitgewirkt?
+
+    \ManfredSteyer Also ich kenne ca. 10 Personen, die mitgearbeitet haben. Allerdings war die Rede von einem weiteren Team in Indien.
+
+    \NicoVogel Sie können gerne noch weitere Beispiele nennen.
+
+    \ManfredSteyer Ein anderes Projekt fand im Steuerwesen statt. Es ging um Lohnabwicklung. Ein riesiges Projekt mit ca. 60 Entwicklern, die an dem Produkt arbeiteten. Dort haben wir mit Hyperlinks gearbeitet. Wir haben die große Lösung in kleine Portionen geteilt. Die Parameter haben wir mit URL Parameter weitergeleitet, damit die nächste Domäne noch den Kontext kannte. Das waren meist eine Hand voll Kontextparameter.
+
+    \NicoVogel Vorteil ist, dass es sauber geschnitten ist, Nachteil ist, dass man nur ein Micro Frontend pro Page anzeigen kann.
+
+    \ManfredSteyer Ja genau. Wir versuchen das Teilen von Komponenten zu vermeiden, indem wir die Domänen gut voneinander isolieren, damit wir keine unnötige Kopplung kriegen. Wir hatten Nutzerbeschwerden, da der Domänenwechsel recht langsam ist. Seit wir mit statischem Prerendering arbeiten, also die erste Ansicht der Index HTML Datei hinzugefügt wird, sieht der Nutzer bereits etwas, obwohl die Seite im Hintergrund noch lädt. Der Nutzer merkt daher kaum noch, dass eine neue URL geladen wird.
+
+    \NicoVogel Habt ihr das Serverseitig eingeschoben? Oder ist das Teil der Buildzeit?
+
+    \ManfredSteyer Wir machen es zur Buildzeit, da wir uns Serverseitig nicht antun wollten. Technologie ist die gleiche, außer dass nur eine Seite vorgerendert wird, die in die Index Seite zurück geschrieben wird, damit es sofort angezeigt wird. Es war ein größeres Team mit ca. 60 Leuten. Derzeit arbeiten am Frontend 3-5 Leute.
+
+    \NicoVogel What are suitable scenarios for the micro frontends architecture in general?
+
+    \ManfredSteyer Im Bereich Versicherung hatten wir ein Projekt sogar mit Web Components. Ein anderer Bereich ist Healthcare, Krankenhausinformationssysteme. Das sind teilweise riesige Systeme, die zerfallen in verschiedene Domänen. Etwas was man gar nicht so denken würde sind Glücksspiele. Das findet eher im EU-Ausland statt, da es in DE und AT zu restriktive Gesetze gibt. Die Spiele werden von Online Casinos meistens zugekauft. Daher müssen die Spiele als weiteres Micro Frontend geladen werden.
+
+    \NicoVogel Sind das Enterprise Anwendungen oder geht es auch in den Consumer Bereich?
+
+    \ManfredSteyer Ich habe ein paar Applikationen auch im Consumer Bereich gesehen, aber wahrscheinlich sind diese Anwendungen mehr im Experten Bereich, da das auch mein Fokus ist.
+
+    \NicoVogel Im Consumer Bereich nutzen Amazon, DAZN und Spotify Micro Frontend, soweit ich weiß.
+
+    \ManfredSteyer Ich hatte letztens eine Anwendung für ein Informationssystem von Apotheken für Endkunden. Da gab es mehrere Anwendungen, die über Micro Frontends realisiert wurden.
+
+    \NicoVogel Sie beschäftigen sich überwiegend mit Enterprise Bereich. Nehmen Sie das auch so wahr, dass das das überwiegende Einsatzfeld ist?
+
+    \ManfredSteyer Ja. Es hat damals schon mit den Microservices begonnen, dann gab es im Backend den Schnitt und die Frage war daraufhin, wie man das aufs Frontend überträgt.
+
+    \NicoVogel What do you think about my requirement categories? Am I missing anything? Would you change the order of importance?
+
+    \ManfredSteyer Ich glaube die Reihenfolge unterscheidet sich je nach Projekt und ist abhängig von den Architekturzielen. Aber die Kategorien passen zu dem, was ich in meinen Beratungen in Kundenprojekten berücksichtige. Beim Routing müssten die konkreten Router der einzelnen Micro Frontends berücksichtigt werden. Zu Performance zählt noch das Thema Bundle Size. Wir arbeiten mit Single Page Applications und da möchte man vermeiden, dass man dasselbe Framework zweimal laden muss, wenn man zwei Micro Frontends hat die auf dem gleichen Framework aufsetzen. Dazu gibt es Lösungen. Teilweise sind es Hacks, teilweise muss man tiefer in den Build Prozess eingreifen. Und dann schafft man es, dass man Angular einmal lädt und der Framework Core wird von mehreren separat kompilierten Single Page Applications wiederverwendet.
+    Ich habe einen Ansatz auch in einem meiner Blog Posts bereits beschrieben. Dieser nutzt von Webpack den externals Ansatz in Kombination mit Angular. Ein weiterer Ansatz bildet Module Federation von Webpack 5. Das erlaubt ebenfalls das Herauslösen des Framework Cores, aber es wird weniger händischer Aufwand benötigt.
+
+    \NicoVogel Können Sie mir von Ihren Erfahrungen bezüglich Shared Core erzählen? Mich würde unter anderem der Aspekt der Kopplung interessieren.
+
+    \ManfredSteyer Generell ist es bei Shared Core weiterhin möglich, mehrere Frameworks in einer Anwendung bereitzustellen. Hierbei wird beispielsweise ein Angular und ein Vue Core bereitgestellt. Was durchaus ein Problem darstellt ist die Kopplung. Man möchte in einer Micro Frontend Anwendung zwei Ziele erreichen, allerdings kann lediglich eins erreicht werden. Auf einer Seite möchte ich eine lose Kopplung und auf der anderen Seite möchte ich kleine Bundlesizes haben. Beide Ziele widersprechen sich, aber das ist ein bekanntes Problem in der Softwarearchitektur. Ich empfehle hier immer, dass man anhand seiner Kriterien das passende Verhältnis zwischen Bundlesize und Isolation wählt
+
+    \NicoVogel Haben Sie eine Anwendung betreut, bei der die Bundlesize keine Rolle spielte?
+
+    \ManfredSteyer Besonders wenn es Enterprise Anwendungen sind, dann spielt Bundlesize eigentlich keine Rolle. Dabei kann die Anwendung auch um einen Faktor 10 größer sein, aber durch Caching wird das ausgeglichen. Hierzu habe ich neulich einen Ansatz für eine Progressive Web App gesehen, wobei Service Worker verwendet wurden um Micro Frontend ordentlich zu cachen.
+
+    \NicoVogel Also gibt es auch schon Ansätze für Progressive Web Apps?
+
+    \ManfredSteyer Selbst gebaute. Jedes Micro Frontend war eine PWA und diese wurden in eine Shell geladen.
+
+    \NicoVogel Ich nehme zur Kenntnis, dass die Requirement Kategorien für alle Projekte gleich sind, aber die Reihenfolge projektspezifisch ist. Ansonsten hatten Sie jetzt lediglich Bundlesize als Unterpunkt zu Performance genannt. Möchten Sie hier noch mehr ergänzen?
+
+    \ManfredSteyer Ja, ein weiterer Aspekt ist das doppelte Laden von Informationen. Im generellen ist es sinnvoller, dass jedes Micro Frontend sich seine Daten selbst holt, anstatt diese in der Applikation zu teilen. Wenn zu viel über die Shell gecached wird, koppelt das die Micro Frontends stark aneinander und auch mit der Shell. Generell sollte versucht werden caching auf der Shellebene zu vermeiden. Lediglich ein paar Kontextdaten wie zum Beispiel, "Wer ist der aktuelle Nutzer?", "Um welches Portal handelt es sich gerade?" oder "Um welchen Kunden geht es?".
+
+    \NicoVogel Nutzen Sie dann auch das Pattern Backend for Frontend?
+
+    \ManfredSteyer Wenn es irgendwie geht, dann würde ich sehr stark dieses Pattern empfehlen.
+
+    \NicoVogel What are requirements for the named shell application scenario which you had from a customer?
+
+
+    \ManfredSteyer Es geht immer um eine Art Meta-Routing, Isolation vs. Bundlesize und Kommunikation. Bei Kommunikation empfehle ich immer einen Message Bus Ansatz, weil es am wenigsten koppelt. Bei Styling gibt es auch einige Fragen, wie "Hat jedes Micro Frontend seine eigenen Styles oder werden global Styles geteilt?".
+
+
+    \NicoVogel Können Sie zu den genannten Punkten auch Ansätze nennen?
+
+
+    \ManfredSteyer Bei Performance gibt es Webpack externals, Module Federation oder auch SystemJS. SystemJS ist ein alter Ansatz, aber es unterstützt das dynamische nachladen von JavaScript. Beim Teilen von Zuständen, ist der einfachste Ansatz ein kleiner globaler Message Bus. Zum Beispiel ein Behavior Subject von RxJS oder dieses wird noch etwas erweitert. Darin können dann Kontextdaten zwischengespeichert werden oder man tauscht darüber Informationen aus. Falls jedes Micro Frontend ein Web Component ist, dann kann mit Events und Properties kommuniziert werden. Hierbei reicht die Shell Daten über Properties an Web Components weiter und erwartet bestimmte Events. Das kann sicherlich auch normiert werden. Beispielsweise hat jedes Micro Frontend ein State Property und ein Message Event. Eine weitere Möglichkeit der Kommunikation sind CustomEvents oder auch über URL Parameter. Letzteres hat den Vorteil, dass die Anwendung Deep Linking fähig ist. Etwas seltener, aber teilweise notwendig, ist Server-Sent-Events oder WebSockets. Im Falle von einer Hyperlink Integration bleibt einem aber nichts anderes übrig. Zuletzt gibt es noch einen Ansatz, der das Pattern Backend for Frontend voraussetzt. In dem Fall kann sich ein Micro Frontend mit seinem Backend austauschen und die Backends synchronisieren sich im Hintergrund über Message Queues.
+
+
+    \NicoVogel Können Sie bitte nochmal auf Routing eingehen? Sie haben Meta-Routing erwähnt und mich würde interessieren, welche Router Sie verwendet haben.
+
+
+    \ManfredSteyer Wir haben das immer selbst implementiert. Dafür haben wir uns Frameworks wie Single-SPA angeschaut.Wir haben es selbst implementiert, weil wir mit der Framework Lösung nicht zufrieden waren. Dabei betrachten wir eigentlich immer das erste URL Segment und auf Basis dieses Segments wird entschieden, welches Micro Frontend angezeigt wird.
+
+
+    \NicoVogel Könnten Sie erklären warum, weil Single-SPA von einigen Experten empfohlen wurde.
+
+
+    \ManfredSteyer SingleSPA löst das größte Problem, das ich damals hatte, nicht.was das dynamische Laden von Micro Frontends darstellt. Das muss man manuell machen mit SystemJS, Script-Tags oder – jetzt wo es zumindest als BETA bereitsteht – mittels Module Federation. Außerdem war damals die Angular-Integration unschön geschrieben und hat Angular immer im Debug-Modus gestartet. Das ist heute nicht mehr der Fall.
+    Zumindest die Beispiele gehen davon aus, dass das Micro Frontend selber Handler für die drei oder vier Lifecycle-Events von Single-SPA bereitstellt. Ich hätte aber gerne, dass es für das Micro Frontend egal ist, ob es im Standalone-Mode oder in eine Shell geladen wird. All dies kann man auch selber mit gefühlt weniger als 100 Zeilen Code selbst lösen.
+
+
+    \NicoVogel Ich würde gerne bei der vorherigen Frage fortfahren. Hierbei würde mich interessieren, wie Sie Micro Frontends ausblenden.
+
+
+    \ManfredSteyer Wir haben es nur ausgebländet, damit wir die Zustände halten konnten. Andernfalls müsste man Lifecycle Management betreiben. Das ist technisch gesehen kein Problem, aber der Zustand war uns wichtig.
+
+    \NicoVogel Mich würde auch interessieren, was für Erfahrungen Sie zum Thema Performance haben. Was ist hierbei die größte Anzahl an Micro Frontends, die Sie gleichzeitig auf einer Seite hatten? Und gab es hierbei Performance Probleme?
+
+    \ManfredSteyer Also generell hatte ich noch keine Performance Probleme. Gerade bei dem Ansatz mit den iFrames, haben wir Performance Tests durchgeführt. Hierbei haben wir 200 künstliche Micro Frontends auf einmal geladen und dabei hatten wir keine Probleme.
+
+    \NicoVogel Hatten Sie schonmal mit einem Projekt zu tun, in dem ein Monolith stückweise gegen eine Micro Frontend Anwendung ersetzt wurde?
+
+    \ManfredSteyer Ich glaube nicht. Tatsächlich sind fast alle Projekte, bei denen ich mitgewirkt habe, auf der grünen Wiese entstanden.
+
+    \NicoVogel Als nächstes interessiert mich Styling. Hierbei kenne ich die beiden Ansätze Design Guild und Design System. Können Sie hierzu Ihre Erfahrungen einbringen?
+
+    \ManfredSteyer Beide Ansätze habe ich schon gesehen. Unabhängig von Micro Frontends habe ich das Gefühl, dass ein Design System immer beliebter wird. Ein dritter Ansatz wäre Innersourcing. Es gibt ein paar Experten, die Styles vorbereiten und das wird dann zu einem Inhouse Open-Source Projekt. Also entweder wird das Projekt so verwendet wie es ist oder es wird ein Fork erstellt um es anzupassen. Hierbei war meist eine Person hauptverantwortlich für das Projekt.
+
+    \NicoVogel Zuletzt würden mich noch Ihre Ansätze zu Developer Experience interessieren.
+
+    \ManfredSteyer Ein Micro Frontend sollte auch im Standalone Modus funktionieren können. Das heißt es soll separat entwickelt, debugged und getestet werden. Was ich auch noch gesehen habe, ist das die einzelnen Teams nichts mit der Shell zu tun haben, sondern ihren Code irgendwo hin deployed haben und ein kleines separates Shell Team hat sich um die Integration gekümmert. Außerdem wird dem Micro Frontend eine Library bereitgestellt, die sich um die Interkommunikation kümmert. Beim Thema Testen werden teilweise Integrationstests erstellt, die über die gesamte Anwendung gehen.
+
+    \NicoVogel Möchten Sie noch etwas ergänzen bevor wir zur Nächsten Frage übergehen?
+
+    \ManfredSteyer Eine Frage die immer wieder aufkommt ist, ob ein globaler Redux Store verwendet werden soll. Ich rate hiervon ab, weil es eine zu starke Kopplung erzeugt.
+
+
+    \NicoVogel Can you name any requirements which are needed for all shell application scenarios?
+
+    \ManfredSteyer Also die abstrakten Anforderungen sind immer gleich, aber die Implementierungen sind immer unterschiedlich. Z.B. bei Security gibt es zwei Ansätze. Entweder ich teile einen Token über einen Message Bus oder es kommt alles von der gleichen Origin und daher kann es über einen Session Cookie geteilt werden.
+
+
+    \NicoVogel Gibt es keine Bedenken dabei, ein Token einfach über einen Message Bus zu senden?
+
+
+    \ManfredSteyer Also es gibt generell immer ein Risiko mit Tokens im Browser. Das ist tatsächlich ein großes Problem mit den Tokens. Daher schlagen die aktuellen Best Practices vor, dass man HTTP only Cookies verwendet, wenn es möglich ist. Sprich es muss alles über eine Origin laufen.
+
+
+    \NicoVogel Da Sie meinten, dass es nie gleiche Ansätze gibt, würde mich interessieren, was besonders wichtig ist.
+
+
+    \ManfredSteyer Im Wesentlichen sind es die fünf Anforderungen.
+
+
+    \NicoVogel Dann würde mich noch interessieren, ob Sie in einem Projekt schon einmal mit Internationalisierung zu tun hatten.
+
+
+    \ManfredSteyer Was bis jetzt noch keine Anforderung war, ist ein Strategieaustausch. Also die Anwendung verändert sich je nach Land oder Kunde. Ich betreue Kunden, die eine solche Anforderung haben, aber keiner verwendet einen Micro Frontend Ansatz. Eine Art von Anwendung, auf die so eine Anforderung zutrifft, ist eine White Label Anwendung.
+    Andererseits ist Internationalisierung eine Standardanforderung, welche immer pro Micro Frontend gelöst wird. Es wird lediglich über den Message Bus mitgeteilt, welche Sprache verwendet werden soll.
+
+
+    \NicoVogel Haben Sie auch Funktionalitäten in der Shell oder versuchen Sie diese immer möglichst klein zu halten?
+
+
+    \ManfredSteyer Generell soll die Shell so klein sein wie möglich. Falls die Bundlesize ein Problem darstellt, werden geteilte Dependencies einmal in die Shell geladen, die dann wiederverwendet werden. Eine Ausnahme hierzu sind UI Bestandteile, die überall in der Anwendung identisch sind wie beispielsweise die Navigation. Eine weitere Funktion, die ich in der Shell sehe, könnte folgendes sein: in einem Message Bus werden unter anderem auch Kontextdaten ausgetauscht. Die Shell müsste diese extrahieren, damit sie diese an neue Micro Frontends weitergeben kann.
+
+
+    \NicoVogel What are the most difficult requirements to achieve and why?
+
+    \ManfredSteyer Tatsächlich das Meta-Routing. Der Hauptgrund ist, dass man hierbei mit der Browser API interagiert und es noch keinen guten Ansatz gibt. Hierbei gibt es begrenzte Möglichkeiten. Die erste Möglichkeit nutzt eine Browserfunktionalität, welche ein Event ausgelöst, wenn sich der Wert hinter der Raute ändert. Manche Kunden wollen aber die Raute nicht in der URL. Um das zu umgehen, haben wir stattdessen ein eigenes Navigationsevent erstellt, welches zum Synchronisieren der Router verwendet wird. Eine andere Lösung wäre die Browser API zu Monkey Patchen, aber anders bekommt man kein Event, wenn sich die URL ändert.
+
+
+    \NicoVogel Do you think that there is a need for a generalized shell application?
+
+    \ManfredSteyer Ja, ein generalistisches Framework wäre gut. Hierzu gibt es auch schon ein paar Ansätze. Ich glaube Single-SPA hat ein paar Ansätze, ansonsten auch Luigi von SAP. Ich bin mir sicher, dass wir so etwas brauchen werden.
+
+
+
+\end{description}

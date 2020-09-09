@@ -1,0 +1,156 @@
+% !TeX root = ../../documentation.tex
+
+\section{Interview with Ivan Jovanovic}
+
+This paraphrase of the expert interview with Ivan Jovanovic.
+If any information of this is used in the thesis, its marked with \cite{Vogel.2020.Jovanovic}.
+\textbf{V} is the abbreviation for \textit{Nico Vogel} and \textbf{J} for \textit{Ivan Jovanovic}.
+
+\setspeaker{IvanJovanovic}[J]
+
+\begin{description}
+    \NicoVogel Have you worked with a micro frontend shell application?
+
+    \IvanJovanovic I worked with micro frontends architecture since 3 years ago. When I started, I did not know that its called micro frontends. Later while research, I found out that others have the same problems and use similar approaches to solving them.
+
+    \NicoVogel Can you name a few facts about the project, like which frameworks were used, team size, and general structure.
+
+    \IvanJovanovic I worked for a healthcare company from the US. It is a big company with more than 1000 developers. The company creates an employee app that helps them to have a healthier life. The application has different parts, which are a mobile version, client admin version, and a big web UI version. The web version provides features like proposing exercises, tracking exercises, tracking what they are eating, communicating with trainers, and more. The application is implemented with the Rails framework, and it takes like an hour to build it with testing and integration. Behind the application are multiple microservices.
+    When I joined the company, my task was to extend the application with JavaScript, because they want to use Angular and React to improve the user experience. The initial idea was to add some JavaScript to the Rails application, which then bootstraps a JavaScript application on top of the Rails app. The JavaScript application would then handle the backend communication. This approach allowed us to upgrade the application without fully rewriting everything from scratch.
+    The Rails application was developed by around 200 people. Dividing them into new teams that are responsible for micro frontends, which use the explained procedure, allowed us to drastically reduce the development time. Because it was no longer one repository, but rather one for each micro frontend, another factor which we saved time was in deployment and also fixing bugs.
+    We started with this idea, and the initial version used a little jQuery to bootstrap the JavaScript application. jQuery was used because the Rails app used a lot of it. The approach allowed us to be technology agnostic. Some teams used Angular, and others React.
+
+    \NicoVogel Can you shortly explain how Rails works on the web? I did not use it yet. Is it server-side rendering?
+
+    \IvanJovanovic It uses a server-side rendering approach and its from the old days when you used Rails or PHP. Nowadays, people use Rails for the backend and use React for the frontend. The Rails app is old, but it makes a lot of money, and the business is counting on this app. Therefore, a rebuild from scratch for 2 years was not possible.
+    The biggest challenge was to split the teams and distribute the responsibilities. They also were allowed to pick a framework they want because, in the end, it is just a bunch of JavaScript code. CSS and JavaScript are then loaded from some server, injected into the client-side, a node is selected for mounting the application, and that worked. We were able to create lots of new UI within 6 months, like real-time chat application and tracking UIs. The Rails application was stable and fast enough to load within milliseconds. There was enough time left to start the bootstrap, load the JavaScript application, and mount it. Therefore, we hand pages that loaded in less than a second, and they delivered a nice UI.
+
+    \NicoVogel To clarify the approach a little. The old application was running as usual. You wrapped it in a shell application, and sometimes a JavaScript application is loaded instead.
+
+    \IvanJovanovic We were partially deprecating old pages from the Rails application and replaced it with a slim HTML which contains the bootstrap JavaScript code.
+
+    \NicoVogel What are suitable scenarios for micro frontend architecture in general?
+
+    \IvanJovanovic I would not select scenarios because you can use micro frontends in all kinds of scenarios. It is more from the team size perspective. For example, if there are like two teams, then it does not make sense to use micro frontends. On the other hand, for big companies, it helps with organizing teams. Therefore, it more about the organization creating horizontal teams that are responsible for one feature end to end. These teams should then be isolated so that they can work fast. In the end, when you connect all these team's code, the result will be the application.
+
+    \NicoVogel Could you name more facts when it makes sense to use micro frontend architecture.
+
+    \IvanJovanovic Another aspect would be a big application. When using micro frontends, you can distribute each sub-application into its own repository, instead of using one giant repository. Besides, in one of my micro frontend talks, I mentioned that it reduces deploy times. This is a known practice in the backend, where it is split up into microservices, and each service lives in its own container. They are then orchestrated via Docker or Kubernetes. The counterpart for the frontend is micro frontends.
+    This also has some benefits. For example, because the code base is split up, there are smaller chunks that are easier to test or even replace. Imagine that something bracks the healthcare app, and you need to jump into the code. Then change one part and hope it does not break anything else.
+    In the case of micro frontends, you can simply clone it, run it locally, and they are probably only a couple of APIs. Therefore, its easier to narrow it down and fix it. And because the micro frontend works in isolation, you know that it does not break the application. Using micro frontends, you will save time and have an easier life as a developer when fixing bugs or updating the version.
+
+    \NicoVogel What do you think about my requirements categories? Am I missing anything? Would you change the order of importance?
+
+    \IvanJovanovic I would put performance on top because that is the biggest issue that people I know have. It is ok if you, for example, split the application per page and have one micro frontend per page. But if you have multiple micro frontends on the same page, this can lead to performance issues. In one application I worked on, we sometimes had one React and two Angular apps on the same page. That is a lot of JavaScript code and a lot of dependencies. Some older browsers or smartphones had issues with these pages. Currently, there is no general answer to performance, but a good one is having only one micro frontend per page.
+    I think browser routing and integration approach is number two. For browser routing, there are already a lot of solutions, and for the integration, you can use whatever works for you. If you build a micro frontend application from scratch, then you can use Single-SPA, for example. Or you create something similar to what we build for the healthcare app. Or you can use server-side rendering, which is also used by the German supermarket Rewe.
+    In general, for integration, you need to do good research and then find what works for you.
+    The next thing is shared state, and I agree that it is number 3. I used a mix of approaches here. For example, for authentication, I used the local storage, or for exchanging information between services, I used Redux. Redux was basically used as a frontend database. If a new app is rendered, it will connect the global Redux Store and read the information it needs to display its content accordingly. Every micro frontends was allowed to write into the Redux store. This made it really easy to implement something like internationalization. Another advantage is that it also stores needed information which is available when fetching an API. We utilized this idea for the user. So, all the user data which is needed by most micro frontends is stored inside the Redux store, and therefore, we need to fetch the data only once. Another suitable information would be settings.
+
+    \NicoVogel Did you create a library to interact with the Redux store? Because multiple sources interact with it, you need to know the data structure or the entries relevant to other micro frontends.
+
+    \IvanJovanovic It was mainly handled from the documentation perspective, and we did not create a library. Therefore, each micro frontends had to implement the logic. So, they need to follow the instructions from the documentation and expect that the information is available in the Redux store. A module or library would be a good idea here, but we did not have it. We also utilized the option of overriding information within the Redux Store. For example, the user's last name had changed, and we were able to only change that while preserving the structure. That worked really well.
+    I know that others use only the backend for communication. So, every micro frontend has its own microservice in the backend, and the micro frontend only communicates with its backend microservice. If you want to get the user information, this is handled by its microservice. The microservices get the information from the database. This approach sounded complicated for our use case, and therefore we used a global Redux store. Angular and Redux also have a nice integration with Redux.
+
+    \NicoVogel What about testing this communication? From what I read, there is currently no good testing approach for the frontend, and therefore, some use the Backend for Frontend approach. Because in the backend, they can use Pact.io to write contract-driven tests.
+
+    \IvanJovanovic In the projects, I worked for, we did not really invest in testing the communication in the frontend. We only used tools like Cucumber to test UI behavior. So, we used those tests to ensure that the integration between services work. Finally, each micro frontend also had its own unit tests. That works fine, and it is still used in the projects.
+
+    \NicoVogel To conclude question 3, could you give your opinion on style handling and developer experience?
+
+    \IvanJovanovic Style handling can be a problem and, therefore, number 4 fits. The developer experience is 5. For style handling, it is always good to have one library for components and CSS. We did not start using this approach, and this resulted in three different styles for the same button. Therefore, we created a CSS and components library which can be imported as needed. But there is one aspect that needs to be followed when changing the component library version. Before changing it, every team must be informed about the upcoming update, and they need to implement that.
+
+    \NicoVogel Was the component library based on Web Components?
+
+    \IvanJovanovic No, it did not use Web Components. Because like 90% of the micro frontends were in React, we started to create React components, and they could be imported. The problem was with Angular because they could not be used there. I think it was a bad desition to allow multiple frameworks.
+
+    \NicoVogel Did you have Angular and React running in parallel sometimes?
+
+    \IvanJovanovic Yes, we did. It was ok, but from a synchronization perspective, it was a problem. At some point, we decided to use a component library, and React components do not work in Angular. You either continue to maintain a giant CSS library which styles everything, or you create two component libraries, but this makes a mess.
+
+    \NicoVogel But you could have solved this issue with a Web Component library.
+
+    \IvanJovanovic Because we started the project 3 or 4 years ago, back then, Web Components were not really supported.
+    The fifth thing is developer experience. The aspects of tools, debugging, and testing are probably a task for bigger research to find what's there. In general, you can start using existing ecosystems from one frontend framework. For example, if you create your micro frontends with React, then you can test with Jest. But when it comes to testing the integration of the full application, we did those UI tests with Cucumber. Other possibilities are Cypress and TestCafe. In these test suits, you do not write JavaScript, but rather describe scenarios, like "as a user, I see a button there with id/class/attribute of some value and when I click on that I see something else.". It is like writing plain English.
+    In the case of debugging, it was also easy because we had Redux. For example, when a tester has an issue, he can export the Redux store, and the developer can import it. This allows the developer to see what happened, action by action, and so it is easy to find the bug. When you identified the micro frontend that produced the bug, you can isolate it and continue reasoning about it.
+    Starting with Redux was a good thing, because of this feature of exporting the store and debug it one by one. Besides that, we did not use anything specific.
+
+    \NicoVogel I want to come back to a thing you mentioned earlier. You said, that performance is your number one priority. Mainly due to having performance issues on old mobile phones and browsers.
+
+    \IvanJovanovic I also had issues with newer browsers or machines have problems with big chunks of JavaScript.
+
+    \NicoVogel That is interesting because you are the first person to mention performance being a big problem. Another expert mentioned that they ran 15 Angular applications at the same time, and they had no problem. But I think it is important to clarify one thing. The healthcare app you mentioned is for normal consumers, is it? It is not a specific enterprise application.
+
+    \IvanJovanovic It is soled as a big enterprise app, but it is for employees. There was also a simple admin panel for one department, but it was really simple.
+
+    \NicoVogel Therefore, it was used by the employees, and they could use any device they wanted. That is probably the issue because not everyone has the newest phone or browser.
+
+    \IvanJovanovic Yes, we had a lot of complaints from some users that do not receive messages in real-time or even the browser crashes. Debugging and chacing that is hard. So solved that by changing the organization of the pages and moving to one micro frontend per page. Afterward, it was fine.
+
+    \NicoVogel Did you also consider using Web Workers.
+
+    \IvanJovanovic Personally did not, but there were some discussions for that. It involved knowledge sessions for teams and changing the methodology of creating micro frontends. It might fix things. If you have an old or slow machine, then Web Workers are using all the cors, and the performance of that machine could still not be enough.
+    I am not sure what the actual reason against Web Workers was. Bt if you have a slow machine, it will still be slow no matter what you use.
+
+    \NicoVogel While researching, I came across this idea of using an action-based frontend, where most of the work is executed in Web Workers instead of the main thread. In your case, Redux could be used to handle the actions. The general idea is, some work needs to be done, so the action is published, and it will be handled by a Web Worker. As soon as it is done, another action is fired, which contains the result. Important to point out is the fact that a decoupled messaging system is needed anyway between the micro frontends. With a slide extension, this could be included.
+    I did not further invest in this idea because no other experts mentioned any performance problems. So, I believed that it is not needed, and now you mention performance issues.
+
+    \IvanJovanovic I worked on the healthcare application 4 years ago for two years, and back then, it was a problem. Maybe nowadays it is better, but I don't know. One reason it could be that other experts did not experience this is that the Chrome browser is totally different than 3 years ago. It became much faster. But if you put 15 micro frontends into one page, there will be performance problems at some point.
+
+    \NicoVogel To be fair, most of the other experts I interviewed worked on enterprise applications. The users are, therefore, employees, and they use company hardware.
+
+    \IvanJovanovic So, the solution seems to be requesting strong hardware as a requirement.
+
+    \NicoVogel What are the requirements for the named shell applications for a customer? Please name also approaches you took.
+
+    \IvanJovanovic The stakeholder did not provide us with requirements, so we defined them ourself. The only requirements they gave us were that it should be new and fancy, new features should not be too expensive, and the application should not be rebuild.
+    We needed a good performance because a couple of real-time micro frontends were used. Therefore, it had to be fast, stable, and usable from multiple machines. Another requirement we set for ourselves was to have everything properly planned for the new features. To achieve that, we needed to collaborate with the product owners in order to fit there features into one micro frontend.
+    Those were the main requirements.
+
+
+    \NicoVogel Can you name requirements which are needed for all shell applications? If possible, name the approach which you would prefer.
+
+    \IvanJovanovic Performance and shared state need to be discussed in any application. Because I believe that it does not make sense to have a micro frontend that does not communicate with other parts in the application, also I already named reasons why performance is important and what issues can be.
+
+
+    \NicoVogel But can the shell application help improve performance?
+
+
+    \IvanJovanovic I don't know. But another requirement, even if not connected with code, is the organization of teams. It is a big requirement and a big problem at the same time. Suppose this is not done right, its a distributed monolith. Starting from the top of the company, you need to create new teams, a new organization, new responsibilities, and then spin up the app and distribute the responsibilities to specific teams. You should be successful with that approach. If not followed properly, it can happen that a feature is forgotten over time. At some point in the future, there needs to be a change in that feature, and the response team has forgotten how it works. This is especially an issue in the JavaScript world, where everything is changing within a day.
+    Therefore, smaller teams should be responsible for a couple of apps or for one bigger app. They also need to make sure that the app works in the future. This includes dependencies, functionality, and speed.
+
+
+    \NicoVogel You pointed out that JavaScript is advancing quickly and also that it was a bad decision to allow multiple frameworks on the same page. Could you outline what you think about technology-agnostic approaches for micro frontends?
+
+
+    \IvanJovanovic Teams can be isolated, but as soon as we worked on styling, we noticed that it is not possible. It is possible, we had a solution, but it is easier if you only use one technology stack. Furthermore, it is important to define standards across teams. For example, the same tooling, same ESLint configuration, and same code style, because you will definitely have someone jumping from one team to another. In general, moving members is common, and if they need to spend months learning a new stack, you gain nothing. You archive more if you define one ecosystem and focus on it. In general, it is just another complexity layer that is added when allowing technology agnostics.
+    But sharing dependencies between micro frontends can be agnostic if needed.
+    We allowed the teams to choose a technology they wanted in the healthcare application. But I believe for the developer experience and developing speed. It is better to select one framework that is probably better.
+    Another thing that relieves the browser is using a shared core approach. I believe this was one reason why we had performance issues because we did not share the core. In the end, using multiple cores takes a lot of CPU time to compile and execute. It is not complex for the CPU, but it is a lot of work that needs to be done in a couple of seconds.
+
+
+    \NicoVogel What do you think are the most difficult requirements, and why?
+
+
+    \IvanJovanovic Team organization, feature organization, and everything that is needed prior to writing code. Also, the code organization likes what tools do we use, what's shared, and what not, what freedom does the development team have, and so on. This could be combined into one requirement, which would be team organization. It is the hardest thing, and if you do it properly, you will not have any problems ever. On the other hand, if you don't get it right, then it will be a mess, and it will hit you back in a couple of months.
+
+
+    \NicoVogel Can you name difficult requirements for the shell as well?
+
+
+    \IvanJovanovic I believe it is browser routing and integration. This includes properly setting everything up so that the micro frontends are loaded when they are needed. Another thing is to clean up a micro frontend when you no longer need it. Therefore, doing life cycle management. After that, I would not touch the shall anymore.
+    In the approach we took, we need to set up everything manually, but if you use Single-SPA or any other micro frontends framework, it will provide you these features, and only configuration is needed.
+
+
+    \NicoVogel Another thing you mentioned, which is a task of the shell, is setting up the Redux store and exposing it. This would be part of shared state.
+
+
+    \IvanJovanovic That is a good one, and that's exactly what happened. All micro frontends were exposed as functions. Therefore, the shell needed to pass the node ID where the micro frontend should be mounted, as well as other information needed, to the function.
+
+
+    \NicoVogel Do you think that there is a need for a generalized shell application?
+
+
+    \IvanJovanovic I think there is a need. But another thing which is requested a lot is an example of how to use micro frontends. A best practice example is probably not possible yet, because it is new, but a working example would be good. If this example can then be used by others as well, it would be perfect. A lot of companies start from scratch, and they need to start somewhere. Therefore, having an example application or something general which they can use without thinking about it.
+
+
+\end{description}

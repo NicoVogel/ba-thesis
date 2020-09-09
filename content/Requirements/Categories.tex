@@ -1,0 +1,157 @@
+%!TEX root = ../../documentation.tex
+
+\section{Requirement categories}\label{cha:requirement_categories}
+
+During the requirements research it became apparent that requirements can be divided into categories.
+Grouping requirements by categories further structures the analysis.
+This also allows to order them based on there importance.
+Thus, the following list shows an interpretation of requirement categories and their importance in descending order.
+Each category is abbreviated, except \textit{Performance}, as seen in the following list.
+They are also used in the Table \ref{tbl:overview_requirements}.
+
+\pagebreak
+
+\begin{enumerate}
+    \item Browser routing and integration approach \textit{(Integration)}
+    \item Performance
+    \item Shared state and micro frontend inter-communication techniques \textit{(State)}
+          \begin{itemize}
+              \item Internationalization
+              \item Authentication
+          \end{itemize}
+    \item Styling handling \textit{(Style)}
+    \item Developer experience \textit{(Developer)}
+          \begin{itemize}
+              \item Tools
+              \item Debugging
+              \item Testing
+          \end{itemize}
+\end{enumerate}
+
+To challenge the interpretation, each expert was asked to validate it.
+This was the third question of the expert interviews (see Appendix \ref{cha:appendix_expertinterview_questions}).
+All experts agreed with the selected categories, but the order of importance was slightly different.
+An overview of all opinions about the importance is shown in Table \ref{tbl:overview_requirements_categories}.
+The number on the left indicates the score.
+
+\begin{table}[h]
+    \setlength{\tabcolsep}{4.265pt} % Default value: 6pt
+    \begin{tabularx}{\linewidth}{|l|l|l|l|l|l|l|}
+        \hline
+        \textbf{S}                              &
+        \textbf{LM} \cite{Vogel.2020.Mezzalira} &
+        \textbf{PR} \cite{Vogel.2020.Rehm}      &
+        \textbf{PH} \cite{Vogel.2020.Huber}     &
+        \textbf{MS} \cite{Vogel.2020.Steyer}    &
+        \textbf{BO} \cite{Vogel.2020.Olleck}    &
+        \textbf{IJ} \cite{Vogel.2020.Jovanovic}
+        \\ \hline
+        1
+                                                &
+        Integration
+                                                &
+        Integration
+                                                &
+        Integration
+                                                &
+        Integration
+                                                &
+        Integration
+                                                &
+        Performance
+        \\ \hline
+        2
+                                                &
+        State
+                                                &
+        Performance
+                                                &
+        State
+                                                &
+        Performance
+                                                &
+        State
+                                                &
+        Integration
+        \\ \hline
+        3
+                                                &
+        Developer
+                                                &
+        State
+                                                &
+        Performance
+                                                &
+        State
+                                                &
+        Performance
+                                                &
+        State
+        \\ \hline
+        4
+                                                &
+        Performance
+                                                &
+        Style
+                                                &
+        Style
+                                                &
+        Style
+                                                &
+        Style
+                                                &
+        Style
+        \\ \hline
+        5
+                                                &
+        Style
+                                                &
+        Developer
+                                                &
+        Developer
+                                                &
+        Developer
+                                                &
+        Developer
+                                                &
+        Developer
+        \\ \hline
+    \end{tabularx}
+    \caption{Overview of the different opinions about requirement categories}
+    \label{tbl:overview_requirements_categories}
+\end{table}
+
+% score calculation explanation
+In order to determine the order of importance based on the expert's opinion, a score is calculated.
+Each position is weighted with a number equal to the order, which is the first column \textit{S}.
+The most important is equal to 1, the second is equal to 2 and so on.
+The final score of each category is determined by averaging all scores.
+The results are shown in Table \ref{tbl:category_scores}.
+In conclusion, \textit{Integration} is the most important category.
+Following that is the \textit{Performance} and \textit{State} on second, followed by \textit{Style} and lastly \textit{Developer}.
+The result is close to the initially predicted order of importance.
+
+\begin{table}[h]
+    \newcolumntype{s}[1]{>{\hsize=#1\hsize}X}
+    \begin{tabularx}{\linewidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Integration} &
+        \textbf{Performance} &
+        \textbf{State}       &
+        \textbf{Style}       &
+        \textbf{Developer}
+        \\ \hline
+        $ \approx 1,2$
+                             &
+        $ \approx 2,5$
+                             &
+        $ \approx 2,5$
+                             &
+        $ \approx 4,2$
+                             &
+        $ \approx 4,7$
+        \\ \hline
+    \end{tabularx}
+    \caption{Requirement categories scores based on expert opinions}
+    \label{tbl:category_scores}
+\end{table}

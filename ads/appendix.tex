@@ -1,0 +1,180 @@
+% !TeX root = ../documentation.tex
+
+\addchap{\langanhang}
+
+\chapter{Expert interview procedure}\label{cha:appendix_expertinterview}
+
+This was used as guideline for the expert interviews.
+There is also a \ac{GDPR} clause, but it is not included.
+
+\section{General procedure of interviews}
+
+First, I will introduce myself, my bachelor thesis and explain the interview procedure. After that, I would start the recording, read the \ac{GDPR} clause loudly and ask you if it is ok for you. Then you should shortly introduce yourself and outline your work experience. Next, I start asking you the interview questions.
+
+\textbf{More information about the questions}
+
+Nearly all questions ask about requirements. This term includes requirements from the party’s customer, consumer (end user) and developer. There are also scenarios mentioned. The general intention is to cluster requirements around scenarios so that readers can better grasp when a requirement is needed. This also allows finding the most needed requirements.
+
+\textbf{Requirements categories of interest}
+
+There are all sorts of requirements for a micro frontend application. So, to ensure that the same categories are interviewed and to shift the focus to the important requirements, the following list was created. The list shows the importance descending, as well as examples for shared state and developer experience.
+
+\begin{enumerate}
+    \item Browser routing and integration approach
+    \item Performance
+    \item Shared state and micro frontend inter-communication techniques
+          \begin{itemize}
+              \item Internationalization
+              \item Authentication
+              \item Etc.
+          \end{itemize}
+    \item Styling handling
+    \item Developer experience
+          \begin{itemize}
+              \item Tools
+              \item Debugging
+              \item Testing
+          \end{itemize}
+\end{enumerate}
+
+\section{Interview Questions}\label{cha:appendix_expertinterview_questions}
+
+\begin{enumerate}
+    \item Have you worked with a micro frontend shell application?
+          \begin{itemize}
+              \item Yes: Could you name general facts? (used frameworks, team size, general structure)
+              \item No: why not?
+          \end{itemize}
+    \item What are suitable scenarios for the micro frontend architecture in general?
+    \item What do you think about my requirement categories? Am I missing anything? Would you change the order of importance?
+    \item What are requirements for the named shell application scenario which you had from a customer?
+          \begin{itemize}
+              \item If possible, also add which approach was used and or considered
+              \item If you are not allowed to share this information, answer the question with what you think are the needed requirements.
+          \end{itemize}
+    \item Can you name any requirements which are needed for all shell application scenarios?
+          \begin{itemize}
+              \item If possible, also add which approach was used.
+          \end{itemize}
+    \item What are the most difficult requirements to achieve and why?
+    \item Do you think that there is a need for a generalized shell application?
+\end{enumerate}
+
+\chapter{Requirement evaluation}\label{cha:appendix_requirements_overview}
+
+The Table \ref{tbl:adx_requirements_scores} contains all requirements and there score.
+The base for this calculation is shown in Table \ref{tbl:adx_requirements_references}, which contains all references were these requirements were mentioned, considered difficult or considered critical.
+The process is explained in \ref{cha:requirement}.
+In the Table \ref{tbl:adx_requirements_scores} a \ac{ID} is introduced, which is used in Table \ref{tbl:adx_requirements_references}.
+
+The following list shows all references used in the Table \ref{tbl:adx_requirements_references} and there last names.
+\begin{itemize}
+    \item \textcite{Dornenburg.2019}
+    \item \textcite{Grijzen.2019}
+    \item \textcite{Jackson.2019}
+    \item \textcite{Laug.2018}
+    \item \textcite{Leitner.2020}
+    \item \textciteOlleck{}
+    \item \textciteJovanovic{}
+    \item \textciteMezzalira{}
+    \item \textciteSteyer{}
+    \item \textciteHuber{}
+    \item \textciteRehm{}
+\end{itemize}
+
+
+
+\begin{table}[]
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{\ac{ID}}  &
+        \textbf{Score}    &
+        \textbf{Category} &
+        \textbf{Requirement}
+        \\ \hline
+        1                 & 14 & Integration & Loading                \\ \hline
+        2                 & 10 & Integration & Lifecycle management   \\ \hline
+        3                 & 9  & Integration & Routing                \\ \hline
+        4                 & 8  & Integration & Configuration          \\ \hline
+        5                 & 7  & Integration & Integration            \\ \hline
+        6                 & 6  & Integration & Shared logic           \\ \hline
+        7                 & 4  & Integration & Widgets                \\ \hline
+        8                 & 4  & Integration & Page layout            \\ \hline
+        9                 & 2  & Integration & Indexable via crawler  \\ \hline
+        10                & 2  & Integration & \ac{MF} interoperable  \\ \hline
+        11                & 1  & Integration & Abstraction layer      \\ \hline
+        12                & 1  & Integration & Third party extensible \\ \hline
+        13                & 11 & Performance & Performance            \\ \hline
+        14                & 16 & State       & State exchange         \\ \hline
+        15                & 10 & State       & Intercommunication     \\ \hline
+        16                & 5  & State       & Security               \\ \hline
+        17                & 2  & State       & Internationalization   \\ \hline
+        18                & 15 & Style       & Consistent style       \\ \hline
+        19                & 13 & Developer   & Autonomy               \\ \hline
+        4                 & 8  & Developer   & Configuration          \\ \hline
+        20                & 8  & Developer   & Experience             \\ \hline
+        21                & 5  & Developer   & Tools                  \\ \hline
+        22                & 3  & Developer   & Debugging              \\ \hline
+        23                & 3  & Developer   & Testing                \\ \hline
+    \end{tabular}
+    \caption{Overview of all requirements with scores}
+    \label{tbl:adx_requirements_scores}
+\end{table}
+
+
+
+
+\begin{table}[]
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{\ac{ID}}   &
+        \textbf{Mentioned} &
+        \textbf{Difficult} &
+        \textbf{Critical}
+        \\ \hline
+        1                  & \cite{Dornenburg.2019}, \cite{Grijzen.2019}, \cite{Vogel.2020.Huber}, \cite{Jackson.2019}, \cite{Leitner.2020}, \cite{Laug.2018}, \cite{Vogel.2020.Steyer}     &                                                                                                              & \cite{Vogel.2020.Jovanovic}, \cite{Vogel.2020.Rehm}                           \\ \hline
+        2                  & \cite{Dornenburg.2019}, \cite{Grijzen.2019}, \cite{Leitner.2020}, \cite{Vogel.2020.Mezzalira}, \cite{Vogel.2020.Olleck}                                        &                                                                                                              & \cite{Vogel.2020.Rehm}                                                        \\ \hline
+        3                  & \cite{Dornenburg.2019}, \cite{Grijzen.2019}, \cite{Vogel.2020.Huber}, \cite{Laug.2018}, \cite{Vogel.2020.Rehm}, \cite{Vogel.2020.Steyer}                       & \cite{Vogel.2020.Mezzalira}                                                                                  &                                                                               \\ \hline
+        4                  & \cite{Grijzen.2019}, \cite{Vogel.2020.Rehm}                                                                                                                    &                                                                                                              & \cite{Vogel.2020.Jovanovic}                                                   \\ \hline
+        5                  & \cite{Laug.2018}, \cite{Vogel.2020.Rehm}, \cite{Vogel.2020.Steyer}                                                                                             &                                                                                                              &                                                                               \\ \hline
+        6                  & \cite{Dornenburg.2019}, \cite{Jackson.2019}, \cite{Laug.2018}                                                                                                  &                                                                                                              &                                                                               \\ \hline
+        7                  & \cite{Dornenburg.2019}, \cite{Laug.2018}, \cite{Vogel.2020.Rehm}                                                                                               & \cite{Vogel.2020.Mezzalira}, \cite{Vogel.2020.Steyer}, \cite{Vogel.2020.Olleck}, \cite{Vogel.2020.Jovanovic} & \cite{Vogel.2020.Huber}                                                       \\ \hline
+        8                  & \cite{Vogel.2020.Olleck}, \cite{Vogel.2020.Rehm}, \cite{Vogel.2020.Steyer}                                                                                     & \cite{Vogel.2020.Mezzalira}, \cite{Vogel.2020.Jovanovic}                                                     & \cite{Vogel.2020.Huber}                                                       \\ \hline
+        9                  & \cite{Grijzen.2019}, \cite{Vogel.2020.Huber}, \cite{Vogel.2020.Mezzalira}, \cite{Vogel.2020.Rehm}                                                              & \cite{Vogel.2020.Jovanovic}                                                                                  & \cite{Vogel.2020.Steyer}                                                      \\ \hline
+        10                 & \cite{Dornenburg.2019}, \cite{Grijzen.2019}, \cite{Leitner.2020}, \cite{Vogel.2020.Mezzalira}, \cite{Vogel.2020.Olleck}                                        &                                                                                                              & \cite{Vogel.2020.Rehm}                                                        \\ \hline
+        11                 & \cite{Vogel.2020.Huber}, \cite{Laug.2018}, \cite{Vogel.2020.Mezzalira}, \cite{Vogel.2020.Rehm}, \cite{Vogel.2020.Steyer}                                       & \cite{Vogel.2020.Olleck}                                                                                     &                                                                               \\ \hline
+        12                 & \cite{Dornenburg.2019}, \cite{Grijzen.2019}, \cite{Laug.2018}, \cite{Vogel.2020.Olleck}, \cite{Vogel.2020.Rehm}, \cite{Vogel.2020.Steyer}                      &                                                                                                              &                                                                               \\ \hline
+        13                 & \cite{Dornenburg.2019}, \cite{Vogel.2020.Huber}                                                                                                                & \cite{Vogel.2020.Rehm}                                                                                       &                                                                               \\ \hline
+        14                 & \cite{Grijzen.2019}, \cite{Laug.2018}, \cite{Vogel.2020.Mezzalira}, \cite{Vogel.2020.Olleck}                                                                   &                                                                                                              &                                                                               \\ \hline
+        15                 & \cite{Dornenburg.2019}, \cite{Vogel.2020.Mezzalira}                                                                                                            &                                                                                                              &                                                                               \\ \hline
+        16                 & \cite{Grijzen.2019}, \cite{Vogel.2020.Rehm}                                                                                                                    &                                                                                                              &                                                                               \\ \hline
+        17                 & \cite{Vogel.2020.Mezzalira}                                                                                                                                    &                                                                                                              &                                                                               \\ \hline
+        18                 & \cite{Grijzen.2019}                                                                                                                                            &                                                                                                              &                                                                               \\ \hline
+        19                 & \cite{Dornenburg.2019}, \cite{Grijzen.2019}, \cite{Leitner.2020}                                                                                               & \cite{Vogel.2020.Olleck}                                                                                     & \cite{Vogel.2020.Steyer}, \cite{Vogel.2020.Rehm}                              \\ \hline
+        4                  & \cite{Dornenburg.2019}, \cite{Grijzen.2019}, \cite{Jackson.2019}, \cite{Leitner.2020}, \cite{Laug.2018}                                                        & \cite{Vogel.2020.Olleck}                                                                                     & \cite{Vogel.2020.Jovanovic}, \cite{Vogel.2020.Steyer}, \cite{Vogel.2020.Rehm} \\ \hline
+        20                 & \cite{Dornenburg.2019}, \cite{Grijzen.2019}, \cite{Jackson.2019}, \cite{Vogel.2020.Jovanovic}, \cite{Leitner.2020}, \cite{Laug.2018}, \cite{Vogel.2020.Steyer} &                                                                                                              & \cite{Vogel.2020.Olleck}                                                      \\ \hline
+        21                 & \cite{Vogel.2020.Jovanovic}, \cite{Laug.2018}                                                                                                                  &                                                                                                              & \cite{Vogel.2020.Steyer}                                                      \\ \hline
+        22                 & \cite{Vogel.2020.Mezzalira}, \cite{Vogel.2020.Steyer}                                                                                                          &                                                                                                              &                                                                               \\ \hline
+        23                 & \cite{Dornenburg.2019}, \cite{Grijzen.2019}, \cite{Vogel.2020.Huber}, \cite{Jackson.2019}, \cite{Vogel.2020.Jovanovic}, \cite{Leitner.2020}, \cite{Laug.2018}  & \cite{Vogel.2020.Olleck}                                                                                     & \cite{Vogel.2020.Steyer}, \cite{Vogel.2020.Rehm}                              \\ \hline
+    \end{tabular}
+    \caption{Overview of all requirements and their respective references}
+    \label{tbl:adx_requirements_references}
+\end{table}
+
+
+
+
+
+\chapter{Expert interview paraphrases}
+
+Each interview starts with an introduction of the author and the bachelor thesis.
+After that the interview guideline (\ref{cha:appendix_expertinterview}) is presented.
+The following interview paraphrases represent the conversations after the interview guideline presentation.
+The paraphrases does also not include the adoption.
+
+\input{./ads/interview/lucamezzalira.tex}
+\input{./ads/interview/pirminrehm.tex}
+\input{./ads/interview/philiphuber.tex}
+\input{./ads/interview/manfredsteyer.tex}
+\input{./ads/interview/berndolleck.tex}
+\input{./ads/interview/ivanjovanovic.tex}

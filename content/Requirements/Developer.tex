@@ -1,0 +1,214 @@
+%!TEX root = ../../documentation.tex
+
+
+\section{Developer requirements and approaches}\label{cha:requirement_detail_developer}
+
+In the following, the requirements \textit{\nameref{cha:requirement_detail_developer_autonomy}}, \textit{\nameref{cha:requirement_detail_developer_experience}} and \textit{\nameref{cha:requirement_detail_developer_tools}} are described in greater detail as well as other requirements, however in less detail due to their score.
+
+Also, it is important to note, that the \textit{\nameref{cha:requirement_detail_integration_configuration}} requirement is described in the section \ref{cha:requirement_detail_integration} instead of here, because it is part in two categories.
+It is the only requirement that fits into two categories and is already fully explained in the Integration chapter.
+
+
+
+
+
+\subsection{Autonomy}\label{cha:requirement_detail_developer_autonomy}
+
+The \textit{\nameref{cha:requirement_detail_developer_autonomy} (\textbf{Score 13})} requirement focuses on the independence aspect of each \ac{MF}.
+This relates directly to the developer freedom.
+Also, the \textit{\nameref{cha:requirement_detail_developer_autonomy}} requirement can be split into the different facades coupling, communication, release, and technology agnostic.
+
+
+
+\paragraph{Coupling}
+
+One of the first things which is relevant for \textit{\nameref{cha:requirement_detail_developer_autonomy}}, is coupling.
+Coupling is a term used to indicate if software parts are dependent on each other.
+In case of \ac{MFA}, coupling is not desired between the individual \acp{MF}.
+This would hinder the individual deployment benefit.
+However, sometimes there is coupling required.
+For example, in the configuration file for the shell application.
+More about configuration in the \textit{\nameref{cha:requirement_detail_integration_configuration}} requirement.
+There is some coupling because there are \ac{MF} specific entries.
+But the coupling is rather low, because it is only in the configuration file and it probably is a one-time setup.
+This approach of keeping coupling low and use a one-time setup if possible, was mentioned by \textcite{Laug.2018} and \textcite{Dornenburg.2019}.
+\citeauthor{Laug.2018} also points out, that sharing code between \acp{MF} should be avoided.
+He believes that it is better to provide \textit{copy-paste} ready code for each team, rather then to share code.
+Another part which creates coupling is sharing styles.
+This is addressed in the \textit{\hyperref[cha:requirement_detail_style]{Consistent style} } requirement, but generally the opinions of the experts diverge.
+For example, \citeauthor{Laug.2018} also believes that styles should be \textit{copy-paste} ready components instead of sharing actual code, while \textciteOlleck{} used a global utility \ac{CSS} file with multiple versions.
+
+
+
+\paragraph{Communication}
+
+Another part of autonomy is reflected in the communication.
+There are two kinds of communication for \ac{MFA}.
+The first is the intercommunication, which is discussed in more detail in the \textit{\nameref{cha:requirement_detail_state_intercommunication}} requirement.
+All experts that mention intercommunication approaches, used a message bus solution.
+It has low coupling and is very flexible.
+The second communication type is the communication between the \ac{MF} and backend.
+The most named approach for this communication is \ac{BFF}, which is explained in the section \ref{cha:theory_extensions_bff}.
+It was mentioned by \textciteSteyer{}, \textcite{Jackson.2019}, \textcite{Leitner.2020} and \textcite{Laug.2018}.
+\citeauthor{Leitner.2020} believes that using \ac{BFF} is mandatory.
+He further explains, that using \ac{BFF} also implies that one \ac{MF} and its \ac{BFF} microservice are considered as one unit.
+\citeauthorSteyer{} also recommends to always use the \ac{BFF} pattern if possible.
+
+
+
+\paragraph{Release}
+
+\textit{\nameref{cha:requirement_detail_developer_autonomy}} is not only about developing, but also about deployment and release processes.
+The experts mentioned that \ac{CI/CD} plays a large role for deploying and releasing \acp{MF}.
+\textciteRehm{} suggests, that each \ac{MF} should have its own \ac{CI/CD} pipeline.
+Another aspect which was mentioned, is the independent release cycle.
+This is one of the core benefits of \ac{MFA} and \citeauthorRehm{} mentions, that a release should be quick.
+Therefore, both \textciteMezzalira{} and \citeauthorRehm{} believe, that a \ac{CI/CD} pipeline must be quick for a good developer experience.
+\citeauthorMezzalira{} states, that a \ac{CI/CD} should run within minutes.
+Additionally, \citeauthorRehm{} proposes that each \ac{MF} should be released in its own versioned Docker container\footnotemark, which enables practices like Blue-Green deployment.
+\footnotetext{\url{https://www.docker.com/resources/what-container} (Visited on 09/06/2020)}
+Another aspect which is important to allow such practices is the configuration file of the application.
+More about configuration in the \textit{\nameref{cha:requirement_detail_integration_configuration}} requirement.
+Finally, \textcite{Laug.2018} supports \citeauthorRehm{} statement and adds, that if \ac{BFF} is used, then both the \ac{MF} and \ac{BFF} microservice could be in one Docker container.
+
+
+
+\paragraph{Technology agnostic}
+
+Before concluding this requirement, it is important to discuss the aspect of supporting technology agnostic \acp{MF}.
+A \ac{MF} application can either use only one frontend framework or multiple.
+Depending on the scenario restrictions, a framework agnostic approach can be realized or not.
+For example, \textciteJovanovic{} was working on a project where initially React and Angular was used, but it resulted in performance issues.
+They limited the number of heavy frameworks used per page to one.
+More about the performance impact of frameworks in the \textit{\hyperref[cha:requirement_detail_performance]{Performance}} requirement.
+
+\textciteJovanovic{} suggests, that a default technology stack should be defined and it should be used by every team.
+But he points out, that using this approach is not necessarily the best solution.
+He believes, that if there is a better technology available, it should be used instead.
+A similar statement was made by \textcite{Laug.2018b}.
+He mentions that normally developers stay in their comfort zone and thus use the same technology stack as the other teams.
+Therefore, the fear to end up supporting dozens of frameworks is mostly unjustified.
+Lastly, \textciteHuber{} also supports the idea of an open stack which allows for a potential technology shift later on.
+
+Another approach was used by \textcite{Grijzen.2019}.
+In the project he worked for, they only support one technology stack.
+The advantage is, that they can define one standard to align all projects.
+This is further improved by a \ac{CLI} they created to allow for bootstrapping new \acp{MF}.
+He also mentions that it makes it easier for developers to change teams.
+Finally, another facade of technology agnostic approaches regarding styling is addressed  in the \textit{\hyperref[cha:requirement_detail_style]{Consistent style}} requirement.
+
+
+
+\paragraph{Conclusion}
+
+\textit{\nameref{cha:requirement_detail_developer_autonomy}} is a base principle of \ac{MFA}.
+It should be preserved, by keeping the coupling between the \acp{MF} low.
+There are multiple approaches that can be used to achieve that.
+For example, instead of sharing code it should be \textit{copy-paste} read.
+Another is choosing an appropriate intercommunication method.
+These address the actual coding process, but there are also concepts or process related aspects which preserve autonomy.
+Namely, the concept \ac{BFF} and individual \ac{CI/CD} pipelines per \ac{MF}.
+To conclude the \textit{\nameref{cha:requirement_detail_developer_autonomy}} requirement, there is also the question if the application should be technology agnostic or not.
+Most of the experts used a technology agnostic approach, so that if needed, another technology can be used.
+On the other hand, using one technology stack has the advantage of better utilizing tools.
+
+
+
+
+
+\subsection{Experience}\label{cha:requirement_detail_developer_experience}
+
+The \textit{\nameref{cha:requirement_detail_developer_experience} (\textbf{Score 8})} requirement addresses the fact, that \ac{MFA} adds a lot of complexity to an application.
+Therefore, there should be some measurements to simplify the developers work to maintain a good developer experience.
+
+One step to ensure a good developer experience is a quick developer feedback, which is ensured with a fast \ac{CI/CD} pipeline.
+This was mentioned by \textciteMezzalira{} and \textcite{Grijzen.2019}.
+\citeauthorMezzalira{} points out, that the time from implementing a new feature until the developer receives his feedback needs to be minimal.
+He also mentions that it needs constant work to maintain fast feedback.
+This is also addressed in the \textit{\nameref{cha:requirement_detail_developer_autonomy}} requirement in the release paragraph.
+\citeauthor{Grijzen.2019} adds to \citeauthorMezzalira{}, that everything should be automated, to remove unnecessary work from the developer.
+
+Another step mentioned by \textcite{Grijzen.2019} was to provide a library for common actions.
+The shell could provide this library and it handles tasks like navigation and persist or receive \ac{URL} state.
+Further possibilities which address styling are a component library and utility \ac{CSS}.
+This was mentioned by \textciteRehm{} and \textciteHuber{}.
+
+Lastly, \textciteSteyer{} proposes that the \ac{MF} teams should not work on the shell or the integration.
+Instead, there should be a separate team responsible for this.
+On the other hand, \textcite{Laug.2018} believes, that the shell should not change over time and thus making \citeauthorSteyer{}s statement obsolete.
+Finally, \textciteMezzalira{} thinks, that this is a difficult requirement.
+
+
+
+
+\subsection{Tools}\label{cha:requirement_detail_developer_tools}
+
+The \textit{\nameref{cha:requirement_detail_developer_tools} (\textbf{Score 5})} requirement is about tools that simplify the development of a \ac{MF} application.
+Even though this is considered critical by \textciteJovanovic{}, there is rather low input overall about tooling.
+The most extensive tool was presented by \textcite{Grijzen.2019}.
+He showed a \ac{CLI} tool, that they created for their application.
+It handles tasks like project setup, build setup and deployment pipelines, and it ensures that everything works out of the box.
+The only other tool mentioned are Zeplin and Storybook, which were proposed by \textciteRehm{}.
+Both tools fall into the \ac{UI} development sector.
+Zeplin shows which components are used within a page, as well as other helpful information\footnotemark.
+\footnotetext{\url{https://zeplin.io/why-zeplin} (Visited on 08/22/2020)}
+On the other hand, Storybook is a tool to create \ac{UI} components in isolation and document them\footnotemark.
+\footnotetext{\url{https://storybook.js.org/docs/react/get-started/introduction} (Visited on 08/23/2020)}
+
+
+
+
+
+\subsection{Other requirements}
+
+The following requirements have a score less than 5.
+
+
+
+\paragraph{Debugging}\label{cha:requirement_detail_developer_debugging}
+
+The \textit{\nameref{cha:requirement_detail_developer_debugging} (\textbf{Score 3})} requirement addresses approaches which simplifies debugging in a \ac{MF} application.
+A specialty of a \ac{MF} application, is that it consists of multiple individual \acp{MF}, which are composed together by the shell to one application.
+This raises the question on how to debug a distributed system.
+The experts provided some advice on how to tackle this problem.
+
+\textciteSteyer{} and \textcite{Laug.2018} propose, that there should be a standalone mode for each \ac{MF}.
+The standalone version should allow for development, debugging, testing and integration of the \ac{MF}.
+When running a \ac{MF} in standalone mode, the development should feel and work no different than ordinary applications.
+\citeauthor{Laug.2018} points out, that he used a different shell (mock shell) to integrate the \ac{MF} in the same way as it would be in the actual shell.
+Each \ac{MF} has its own mock shell and is part of the \ac{MF}.
+Therefore, this allows that it can be modified as needed to fit any of the testing and developing needs.
+This approach is also used by \textciteRehm{}.
+
+This only covers the frontend, but sometimes the backend is also needed for development.
+\textciteRehm{} mentioned an approach he used to keep this need simple for the developers.
+To provide a backend for local development of a \ac{MF}, they used Kubernetes port forwarding\footnotemark.
+\footnotetext{\url{https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/} (Visited on 09/06/2020)}
+This forwarded an instance of the backend service from a development server to a local port.
+For each \ac{MF} they provided a command which sets up the connection, therefore eliminating the need to start the backend services on the local machine.
+
+
+
+
+
+\paragraph{Testing}\label{cha:requirement_detail_developer_testing}
+
+The \textit{\nameref{cha:requirement_detail_developer_testing} (\textbf{Score 3})} requirement is about testing a \ac{MF}.
+Testing a \ac{MF} should be no different from a regular application, except for the \ac{MF} specific parts, like integration and intercommunication.
+
+In case of integration testing, there were two approaches mentioned.
+The first is from \textcite{Dornenburg.2019}.
+He explained that the configuration that is used by the shell to load each \ac{MF}, can be changed to load one \ac{MF} locally and the rest from a development server.
+Therefore, only the shell and one \ac{MF} need to be started for the integration test.
+The second approach was mentioned by \textcite{Laug.2018b}.
+He proposes a shell integration method, which checks if the actual exports of the \ac{MF} matches with its configuration.
+It only checks if it is available and not if it works as intended.
+He points out, that it is about how to get certainty in the integration process before a user gets to see the new release.
+More on integration in the \textit{\nameref{cha:requirement_detail_integration_integration}} requirement.
+
+
+The other testing aspect is intercommunication and it is about \ac{CDC} testing (see \ref{cha:theory_practice_cdctesting}).
+\textcite{Jackson.2019} believes, that \ac{CDC} testing should be used to validate communication between \acp{MF}, but he does not mention how it should be done.
+On the other hand \textcite{Laug.2018} points out, that there is no good client \ac{CDC} testing approach for \ac{MF} applications.
+Therefore, he did not use intercommunication in the client, but rather used the backend to handle this need.
+More on that in the \textit{\nameref{cha:requirement_detail_state_intercommunication}} requirement.

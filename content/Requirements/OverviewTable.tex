@@ -1,0 +1,36 @@
+%!TEX root = ../../documentation.tex
+
+\setlength{\tabcolsep}{4.265pt} % Default value: 6pt
+\begin{longtable}{|l|l|p{0.56\textwidth}|}
+	% \begin{longtable}{ l l p{0.56\textwidth} }
+	\hline
+	\textbf{Category}             & \textbf{Requirement}   & \textbf{Description}                                                                               \\ \hline
+	\multirow{12}{*}{Integration} & Loading                & Load a \ac{MF} into the application and provide it for further use                                 \\ \cline{2-3}
+	                              & Lifecycle management   & A \ac{MF} can be bound and unbound to the \ac{DOM}                                                 \\ \cline{2-3}
+	                              & Routing                & Enable page changes based on the \ac{URL} changes                                                  \\ \cline{2-3}
+	                              & Configuration          & Behavior of \ac{MF} should be configurable                                                         \\ \cline{2-3}
+	                              & Integration            & Compose a \ac{MF} into the current application                                                     \\ \cline{2-3}
+	                              & Shared logic           & The shell provides logic for all \ac{MF}                                                           \\ \cline{2-3}
+	                              & Widgets                & A \ac{MF} exposes a widget which can be used by an other \ac{MF}                                   \\ \cline{2-3}
+	                              & Page layout            & The shell should control the page layout                                                           \\ \cline{2-3}
+	                              & Indexable via crawler  & The application needs to be indexable via crawler                                                  \\ \cline{2-3}
+	                              & \ac{MF} interoperable  & A \ac{MF} should be able to run in multiple applications                                           \\ \cline{2-3}
+	                              & Abstraction layer      & The shell should abstract browser \ac{API} calls which differ between platforms                    \\ \cline{2-3}
+	                              & Third party extensible & Consumers should be able to extend the application with external UIs                               \\ \hline
+	Performance                   & Performance            & Ensure that the application performs as expected                                                   \\ \hline
+	\multirow{5}{*}{State}        & State exchange         & A \ac{MF} needs to know the application state to display content accordingly                       \\ \cline{2-3}
+	                              & Intercommunication     & MFs need to interact with each other via some form of communication                                \\ \cline{2-3}
+	                              & Security               & The application needs authentication and authorization                                             \\ \cline{2-3}
+	                              & Internationalization   & The application should be able to change based on language and county                              \\ \cline{2-3}
+	                              & Consistent style       & Ensure that the application has a consistent style                                                 \\ \hline
+	\multirow{6}{*}{Developer}    & Autonomy               & Each \ac{MF} should be independent, which includes technology, development, testing and deployment \\ \cline{2-3}
+	                              & Configuration          & Behavior of \ac{MF} should be configurable                                                         \\ \cline{2-3}
+	                              & Experience             & Compensate the complexity of \ac{MFA} for the developers                                           \\ \cline{2-3}
+	                              & Tools                  & Tools to support developers                                                                        \\ \cline{2-3}
+	                              & Debugging              & Provide an approach for debugging a \ac{MF}                                                        \\ \cline{2-3}
+	                              & Testing                & A \ac{MF} should be testable                                                                       \\ \hline
+
+	\caption{Overview of requirements for a \ac{MF} application which are collected in the expert interviews and research}
+	\label{tbl:overview_requirements}
+\end{longtable}
+\setlength{\tabcolsep}{\spaltenabstand}

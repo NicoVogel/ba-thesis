@@ -1,0 +1,88 @@
+% !TeX root = ../../documentation.tex
+
+\section{Interview with Luca Mezzalira}
+
+This paraphrase of the expert interview with Luca Mezzalira.
+If any information of this is used in the thesis, its marked with \cite{Vogel.2020.Mezzalira}.
+\textbf{V} is the abbreviation for \textit{Nico Vogel} and \textbf{M} for \textit{Luca Mezzalira}.
+
+\setspeaker{LucaMezzalira}[M]
+
+\begin{description}
+    \NicoVogel The first question is, have you worked with micro frontend shell applications? I know that you have, thus, could you name general facts like the framework, the team size, general structure, and stuff like that.
+
+    \LucaMezzalira So, we started to work with a shell application roughly 3 years ago. At that time, we were not aware of any other framework. Therefore, we created a way to handle that internally, which we called bootstrap. This has nothing to do with the well-known framework for creating responsive web applications. Instead, it is an application that is always available for the entire session of the user. It takes care of general tasks, like “loading micro frontends,” “routing between the micro frontends”, and exposing an API. The micro frontends require the API to manage their life cycle.
+    The team size grew from 10 to 400 in 2 years’ time. These teams are distributed between 4 different locations in Europe.
+    Micro frontends were introduced to bring the same benefits from the microservice architecture to the frontend. So, each team owns a specific part of the business domain. Therefore, they can independently make decisions needed for their domain.
+    Another aspect that was important for the switch to micro frontends is that it is easier to incrementally upgrade the application. Furthermore, micro frontends allowed for a seamless transition from the old application to the new one.
+
+    \NicoVogel The second question, what are suitable scenarios for micro frontend architectures in general. Like, one you already mentioned kind of. Can you mention any more?
+
+    \LucaMezzalira I believe that micro frontends are a good architectural style when the organization is big or must scale the project. So, many developers work on the same project. To be more specific, if 50+ developers or distributed teams work on a frontend, micro frontend architecture should be considered. This architecture style is currently embraced by many organizations because of their infrastructure and communication channels.
+
+    \NicoVogel What do you think about my requirements categories? Am I missing anything? Would you change the importance?
+
+    \LucaMezzalira No category is missing. I would put as number 2 shared state, number 3 developer experience, number 4 performance, and number 5 style handling. If you do not invest in developer experience, there is no way that you are going to have a slick and smooth transition to micro frontends. Because using a micro-architecture adds a lot of complexity to a project. Performance is also important, but not especially different from a regular Single Page Application (SPA), for example. If you invest too much in performance, then you risk fading out some benefits of micro frontends, for example, the decoupling of teams or independent deployment. It is possible that a micro frontend architecture application might result in worse performance than a server-side rendering or pure SPA application.
+    Next up is styling. Consistent styling can be achieved in different ways. One way is to use a Design System. It provides design tokens and simple components that should be used by each micro frontend. A Design System can also include a component library that consists of dumb components and elements, like buttons, labels, and so on. The micro frontend teams can use the component library to create more complex components.
+    All these aspects are important, but you need to maintain a balance between the aspects. This essential in a distributed system like micro frontends.
+
+
+    \NicoVogel What are requirements for the named shell application scenarios which you had for a customer? Maybe you could start with DAZN.
+
+    \LucaMezzalira The application shell should be able to load micro frontend, route between micro frontends, expose certain configuration, handle live cycle methods, and if needed, it should also be an abstraction layer. The last feature is needed if the application is used across different devices with different browser APIs. Therefore, abstracting the domain-specific API from the platform. This allows for reusable micro frontends.
+
+    \NicoVogel Can you also name a few approaches you took? You already mentioned that the shell is used as an abstraction layer. Can you name other requirements and their approaches, for example, routing?
+
+
+    \LucaMezzalira DAZN has a unique approach on loading a micro frontend. For each micro frontend, there is one HTML file that is the entry point. This file contains all HTML import tags, which are required by the micro frontend. Using this approach appears to be faster than loading everything out of JavaScript, which has some overhead compared. The overhead consists of the framework and other business logic, which must run first before the actual loading is executed. On the other hand, the HTML approach is slim, and all that is needed is a function that adds the tags from the HTML file into the DOM. This approach is also quite flexible, and each domain can decide what to include in the entry point and whatnot. In terms of orchestration, the DAZN can support canary-releases and country-specific versions per micro frontend. This is archived by keeping the shell unaware of when and from where to load a micro frontend. Therefore, allowing for high granularity and flexibility. To enable this, releasing and shaping the traffic are two independent functions in the infrastructure of DAZN.
+
+    \NicoVogel Can you name another scenario and requirements for that?
+
+    \LucaMezzalira So, a different scenario to DAZN is that there are multiple micro frontends on the same page. On approach is that the shell knows every single view and how it looks like, which NewRelic did. They use a template approach that is handled by the shell. A template has placeholders, and the shell is responsible for filling them. I think the shell application knows a bit too much for my taste. In my opinion, the shell should be a transparent layer, which is very light and without any implications on how the micro frontends look or how they communicate with each other. The shell application should be completely decoupled from the micro frontends and only have some light touches of exposed functionality for the micro frontends. A micro frontend must be independently deployable. Otherwise, you are building a distributed monolith.
+
+    \NicoVogel Did they use Single-SPA because it sounded like it.
+
+    \LucaMezzalira Single-SPA is interesting because it is about loading views instead of loading applications. Another approach to load micro frontends is Module Federation from Webpack. It can be used to load multiple micro frontends into the same page. That is amazing because it is taking care of all the complexity that you have with loading micro frontends. It is also possible to separate dependencies into bundles and lazy load them. It is taking care of encapsulating the different micro frontends in its own opinionated way. Now is it going to be a standard? Maybe, but at this stage, it is very hard to say that is the path that everyone wants to follow.
+
+
+
+    \NicoVogel Did you use Web Components, for example?
+
+    \LucaMezzalira We evaluated Web Components as a potential solution for sharing styles. However, DAZN is very specific because it is also dealing with TVs, consoles, and other devices. The issue is that Web Components are not natively supported in their browsers, and therefore, polyfills are needed. Even with polyfills, Web Components were not supported on some devices. Therefore, it was not suitable.
+
+    \NicoVogel I also heard from another approach where Web Components are used to allow for multiple micro frontends on the same page. So, the shell does not know how the application is stitched together. Instead, the micro frontends know which other micro frontends they consume. What do you think of that?
+
+    \LucaMezzalira You can use this approach. Still, you rely on a feature that is not supported in all browsers, and therefore, polyfills are needed. There is another simpler and older approach, which is immediately invoked function expression (IIFE). This is what Module Federation is using in the background. It is also possible to share parameters between these to pass something like an event emitter. In my opinion, this is a better approach than Web Components. Another reason not to use Web Components is if you start hiding UI elements behind the shadow DOM, then this content can not be indexed by crawler. So, if you need your page to be indexable, then you cannot use the shadow DOM feature.
+    I also think Web Components are misleading. Some people believe that micro frontends are a bunch of components stitched together, which they are not. They are a business domain. I know, for instance, that Michale Geers uses them in some projects and is very happy about that. If you speak with Cam Jackson from ThoughtWorks and a couple of other companies from Oslo Norway, they tried Web Components but did not feel very confident and comfortable using Web Components. Therefore, if I need to render a view and encapsulate things probably, I will go with an IIFE, that is lighter and does not add too much overhead.
+
+    \NicoVogel So, one requirement for DAZN was also that it is indexable by crawlers?
+
+    \LucaMezzalira Yes
+
+    \NicoVogel Can you name any requirements which are needed for all shell applications scenarios? What is crucial, no matter what?
+
+    \LucaMezzalira I think there is always some configuration that must be exposed by the shell application. It is basically mimicking a SPA. You also need to have a loading and routing mechanism.
+
+    \NicoVogel The next question is the same question, but what are the approaches?
+
+    \LucaMezzalira So, the loading part is mandatory, and I think on the routing part, it can be different. One possible approach is that a specific application shell is provided by the server per subdomain, and in this subdomain, it is a client-side composition application. This is useful if you have a horizontal split, which means having multiple micro frontends per page. On the other hand, is the vertical split, which is probably less than 10 complex applications. In this case, the shell application can be smart enough to route between them, and only one shell is needed for all sub-domains, instead of providing one per subdomain. Therefore, the shell is generic and very dump and does the bare minimum to operate on the requirements that I listed before.
+
+    \NicoVogel Just to be sure, so in DAZN, you had like multiple SPA’s and was your bootstrap service like a SPA above it? Or did it reload the page every time you switched to another page?
+
+    \LucaMezzalira No, the bootstrap is a HTML file with a tiny JavaScript library. All it does is parsing a HTML file and appending the nodes required to run the micro frontend to the page itself. When you append a JavaScript file to the browser, it immediately triggers the download of the file. Therefore, we are using standards in a way that we are not cornering our self on using a specific technology that is obsolete in 2 years’ time. It’s just a standard way to parsing a file and append DOM element inside a HTML document. That is probably the most basic thing that you can think of.
+
+    \NicoVogel What are the most difficult requirements to achieve, and why? You mentioned already that the developer experience is a lot more important than I thought.
+
+    \LucaMezzalira So, I think there are a couple of things that you need to bear in mind. First, when you unload a micro frontend, then all the listeners need to be removed as well. So, you need to have some lifecycle hooks that allow the micro frontends to unload them. Another complicated aspect is the developer experience because there are probably working 50+ developers on the same project. It means that you need to have a CI/CD that is very performant, and the feedback loop with the developers must be within minutes. Because the business and codebase evolve constantly, you need to constantly look at performance. Check the time frame, which it takes form committing a change until testing and deployment is done.
+
+    \NicoVogel The last question is my thesis question. So, do you think there is a need for a generalized shell application?
+
+    \LucaMezzalira Something like that you can use in any scenario?
+
+    \NicoVogel Kind of yeah. In the best case, in any scenario and in the worst case in many scenarios.
+
+    \LucaMezzalira Yeah, I think Single-SPA is trying to archive that. I truly believe that they are doing an amazing job. In fact, probably I would use it if I knew 3 years ago that it exists. Although I think the approach we were using is slightly more flexible. But overall, I think Single-SPA is fulfilling that need.
+
+
+
+\end{description}

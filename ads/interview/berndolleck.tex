@@ -1,0 +1,120 @@
+% !TeX root = ../../documentation.tex
+
+\section{Interview with Bernd Olleck}
+
+This paraphrase of the expert interview with Bernd Olleck.
+If any information of this is used in the thesis, its marked with \cite{Vogel.2020.Olleck}.
+\textbf{V} is the abbreviation for \textit{Nico Vogel} and \textbf{O} for \textit{Bernd Olleck}.
+
+\setspeaker{BerndOlleck}[O]
+
+\begin{description}
+    \NicoVogel Erste Frage „Have you worked with micro frontend applications?“. In dem Fall weiß ich, dass du es gemacht hast, daher möchte ich von dir wissen, welche Frameworks, Teamgrößen und generelle Strukturen ihr verwendet habt.
+
+    \BerndOlleck Zur Teamgröße: Über zwei Jahre Laufzeit war das Team etwa 50 Mann stark. Wir hatten mehrere Subteams, die im LeSS Modus gearbeitet haben (Large Scale Scrum). Das Gesamtprojekt wurde vom Kunden an mehrere Anbieter koordiniert. Kundenseitig gab es ebenfalls interne Teams. Wir mussten organisatorische und politische Vorgaben erfüllen, wie getrennte Codebasis und klare Nachverfolgbarkeit von Verantwortlichkeiten. Dafür war die Micro Frontend Architektur die beste Wahl. Als Framework haben wir Angular verwendet. Zu Beginn mit Version 4 und inzwischen Version 8. Wir haben uns im Laufe des Projektes immer wieder für Angular entschieden, obwohl im Projekt auch andere Frameworks über Web Components möglich gewesen wären.
+
+    \NicoVogel Das heißt das Projekt wäre technologieagnostisch gewesen, ihr habt es allerdings nicht genutzt?
+
+    \BerndOlleck Ja und nein. Ein Technologieagnostisch Ansatz hätte uns Probleme bereitet aufgrund der Technologie.
+    Wir haben zum Beispiel Web Components eingesetzt. Allerdings haben wir eine Abkürzung verwendet, da wir wussten, dass immer Angular im Hintergrund läuft.
+
+    Wir haben beispielsweise Shared Services von Angular verwendet.
+
+    \NicoVogel Wer nutzt die Anwendung? Ist es eine reine Enterprise Application für Experten oder nutzen es auch Kunden?
+
+    \BerndOlleck Es ist definitiv eine Enterprise Application. Das alte System hatte eine Nutzerbasis von 15.000 Usern. Für das neue System wurde eine ähnliche Größenordnung angestrebt. Das heißt also, dass es definitiv nicht nur für Experten ist. Die Nutzer sind enterprisespezifisch und somit nicht außerhalb der Kundenumgebung.
+
+    \NicoVogel Ist die Anwendung für verschiedene Devices bzw. Plattformen ausgelegt (also PC und Smartphone)?
+
+    \BerndOlleck Langfristig gesehen soll die Anwendung auch auf Mobile Devices laufen. In den ersten zwei Jahren haben wir den Fokus auf die Desktop Browser-App gelegt. Anfangs haben wir mit IE begonnen, sind aber dann auf Chrome only umgestiegen. Eine einfache Portierung von Desktop auf Mobile wäre nicht möglich ohne Umstellungsaufwand. Allerdings haben wir Sollbruchstellen im UX Design eingebaut, die den Umstieg erleichtern werden.
+
+    \NicoVogel Wenn ihr bei IE geblieben wärt, hättet ihr die ganze Zeit mit Polyfills weiterarbeiten müssen.
+
+    \BerndOlleck Genau, der IE unterstützt keine Web Components und daher brauchen wir hierfür Polyfills, allerdings ist es schwierig mit den IE Polyfills zu arbeiten.
+
+    \NicoVogel Ok ich verstehe, gut zu wissen. Zweite Frage: „What are suitable scenarios for the micro frontend architecture in general?“. Fallen dir neben dem genannten Projekt noch weitere ein?
+
+    \BerndOlleck Wie gesagt, aufgrund der Anforderung einer organisatorischen und politischen Trennung war klar, dass wir auf Micro Frontend setzen. Weitere Szenarien gibt es wie Sand am Meer. Ich würde auch sagen, dass jeder Monolith, der bisher fürs Frontend gebaut wurde, durch eine saubere Komponentenarchitektur eigentlich auch schon eine Art Micro Frontend sein sollte. Die Integration ist in dem Fall über Build-Zeit realisiert im Gegensatz zum Laufzeit Ansatz. bei Frameworks und im Web hat man grundsätzlich schon die Möglichkeit alles in Libraries auszuladen und durch NPM, Yarn oder ähnlichem die Libraries zu verbinden. Wir haben in Angular, schon bevor wir Web Components genutzt haben, eine saubere Architektur aufgesetzt mit wiederverwendbaren Komponenten und Komponentenhierarchien. Diese haben wir ausgelagert in verschiedene Library Projekte und diese wurden von anderen Teams weiterverwendet. Grund dafür war, dass dies ein logischer Vorschritt zu Web Components ist. Aus einer Library mit isolierten Funktionen kann relativ einfach eine Web Componente gebaut werden. Insofern ist Micro Frontend eigentlich für jedes größere Projekt nützlich. Es muss nicht zwingend eine Run-Time Integration sein, es kann auch eine Build-Time Integration sein. Dafür hat sich der Terminus Graceful Monolith etabliert.
+
+    \NicoVogel Da du sagtest es sei sinnvoll für „alle“ großen Projekte: kannst du nochmal konkretisieren, ab wann Micro Frontend Architektur sinnvoll ist?
+
+    \BerndOlleck In der modernen Entwicklungswelt erachte ich es als sinnvoll, dass sobald man Scrum Teams mit eigenen Verantwortungsbereichen bildet und diese in Konflikt mit anderen stehen können, ist es ein guter Zeitpunkt zumindest darüber nachzudenken, ob die Micro Frontend Architektur angewandt werden kann. Wenn man eine große Applikation hat, die lange zum Laden benötigt, ist für mich ein klarer Indikator, dass man eine Run-Time-Integration anstreben sollte mit Micro Frontend Architektur. Die einzelnen Teams sind dann in der Lage ihre Arbeit tatsächlich unabhängig von den anderen zu erledigen, wenn das Portal oder nennen wir es Shell Application, dynamisch lädt und dann nur die Teile lädt, die sie braucht. Ein Beispiel ist folgendes: wenn ich eine Tab-Applikation habe mit vielen Tabs, dann muss nur der Inhalt des Tabs geladen werden, der vom Nutzer genutzt wird.
+    Ein weiteres Beispiel: Wenn man fachlich feststellt, dass die Sachen stark unterschiedlich sind und miteinander kaum kommunizieren, dann kann man direkt mit Micro Frontend starten.
+
+    \NicoVogel Dadurch hat man den Vorteil, dass die Codebase ebenfalls getrennt ist. In dem Fall habt ihr eine Codebase, also ein mono repo (Mono Repository)?
+
+    \BerndOlleck Wir haben viel diskutiert und uns dagegen entschieden. Aus meiner Sicht sind mono repos, wenn man Micro Frontend anwendet, obsolet. Micro Frontend bedeutet Unabhängigkeit und wenn ich einen mono repo verwende, bin ich nicht unabhängig.
+    Mono repo haben historisch gesehen große Vorteile geboten, solange ich Monolithen gebaut habe. Dadurch gab es eine gemeinsame Codebasis, die dennoch trennscharf genutzt werden konnte.
+    Aber sobald ich Micro Frontend nutze sind vor allem Trennung, Isolation und klare Schnittstellen das Wesentliche. In dem Fall, würde ich keinen mono repo mehr nutzen.
+
+    \NicoVogel Nächste Frage: What do you think about my reqirements categories? Am I missing anything? Would you change the order of importance?
+
+    \BerndOlleck Also, für mich ist Shared State das absolut wichtigste, denn das heißt, dass ich API-Kommunikation zwischen meinen Teilen habe. Je breiter oder je schmaler die API-Kommunikation zwischen meinen Teilen ist, desto stärker oder schwächer hängen meine Teile zusammen.
+    Wir hatten in unserem Projekt an manchen Stellen politisch motivierte Schnitte, die weder fachlich noch technisch motiviert waren. Dadurch hatten wir breite APIs und das war immer grässlich. Das frisst viele der Vorteile, die Micro Frontend bringt. Zum Beispiel wird die Integration komplex und die Autonomie geht verloren. Ich würde behaupten, dass eine Micro Frontend Anwendung ohne Shared State keinen Sinn ergibt, da ich dann Browser Tabs habe. Das heißt also minimaler Shared State ist eine Grundvoraussetzung dafür, dass ich überhaupt Micro Frontend in Betracht ziehe, weil ich sonst getrennte Applikationen baue. Shared State kann unterschiedlich groß sein. Von den einfachen Punkten von z.B. „Was ist die gemeinsame Sprache?“, „Was ist mein Nutzerkontext?“ über „Was sind die Präferenzen?“ bis hin zu „Schriftgröße“.
+
+    \NicoVogel An der Stelle möchte ich gerne unterbrechen und zurück zur Reihenfolge kommen. Später gehen wir darauf ein, welche Ansätze ihr verwendet habt.
+
+    \BerndOlleck Wie gesagt Shared State ist das Wichtigste, weil der bestimmt, wie groß meine APIs sind. Nicht nur Shared State, sondern auch Shared Communication ist wichtig. Also wenn es um Broadcast geht oder andere Interaktionen. Das ist für mich das Wichtigste, denn davon hängt der Rest ab.
+    Ansonsten ist Style Handling noch relativ wichtig. Performance ist abhängig davon was man machen möchte, wobei man diese natürlich nicht versauen sollte. Aber Performance sehe ich eher bei den einzelnen Teams an sich und nicht im Integration Approach. Wenn du die Shell Application richtig aufsetzt, dann hast du weniger Einfluss auf die Performance als die Teilapplikationen. Ich denke aber, wenn man sich Gedanken macht über sinnvolle APIs dann ist das Resultat automatisch eine gute Performance.
+    Browser Routing und Integration approach: Man sollte da vorher klären, welche Technologien eingesetzt werden. Wenn man z.B. Auf Web Components setzt, dann schließt man viele Sachen aus. Von der Priorisierung sehe ich es daher an der richtigen Stelle, weil es eine grundlegende Entscheidung ist, die getroffen werden muss.
+
+    \NicoVogel Also würdest du Browser Routing Integration an Position 1 setzen?
+
+    \BerndOlleck Ja, noch vor Shared State!
+
+    \NicoVogel Aktuell hast du folgende Reihenfolge: 1. Browser Routing, 2. Shared State, Styling?
+
+    \BerndOlleck Performance ist auf Position 3, Styling 4 und Developer Experience ist Position 5. Also Shared State sollte höher bewertet sein. Es ist die Frage, wie viel in Browser Routing betrachtet wird. Durch Browser Routing, wenn du dir zum Beispiel URL Manipulationen ansiehst, bist du automatisch in Shared State drin.
+
+    \NicoVogel 4. Frage: What are requirements for the named shell application scenarios? Was waren die Requirements und wie habt ihr es umgesetzt?
+
+    \BerndOlleck Schon zu Beginn war klar, dass wir auf Web Components setzen wollen, womit das Technologie Requirement drin war. Wir wollten erst einmal Erfahrungen mit Web Components sammeln und uns schrittweise rantasten. Daher zuerst eine Strukturierung in Subkomponenten und einzelne NPM Module die verlinkt werden. Danach wird es schrittweise gegen Web Components ersetzt. Wir hatten technisch gesehen mehr als eine Shell Application. Wir hatten auf der obersten Ebene eine Shell, die die Anwendung in Tabs unterteilt hat, und eine gemeinsame Navigationsbar. Jeder Tab ist eine Sollbruchstelle und beinhält ein Micro Frontend. Innerhalb der Tabs gab es weitere Sollbruchstellen.
+    Zum Beispiel gab es eine Variante, in der auf der linken Seite umfangreiche Informationen angezeigt wurden und eine gefilterte Ansicht von dieser rechts dargestellt wurde. Die Ansicht auf der rechten Seite bestand wieder aus Sollbruchstellen, welche visuell vom Nutzer gesteuert werden und zeigen nur an, was der Nutzer sehen möchte. Somit konnten die Shell Applikationen ineinander gestackt werden. Manchmal waren Tabs, ein anderes Mal waren Icons die Sollbruchstelle. Wir hatten auch einen Bereich mit sogenannten Kacheln. Je nach fachlichem Bereich hatten wir mehr als 10 Ansichten, die auch eine Art von Shell Application waren. Jede dieser Kacheln konnte individuell konfiguriert werden. Die Anforderungen für die Shells waren natürlich verschieden, z.B. Von der fachlichen Seite: „Ich habe hier ein Rechteck, dass muss konfiguriert werden“ oder die technische Seite: Man brauchte eine Kommunikationsschicht, damit wir gemeinsam daran arbeiten konnten. Performance war für uns eigentlich irrelevant. Als Monolith waren wir in Chrome bereits schnell genug.
+
+    \NicoVogel Aus Zeitgründen, lass uns auf die Frage 5 übergehen: Was sind aus deiner Perspektive die wichtigsten Requirements für eine Shell Application und welche habt ihr verwendet?
+
+    \BerndOlleck Wir haben eine klare einfache primitive API verwendet. Die API sollte auch in Sorcecode Form geshared werden können zwischen Parent and Child. Es muss klar sein über welche Kanäle kommuniziert wird. Ein Beispiel für Parent an Child Kommunikation ist „Lösch dich bitte“ oder von Child an Parent „Gib mir Nutzerinformationen“.
+
+    \NicoVogel Zwischenfrage: Die Shell Applikation hat nicht automatisch einen Content beim Erzeugen geteilt?
+
+    \BerndOlleck Das haben wir divers gehandhabt. Es gab klare Befehle, wie z.B. die Sprache. Es gab eine bestimmte Menge an Grundinformationen, die einfach weitergereicht wurden. Wie z.B. Für die Shared Services. Aber die Implementierung der Shared Services war dann Kind-spezifisch, um das Datenmanagement in der Shell zu machen und den Shared State individuell beeinflussen zu können.
+
+    \NicoVogel Was versteht ihr unter Shared Service? Ist das ein Codeschnipsel, der nicht für Anzeige zuständig ist?
+
+    \BerndOlleck Genau, hier ein Beispiel ohne Anzeige: Unsere Backend Aufrufe werden über denselben HTTP Service geschickt. Dieser Service kümmert sich darum, dass die Nutzerberechtigungen richtig gemacht werden. Es gibt die Einstellung, dass bei jedem Service Aufruf die UI blockiert wird oder nicht. Blockierende UI während eines Backendaufrufs muss die Shell steuern, da es global ist. Ein weiteres Beispiel: Notification Anzeige. Das wird durch Shared Services einheitlich dargestellt und ermöglicht eine gute User Experience.
+
+    \NicoVogel Was ist aus deiner Perspektive noch besonders wichtig?
+
+    \BerndOlleck Ladeverhalten. Wir haben Wert daraufgelegt, dass Applikationen, die schon geladen waren, nicht noch einmal geladen werden müssen. Konkret bedeutet das, dass JavaScript nicht mehrfach angefordert wird. Ein weiterer wichtiger Punkt sind Versionierungssysteme. Wenn von einer Kind Applikation eine neue Version bereitgestellt wird, dann sollte die Shell nicht angepasst werden, um diese anzuzeigen und der Browser soll eine Version von einer Kind Applikation nur einmal laden. Frameworks wie Angular bieten hierfür typischerweise ein Hashing Mechanismus an, wobei ein Hash in den JavaScript Dateinamen integriert waren. Somit ändert sich der Dateiname bei jeder Version und dadurch kann der Browser Cache verwendet werden.
+
+    \NicoVogel Wie weiß die Applikation, wann eine neue Version geladen werden soll?
+
+    \BerndOlleck Wir haben explizit eine Indirektion eingebaut. Jedes Micro Frontend stellt eine Konfigurationsdatei zur Verfügung, welche Informationen über die aktuelle Version beinhält, unteranderem auch die URL für die aktuelle Version. Die Konfigurationsdatei ist unter einer Standard URL erreichbar und wird nicht gecached.
+    Beim Styling sehe ich da drei Varianten. Man entwirft ein Masterstylesheet, das einmal rein geladen wird. Alle Web Komponenten nutzen kein Shadow DOM und werden stattdessen über das Masterstylesheet gestylt.
+
+    \NicoVogel Zählt das in die Kategorie Design System mit rein?
+
+    \BerndOlleck Man kann Design System auf alle drei Varianten anwenden. Nur der Styling Ansatz sollte geklärt sein im Projekt. Der Vorteil von diesem Szenario ist, dass man eine gleichaussehende Applikation hat. Der Nachteil daran: wenn Teile geändert werden, müssen alle Komponenten mitziehen. Es gibt eine große Abhängigkeit.
+    Zweite Variante: man nutzt Shadow DOM intensiv und jede Teilapplikation lädt dieses Masterstylesheet selbst. Dadurch hat jede Teilapplikation die Freiheit neuere Versionen des Masterstylesheets zu verwenden. Vorteil: flexibel in der Integration und trotzdem einheitlich im Styling.
+    Die dritte Variante: Ich baue eine Bibliothek, die sämtliche Widgets, Bildschirmelemente, Stylings und Sizings enthält. Und nutze diese dann in all meinen Teilapplikationen. Dadurch reduziere ich den Aufwand für das Styling, was sonst noch extra notwendig ist. Nachteil: Es erfordert viel Aufwand, diese Bibliothek zu erstellen. Außerdem ist sie der Single Point of Failure. Aber da ich mit Web Components arbeite, habe ich die Möglichkeit getrennte Stände der Bibliothek zu verwenden. D.h. Ich kann auch weiterhin sanfte Updates machen.
+
+    \NicoVogel Was sind aus deiner Sicht die schwierigsten Requirements?
+
+    \BerndOlleck API! Wenn man die nicht richtig definiert und nicht wachstumsfähig ist, dann hat man “worst of both worlds”. Wenn ich Monolithen baue, dann kann ich meine APIs einfacher refactorn.  Bei Micro Frontend sind sie eher fixiert, d.h. man muss sich mit anderen absprechen. Und man muss sich Gedanken über Versionierungssysteme für APIs und potenziell auch über Kompatibilitätsschichten machen.
+
+    \NicoVogel Kann das aus deiner Sicht eine Shell Anwendung unterstützen?
+
+    \BerndOlleck Eine API in einer Shell Application wird immer wachsen. Daher kann die Shell hier einen tatsächlichen Mehrwert bieten, wenn sie mehrere API-Versionen bereitstellt.
+    Das nächste ist Styling. Wir waren froh, als wir die Library ablösen konnten durch echte Web Components. Wir hatten eine Design System Library als Komponenten Bibliothek, die eine inkompatible Änderung in einem Major Version Change machte. Manche Teile brauchten die neue Version und andere konnten nicht so einfach aktualisiert werden. Wer also ein konsistentes Nutzererlebnis schaffen will, muss ziemlich viel in Styling investieren.
+
+    \NicoVogel Noch was wirklich Schwieriges?
+
+    \BerndOlleck Wenn ich oben nochmal schaue, glaube ich nicht. Performance war kein Problem. Developer Experience: wir hatten einen hervorragenden DevOps Engineer, der hat die Build-Pipeline gemanagt, was uns viel Arbeit abgenommen hat. Es ist wichtig hier zu investieren und dabei hilft es eine ordentliche Projektstruktur zu haben.
+    Integration: Hier hatten wir ein politisches Thema. Dem Kunden war nicht klar, dass alleine das Teilen der Information nicht schon alles schneller macht. Man muss eben genau planen, wie man die einzelnen Teile wieder zusammen zu einem homogenen funktionierenden Ganzen fügt. Dabei kommen Fragen auf, wie „Wie organisiert und testet man das?“. Früher hat man einen Monolith gebaut und vor dem Kompilevorgang schon viele Fehler bekommen. Diese tauchen in Micro Frontend Applikationen erst zur Laufzeit auf.
+    Ein andere Frage ist: wie sichere ich denn, dass sich Teile einer Micro Frontend Applikation unabhängig voneinander aktualisieren können? Das war ein Integrationspunkt, der bei uns schwierig war.
+
+    \NicoVogel Do you think there is a need for a generalized shell application or framework?
+
+    \BerndOlleck Ich glaube viele Projekte werden gleiche Probleme haben. Da wäre es sicherlich hilfreich eine Art Framework zu haben, um generelle Dinge zu klären. Wie z.B. wie gehe ich mit Shared State um? Für die Kommunikation ist es sicherlich hilfreich, wenn man eine gemeinsame standardisierte Schicht hat, die diese Sachen abdeckt. Außerdem sehe ich einen Sinn darin, wenn es typische Szenarios Frameworks oder Bausteine gibt um diese abgedeckt. Aber jede Shell wird individuelle Anforderungen haben. Ich denke eine Framework Basis ist sehr hilfreich, damit man viele Fallen schon vorher vermeidet. Eine einzige generalisierte Applikation wird nicht ausreichen. Stattdessen eine Version, die anpassbar ist für alle Bedürfnisse.
+
+\end{description}

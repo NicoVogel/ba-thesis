@@ -1,0 +1,130 @@
+%!TEX root = ../../documentation.tex
+
+\section{Performance requirement and approaches}\label{cha:requirement_detail_performance}
+
+The \textit{Performance (\textbf{Score 11})} requirement category cannot be divided into sub requirements, but approach categories, which focus around dependencies and integration.
+
+
+
+\paragraph{Dependencies}
+
+Approaches for dependencies mainly are based around the idea of reducing the total amount of \ac{JS} loaded.
+The following approaches are described from least savings to maximum savings.
+The same applies for coupling.
+\textciteRehm{} and \textciteSteyer{} mentioned that dependencies or \ac{JS} files should be optimized for loading.
+This can be realized with \textit{Webpack minimize}\footnotemark, for example.
+\footnotetext{\url{https://webpack.js.org/configuration/optimization/} (Visited on 09/06/2020)}
+
+To reduce  the total size of \ac{JS} to be loaded further, dependencies which are needed from many \acp{MF} can be bundled together and only loaded once.
+This dependency bundle is then provided by the shell for all \acp{MF}.
+The approach was mentioned by \textcite{Grijzen.2019}, who thinks that this should be utilized as much as possible.
+\textciteSteyer{} also believes, that the shell should be responsible for loading the shared dependencies.
+Other shared tasks that the shell manages are discussed in the \textit{\nameref{cha:requirement_detail_integration_sharedlogic}} requirement.
+In general, this approach is flexible in terms of coupling between \acp{MF}.
+The more dependencies that are shared, the higher the coupling between \acp{MF} and the saving of duplicate \ac{JS} code.
+While this approach is only theoretical, the next one also explains how to achieve this approach.
+
+To reduce the total \ac{JS} size even more, the frontend framework core can be shared as well.
+This was mentioned by \textciteSteyer{}, \textciteRehm{}, \textcite{Grijzen.2019}, \textcite{Dornenburg.2019} and \textcite{Leitner.2020}.
+They explained two variances to achieve this with Webpack:
+
+The first one uses the \enquote{external} feature.
+In order to extract the framework core from a \ac{MF}, it must be defined as \enquote{external} in the Webpack config.
+By doing so, Webpack bundles only the \ac{MF} code and will not include the framework core.
+Instead, it expects the core to be accessible via a global variable, which must be defined in the Webpack config\footnotemark{}.
+\footnotetext{\url{https://webpack.js.org/configuration/externals/} (Visited on 08/17/2020)}
+
+Another approach to share the core is by using the Module Federation feature of Webpack.
+If needed, the core can be lazy loaded and the shell does not need any additional logic to do so\footnotemark{}.
+\footnotetext{\url{https://indepth.dev/webpack-5-module-federation-a-game-changer-in-javascript-architecture/} (Visited on 08/17/2020)}
+Both approaches were mentioned by \citeauthorSteyer{} and both can be used for either sharing a framework core or dependencies.
+
+Using the shared core approach has the advantage of drastically reducing the total \ac{JS} size, but only when using a heavy framework like Angular, React or Vue.
+\textcite{Leitner.2020} points out, that in case of slim frameworks like Stencil or SvelteJS, it does not impact the bundle size as much.
+On the other hand, sharing the core introduces a tight coupling between the \acp{MF} and thus, reducing the autonomy of each team.
+More about this in the \textit{\nameref{cha:requirement_detail_developer_autonomy}} requirement.
+
+The experts do have different opinions on using the shared core strategy.
+These differences are related to the type of application that is built.
+For example, \textciteSteyer{} supervised multiple \nameref{cha:scenarios_enterprise}s, where there was no need to keep the bundle size small or even worrying about performance.
+\textcite{Laug.2018} also mentions that bundle size is no concern in the \nameref{cha:scenarios_enterprise} he was working on, because the end-users are either frequent users and thus caching reduces the loading time or the devices are connected via \ac{LAN} which typically implies a good internet connection.
+Therefore, both did not need to use the shared core approach.
+
+\textcite{Dornenburg.2019} did not mention which application type he was working on, but he suggested not to share multiple versions of the same framework.
+By using the described approaches, it is possible to share as many framework cores and versions as needed.
+However, it is important to note that sharing multiple cores also reduces the size benefit of sharing cores at all.
+The end user still needs to download these cores.
+Therefore, \textcite{Grijzen.2019} points out, that for the \nameref{cha:scenarios_offshelf} he is working on, only one framework core is shared with only one version of it.
+
+Each of the approaches, namely minimizing \ac{JS} bundles, sharing dependencies, and sharing the framework core, can be further improved via caching.
+\textciteSteyer{} suggests using Service Workers to cache \ac{MF} files.
+This is relevant for loading required files, which is further discussed in the \textit{\nameref{cha:requirement_detail_integration_loading}} requirement.
+\textciteRehm{} believes, that a caching strategy is needed.
+An approach to allow caching files, is mentioned in the \textit{\nameref{cha:requirement_detail_integration_configuration}} requirement.
+It focuses around the file names and which files should be cached and which should not.
+\citeauthorRehm{} further mentions to use a loading strategy.
+This is needed if the \textit{\nameref{cha:requirement_detail_integration_widget}} requirement applies to the application.
+In this case, a widget could be used, before the parent \ac{MF} is loaded.
+This is further discussed in the requirement itself.
+Lastly, it is important to mention that caching is especially useful if the userbase consists of frequent users.
+
+To conclude, dependencies should be minimized and adding a form of caching improves loading performance for frequent users.
+Also, using shared dependencies or even a shared framework core approach, introduces coupling between the \acp{MF}.
+Depending on the application type, however, using shared dependencies or core is necessary for the \ac{UX}.
+While it may be negligible for \nameref{cha:scenarios_enterprise}s \cite{Vogel.2020.Steyer}, it can be critical for \nameref{cha:scenarios_consumer}s or \nameref{cha:scenarios_offshelf}s.
+
+Finally, depending on the application itself, reducing the total \ac{JS} size is not always as important.
+When considering an application like Instagram, their focus is around images and videos, which have a greater impact in size than any \ac{JS} could have.
+This is also underlined by the \ac{HTTP} Archive, which shows that websites for desktops contain around 3.8 times more bytes for images than \ac{JS}\footnotemark{}.
+\footnotetext{\url{https://legacy.httparchive.org/interesting.php?a=All\&l=Aug\%201\%202020\#bytesperpage} (Visited on 08/29/2020)}
+
+
+
+\paragraph{Integration}
+
+While the dependency approaches focus on shortening the loading time, the integration approaches address the performance of the application itself.
+One approach mentioned by \textciteSteyer{} targets the idea of re-fetching information.
+In his opinion, each \ac{MF} should load its needed information by itself and not using the shell as a cache.
+If the shell is used to cache information, this may result in a tight coupling between the shell and \acp{MF}.
+However, he adds that some context information should be provided by the shell.
+For example, who is the current user or which business process is in use.
+The named examples from \citeauthorSteyer{} refer to context information which are needed by multiple \acp{MF} to correctly display content.
+
+Another more general topic \textciteSteyer{} mentions is perceived performance of the application.
+He states, that he was working on applications with around 15 active \acp{MF} and no performance problems were observed.
+The application was not using a shared core approach and it was an \nameref{cha:scenarios_enterprise}.
+Moreover, he was involved with testing iFrames performance for another \nameref{cha:scenarios_enterprise}.
+He included 200 iFrames in an application and each was displaying another dummy \ac{MF}.
+No performance issues were experienced during the test.
+
+On the contrary, \textciteJovanovic{} points out that one of his main issue with \ac{MF} applications is performance.
+This is also shown in his importance ordering of the requirement categories.
+He rated performance as the most important requirement, which is shown in Table \ref{tbl:overview_requirements_categories}.
+\citeauthorJovanovic{} worked on a \nameref{cha:scenarios_consumer}.
+
+\textciteJovanovic{} and \textcite{Leitner.2020} both mentioned that in case of performance issues, one possible solution can be to reduce the number of heavy frameworks per page.
+A heavy framework would be Angular, React or Vue in their opinion.
+\citeauthor{Leitner.2020} outlines that weak devices will have a hard time running multiple heavy frameworks.
+Lastly, \citeauthorJovanovic{} believes that Web Workers\footnotemark could improve the overall performance.
+\footnotetext{\url{https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers} (Visited on 09/06/2020)}
+He also pointed out, that this will not fix all problems, because weak devices will still have problems even with a multi-core approach.
+
+
+
+\paragraph{Conclusion}
+
+In general performance is a tradeoff between autonomy and \ac{UX}.
+This is especially shown in case of the loading time, which can be optimized on the expense of autonomy.
+Also, depending on the application scenario the importance of choosing a performant approach varies.
+This is further outlined by the following two experts opinions:
+
+The first is \textciteRehm{}, who works on an \nameref{cha:scenarios_enterprise}.
+He points out that autonomy is important, but is currently uncertain if a performant approach will be needed later on and whether it will sacrifice some autonomy.
+Furthermore, he believes that \ac{UX} is still the most important fact and needs to be preserved even at the expense of autonomy.
+On the contrary, the second opinion is from \textciteJovanovic{}, who has worked on a \nameref{cha:scenarios_consumer}.
+His concern was that older browsers or smartphones can run into performance issues.
+Such issues occur for example, when running Angular and React on the same page.
+This is why they ultimately implemented a policy, that only one heavy framework per page is allowed.
+
+The \hyperref[cha:requirement_detail_performance]{Performance} requirement is considered critical from \textciteRehm{} and \textciteSteyer{} and difficult by \textciteJovanovic{}.
+

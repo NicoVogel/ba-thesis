@@ -1,0 +1,207 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Einstellungen
+%
+% Hier können alle relevanten Einstellungen für diese Arbeit gesetzt werden.
+% Dazu gehören Angaben u.a. über den Autor sowie Formatierungen.
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sprache %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Aktuell sind Deutsch und Englisch unterstützt.
+%% Es werden nicht nur alle vom Dokument erzeugten Texte in
+%% der entsprechenden Sprache angezeigt, sondern auch weitere
+%% Aspekte angepasst, wie z.B. die Anführungszeichen und
+%% Datumsformate.
+\setzesprache{en} % oder en
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Angaben %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Die meisten der folgenden Daten werden auf dem
+%% Deckblatt angezeigt, einige auch im weiteren Verlauf
+%% des Dokuments.
+
+% student 1
+\setzemartrikelnr{5704145}
+\setzekurs{STG-TINF17-D}
+\setzeautor{Nico Vogel}
+
+\setzetitel{Evaluation of micro frontend shells for a prototypical generalized shell implementation}
+%\setzetitel{Logfileanalyse mit Apache{\textsuperscript{TM}} Hadoop\textsuperscript{{\textregistered}} MapReduce}
+\setzedatumAbgabe{September 2020}
+\setzefirma{Capgemini}
+\setzefirmenort{Stuttgart}
+\setzeabgabeort{Stuttgart}
+\setzeabschluss{Bachelor of Science}
+\setzestudiengang{Informatik}
+\setzedhbw{Stuttgart}
+\setzebetreuer{Pirmin Rehm}
+\setzegutachter{Martin Spörl}
+\setzezeitraum{06/15/2020 - 09/07/2020}
+\setzearbeit{Bachelor thesis}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Literaturverzeichnis %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Bei Fehlern während der Verarbeitung bitte in ads/header.tex bei der
+%% Einbindung des Pakets biblatex (ungefähr ab Zeile 110,
+%% einmal für jede Sprache), biber in bibtex ändern.
+\newcommand{\ladeliteratur}{%
+    \addbibresource{bibliography.bib}
+    %\addbibresource{weitereDatei.bib}
+}
+%% Zitierstil
+%% siehe: http://ctan.mirrorcatalogs.com/macros/latex/contrib/biblatex/doc/biblatex.pdf (3.3.1 Citation Styles)
+%% mögliche Werte z.B numeric-comp, alphabetic, authoryear
+\setzezitierstil{numeric-comp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Verschiedene Schriftarten
+% laut nag Warnung: palatino obsolete, use mathpazo, helvet (option scaled=.95), courier instead
+\setzeschriftart{lmodern} % palatino oder goudysans, lmodern, libertine
+
+%% Paket um Textteile drehen zu können
+%\usepackage{rotating}
+%% Paket um Seite im Querformat anzuzeigen
+%\usepackage{lscape}
+
+%% Seitenränder
+\setzeseitenrand{2.5cm}
+
+%% Abstand vor Kapitelüberschriften zum oberen Seitenrand
+\setzekapitelabstand{20pt}
+
+%% Spaltenabstand
+\setzespaltenabstand{10pt}
+%%Zeilenabstand innerhalb einer Tabelle
+\setzezeilenabstand{1.5}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Verschiedenes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Farben (Angabe in HTML-Notation mit großen Buchstaben)
+\newcommand{\ladefarben}{%
+    \definecolor{LinkColor}{HTML}{00007A}
+    \definecolor{ListingBackground}{HTML}{FCFAFB}
+}
+%% Mathematikpakete benutzen (Pakete aktivieren)
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+%% Programmiersprachen Highlighting (Listings)
+\newcommand{\listingsettings}{%
+    \lstset{%
+        language=Java,			% Standardsprache des Quellcodes
+        numbers=left,			% Zeilennummern links
+        stepnumber=1,			% Jede Zeile nummerieren.
+        numbersep=5pt,			% 5pt Abstand zum Quellcode
+        numberstyle=\tiny,		% Zeichengrösse 'tiny' für die Nummern.
+        breaklines=true,		% Zeilen umbrechen wenn notwendig.
+        breakautoindent=true,	% Nach dem Zeilenumbruch Zeile einrücken.
+        postbreak=\space,		% Bei Leerzeichen umbrechen.
+        tabsize=2,				% Tabulatorgrösse 2
+        basicstyle=\ttfamily\footnotesize, % Nichtproportionale Schrift, klein für den Quellcode
+        showspaces=false,		% Leerzeichen nicht anzeigen.
+        showstringspaces=false,	% Leerzeichen auch in Strings ('') nicht anzeigen.
+        extendedchars=true,		% Alle Zeichen vom Latin1 Zeichensatz anzeigen.
+        captionpos=b,			% sets the caption-position to bottom
+        backgroundcolor=\color{ListingBackground}, % Hintergrundfarbe des Quellcodes setzen.
+        xleftmargin=0pt,		% Rand links
+        xrightmargin=0pt,		% Rand rechts
+        frame=single,			% Rahmen an
+        frameround=ffff,
+        rulecolor=\color{darkgray},	% Rahmenfarbe
+        fillcolor=\color{ListingBackground},
+        keywordstyle=\color[rgb]{0.133,0.133,0.6}\bfseries,
+        commentstyle=\color{Sepia},
+        stringstyle=\color{red}
+    }
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Eigenes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Hier können Ergänzungen zur Präambel vorgenommen werden (eigene Pakete, Einstellungen)
+
+% xcolor muss mit optionen vor pdfpages geladen werden
+\usepackage[usenames,dvipsnames,table,xcdraw]{xcolor} 	%xcolor für HTML-Notation
+
+\usepackage{pdfpages}
+
+\usepackage{xargs}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+
+
+% Table formatting
+\newcommand\setrow[1]{\gdef\rowmac{#1}#1\ignorespaces}
+\usepackage{longtable}
+\usepackage{makecell}
+% \usepackage{booktabs}
+% \usepackage{tablefootnote}
+
+
+% interview settings
+\usepackage[T1]{fontenc}
+\usepackage{xparse}
+\usepackage{enumitem}
+
+% transcript configuration
+\setlist[description]{
+    font={\sffamily\bfseries},
+    labelsep=0pt,
+    labelwidth=\transcriptlen,
+    leftmargin=\transcriptlen,
+}
+\newlength{\transcriptlen}
+\NewDocumentCommand {\setspeaker} { mo } {%
+    \IfNoValueTF{#2}
+    {\expandafter\newcommand\csname#1\endcsname{\item[#1:]}}%
+    {\expandafter\newcommand\csname#1\endcsname{\item[#2:]}}%
+    \IfNoValueTF{#2}
+    {\settowidth{\transcriptlen}{#1}}%
+    {\settowidth{\transcriptlen}{#2}}%
+}
+\setspeaker{NicoVogel}[V]
+% How much of a gap between speakers and text?
+\addtolength{\transcriptlen}{1em}%
+
+
+% create commands for the interviewer names
+\NewDocumentCommand{\defineInterview}{m}{
+    \expandafter\newcommand\csname citeauthor#1\endcsname{#1}
+    \expandafter\newcommand\csname textcite#1\endcsname{#1 \cite{Vogel.2020.#1}}
+}
+% don't forget to add an empty backet behind each command
+\defineInterview{Olleck}
+\defineInterview{Jovanovic}
+\defineInterview{Mezzalira}
+\defineInterview{Steyer}
+\defineInterview{Huber}
+\defineInterview{Rehm}
+
+
+% indent
+\usepackage{scrextend}
+\NewDocumentCommand{\requirementText}{m}{
+    \begin{addmargin}[1em]{2em}% 1em left, 2em right
+        #1
+    \end{addmargin}
+}
+
+% URL
+\usepackage[hyphenbreaks]{breakurl}
+\usepackage[hyphens]{url}
+
+\let\oldfootnote\footnote
+\renewcommand{\footnote}{\unskip\oldfootnote}% Remove any skips inserted before \footnote
+
+% allow to reference the name and number of something
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\ref*{#1} \nameref*{#1}}}
+
+% check and x marks
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%

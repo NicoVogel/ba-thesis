@@ -1,0 +1,153 @@
+%%**************************************************************
+%% Vorlage fuer Bachelorarbeiten (o.ä.) der DHBW
+%%
+%% Autor: Tobias Dreher, Yves Fischer
+%% Datum: 06.07.2011
+%%
+%% Autor: Michael Gruben
+%% Datum: 15.05.2013
+%%
+%% Autor: Markus Barthel
+%% Datum: 22.08.2014
+%%**************************************************************
+
+\input{ads/header}
+
+\makeglossaries
+\input{ads/glossary}
+
+\begin{document}
+\selectlanguage{english}
+
+% Deckblatt
+\begin{spacing}{1}
+	\input{ads/deckblatt}
+\end{spacing}
+\newpage
+
+% Sperrvermerk
+%	\input{ads/sperrvermerk}
+%	\newpage
+
+% Erklärung
+\input{ads/erklaerung}
+\newpage
+
+% Abstract
+\input{ads/abstract}
+\newpage
+
+% Abstract
+\input{ads/abstract_de}
+\newpage
+
+\pagestyle{plain}		% nur Seitenzahlen im Fuß
+
+%\RedeclareSectionCommand[beforeskip=\kapitelabstand]{chapter} % stellt Abstand vor Kapitelüberschriften ein
+
+% Inhaltsverzeichnis
+\begin{spacing}{1.1}
+\begingroup
+
+% auskommentieren für Seitenzahlen unter Inhaltsverzeichnis
+\renewcommand*{\chapterpagestyle}{empty}
+\pagestyle{empty}
+
+%\setcounter{tocdepth}{1}
+%für die Anzeige von Unterkapiteln im Inhaltsverzeichnis
+\setcounter{tocdepth}{2}
+
+\tableofcontents
+\clearpage
+\endgroup
+\end{spacing}
+\newpage
+
+\pagenumbering{Roman}
+
+% Abkürzungsverzeichnis
+\cleardoublepage
+\input{ads/acronyms}
+
+%	\newpage\null\thispagestyle{plain}\newpage
+
+% Abbildungsverzeichnis
+\cleardoublepage
+\listoffigures
+
+%	\newpage\null\thispagestyle{plain}\newpage
+
+%Tabellenverzeichnis
+\cleardoublepage
+\listoftables
+
+%	\newpage\null\thispagestyle{plain}\newpage
+
+% Quellcodeverzeichnis
+\cleardoublepage
+
+\newcounter{savepage}
+\setcounter{savepage}{\number\value{page}}
+\pagenumbering{arabic}
+
+\pagestyle{headings}		% Kolumnentitel im Kopf, Seitenzahlen im Fuß
+
+% Einleitung
+\input{content/Introduction.tex}
+
+% Theoretische Grundlagen
+\input{content/Theory.tex}
+
+% Requirement Analysis
+\input{content/Scenarios.tex}
+
+% Requirement Analysis
+\input{content/Requirement.tex}
+
+% Evaluation
+\input{content/Evaluation.tex}
+
+% Architecture
+\input{content/Architecure.tex}
+
+% Fazit
+\input{content/Conclusion.tex}
+
+% Inhalt
+%\foreach \i in {01,02,03,04,05,06,07,08,09,...,99} {%
+%	\edef\FileName{content/\i kapitel}%
+%		\IfFileExists{\FileName}{%
+%			\input{\FileName}
+%		}
+%		{%
+%			%file does not exist
+%		}
+%}
+
+\clearpage
+
+\pagenumbering{roman}
+\setcounter{page}{\number\value{savepage}}
+
+% Literaturverzeichnis
+\cleardoublepage
+\printbibheading
+\printbibliography[nottype=online,heading=subbibliography,title={Publications}]
+\printbibliography[type=online,notkeyword=Gesetz,notkeyword=Standard,heading=subbibliography,title={Online References}]
+\printbibliography[type=online,keyword=Gesetz,heading=subbibliography,title={Rechtsquellenverzeichnis}]
+\printbibliography[type=online,keyword=Standard,heading=subbibliography,title={Standards \& Normen}]
+
+%	\renewcommand\bibname{Literaturverzeichnis}
+%	\printbibliography
+
+%	\newpage\null\thispagestyle{plain}\newpage
+
+% Glossar
+\printglossary[style=altlist,title=\langglossar]
+
+% sonstiger Anhang
+\clearpage
+\appendix
+\input{ads/appendix}
+
+\end{document}

@@ -1,0 +1,41 @@
+%!TEX root = ../documentation.tex
+
+\addchap{\langabkverz}
+%nur verwendete Akronyme werden letztlich im Abkürzungsverzeichnis des Dokuments angezeigt
+%Verwendung: 
+%		\ac{Abk.} --> fügt die Abkürzung ein, beim ersten Aufruf wird zusätzlich automatisch die ausgeschriebene Version davor eingefügt bzw. in einer Fußnote (hierfür muss in header.tex \usepackage[printonlyused,footnote]{acronym} stehen) dargestellt
+%		\acs{Abk.} --> fügt die Abkürzung ein
+%		\acf{Abk.} --> fügt die Abkürzung UND die Erklärung ein
+%		\acl{Abk.} --> fügt nur die Erklärung ein
+%		\acp{Abk.} --> gibt Plural aus (angefügtes 's'); das zusätzliche 'p' funktioniert auch bei obigen Befehlen
+%	siehe auch: http://golatex.de/wiki/%5Cacronym
+%	
+\begin{acronym}[YTMMM]
+	\setlength{\itemsep}{-\parsep}
+
+	\acro{API}{Application Programming Interface}
+	\acro{BEM}{Blocks, Elements and Modifiers}
+	\acro{BFF}{Backend for Frontend}
+	\acro{CI/CD}{Continuous Integration and Continuous Delivery}
+	\acro{CDC}{Consumer-Driven Contract}
+	\acro{CLI}{Command-Line Interface}
+	\acro{CSS}{Cascading Style Sheet}
+	\acro{DOM}{Document Object Model}
+	\acro{ES}{ECMAScript}
+	\acro{GDPR}{General Data Protection Regulation}
+	\acro{HTML}{Hypertext Markup Language}
+	\acro{HTTP}{Hypertext Transfer Protocol}
+	\acro{ID}{Identifier}
+	\acro{IIFE}{Immediately Invoked Function Expression}
+	\acro{JS}{JavaScript}
+	\acro{JSON}{JavaScript Object Notation}
+	\acro{LAN}{Local Area Network}
+	\acro{MF}{Micro frontend}
+	\acro{MFA}{Micro frontend architecture}
+	\acro{RPC}{Remote Procedure Call}
+	\acro{SASS}{Syntactically Awesome Style Sheet}
+	\acro{UI}{User Interface}
+	\acro{URL}{Unified Ressource Locator}
+	\acro{UX}{User Experience}
+
+\end{acronym}

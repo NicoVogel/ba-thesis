@@ -1,0 +1,129 @@
+%!TEX root = ../../documentation.tex
+
+
+\section{Style requirement and approaches}\label{cha:requirement_detail_style}
+
+The style requirement category cannot be divided into sub requirements.
+Therefore, it is only the \textit{Consistent style (\textbf{Score 15})} requirement and its information.
+This information can be grouped into multiple aspects, which will be presented in this section.
+First, the general intent, namely style isolation is outlined.
+Following that are two specific approaches: utility \ac{CSS} file and component library.
+Lastly, practices are presented in this section
+
+
+
+\paragraph{Style isolation}
+
+A key part of styling in \ac{MF} applications is isolating the styles between the \acp{MF}.
+There are various ways to isolate styles and which approach is used depends on how autonomous the teams should be.
+More on team autonomy in the \textit{\nameref{cha:requirement_detail_developer_autonomy}} requirement.
+
+To achieve style isolation, \textcite{Jackson.2019} mentions techniques like \ac{SASS}, \ac{BEM}, \ac{CSS} in \ac{JS}, shadow \ac{DOM} and \ac{CSS} modules can be used.
+The last technique was proposed by \textcite{Laug.2018b}.
+The first technique, \ac{SASS}, is a preprocessing variance of \ac{CSS}.
+It is a superset of \ac{CSS} which enables features like nesting, mixins, and inheritance\footnotemark.
+\footnotetext{\url{https://sass-lang.com/guide} (Visited on 08/21/2020)}
+Next is \ac{BEM}, that is a naming convention for \ac{CSS} classes\footnotemark.
+\footnotetext{\url{http://getbem.com/introduction/} (Visited on 08/21/2020)}
+The third is \ac{CSS} in \ac{JS}, which moves styles into \ac{JS}.
+Another approach is the shadow \ac{DOM}, a Web Component feature, which utilizes a browser native isolation mechanism.
+Finally, \ac{CSS} modules are a step in the build process, that enforce isolation by changing \ac{CSS} class names to be unique\footnotemark.
+\footnotetext{\url{https://github.com/css-modules/css-modules} (Visited on 08/21/2020)}
+
+Besides these known approaches, there was a custom approach  mentioned by \textcite{Grijzen.2019}.
+He explained that each \ac{MF} has its own namespace which is equivalent to the \ac{MF} name.
+Because the project also has the \textit{\nameref{cha:requirement_detail_integration_pagelayout}} requirement, it is possible to apply the namespace to the layout placeholders.
+To enable the isolation, the namespace is added as prefix to each \ac{CSS} class within a \ac{MF}.
+
+All these techniques can be used to achieve isolating style, but which technique is used is up to the architect.
+For example, \textcite{Dornenburg.2019} believes that \ac{BEM} is only a workaround.
+
+
+
+\paragraph{Utility \ac{CSS}}
+
+One approach that was mentioned multiple times, is to use a utility \ac{CSS} in the project.
+Such a \ac{CSS} file contains global styles which are shared between all \acp{MF}.
+\textciteOlleck{} points out, that such a \ac{CSS} file can either be loaded once by the shell and thus create a tight coupling, or each \ac{MF} loads it by themselves.
+The last approach is only possible if the shadow \ac{DOM} is used, because it isolates the styles within the Web Component.
+This also allows to load multiple versions of the styles within the same project.
+This also keeps coupling low between the \acs{MF}, even though a global \ac{CSS} is used.
+\textciteRehm{} mentions, that a utility \ac{CSS} file should contain a spacing system.
+A spacing system defines the sizes of different elements, like buttons and paragraphs.
+This ensures a consistent look regarding spaces between elements.
+Finally, the last comment on this is from \textcite{Laug.2018}.
+He suggests avoiding \ac{CSS} rules to be included in the utility \ac{CSS} file which exceed margins and paddings.
+
+
+
+\paragraph{Component library}
+
+Another approach, which was mentioned multiple times, is the usage of a component library.
+A component library\footnotemark can either be framework specific or agnostic, which uses Web Components.
+\footnotetext{\cite[p.~16]{Vesselov.2019}}
+\textciteRehm{} points out, that in both cases it should be loaded by the shell to provide it only once for all \acp{MF}.
+This leaves the question open, when a component library should be framework specific or agnostic.
+
+There are two scenarios where a framework specific component library is used.
+The first was mentioned by \textciteJovanovic{} and it is when Web Components are not available, then the component library needs to be framework specific.
+Another reason can be that only one framework is used in the application.
+For example, \textciteRehm{} pointed out, that the application he is working on only uses Angular as framework.
+Therefore, some shortcuts can be achieved if an Angular component library is used instead of a framework agnostic version.
+He further mentions that it could be swapped out with a Web Component library, but there is no need currently.
+
+On the other hand, a framework agnostic approach enables a technology swap later on.
+A framework agnostic component library is used by \textciteOlleck{} and \textciteRehm{}.
+\citeauthorRehm{} explains, that even though they use an Angular component library for the components that they build, a second technology agnostic component library is provided by the customer.
+Therefore, he uses both types at the same time.
+However \citeauthorOlleck{} points out, that using a component library based on Web Components can be problematic.
+For example, if the version of the Web Component library is upgraded and any \ac{MF} needs the new version, then the entire application needs to be updated.
+This is due to the fact, that it is not possible to register a Web Component with the same name twice.
+Therefore, a tight coupling is implied between the Web Component library and the \acp{MF}.
+\citeauthorOlleck{} points out, that this can be solved by adding the version into the Web Component name.
+
+There is also some general advice for creating a component library.
+\textcite{Laug.2018} experienced, that component libraries sometimes may be over engineered.
+An example for an over engineered component would be a list component with a select, filter and search feature and the user is supposed to select one item of three.
+In this case the filter and search features are not needed, hence over engineered.
+He states that in this case these features are not needed and are disturbing.
+Therefore, providing basic versions of components can help prevent over engineering.
+This is also pointed out by \textcite{Jackson.2019}, where he recommends to focus on basic components.
+He points out, that to preserve reusability for complex components, they need to be built without any business logic.
+
+
+
+\paragraph{Practices}
+
+The experts mentioned some style practices.
+The most named practice is Design System.
+A Design System is a collection of components, groupings of components and guidelines.
+For further detail, see \cite[p.~16]{Vesselov.2019}.
+Design System is used by \textciteRehm{}, \textciteOlleck{}, \textcite{Leitner.2020}, \textcite{Laug.2018}, \textcite{Grijzen.2019}, \textciteSteyer{} and \textciteHuber{}.
+In general, \citeauthorSteyer{} noticed an increased interest in the usage of Design Systems.
+
+Besides Design System, there are also the practices like Design Guild and Inner Sourcing.
+Design Guild focuses on the idea of collaboratively evolving design.
+To achieve this, a regular meeting is conducted, where decisions around design are discussed and decided.
+The meeting is attended by one member of each team and this member has the responsibility to share the knowledge in the team.
+This principle was successfully utilized by \textcite{Laug.2018}.
+He also pointed out, that one result of the Design Guild should be a style guide which provides copy and paste ready code \cite{Laug.2018b}.
+
+On the other hand, Inner Sourcing uses the approach of creating a project internally, which has at least one main contributor and others can contribute via pull requests, therefore mimicking an open source project.
+This approach was explained by \textciteSteyer{} and also mentioned by \textcite{Jackson.2019}.
+
+
+
+\paragraph{Conclusion}
+
+To achieve consistent style in a \ac{MF} application there is always a tradeoff between autonomy and \ac{UX}.
+Various methods to isolate style were outlined, but total isolation is not necessarily what is needed.
+Therefore, many experts mentioned a utility \ac{CSS} file.
+This file couples \acp{MF} together, but the amount of coupling depends on the styling rules.
+A large decision is always whether to use global or local styles, explains \textciteSteyer{}.
+
+Another common approach are component libraries and they are also used in combination with other practices.
+\textciteSteyer{} mentions, that a frequent practice nowadays is Design System.
+\textcite{Dornenburg.2019} states, that in general styling is about components rather than the entire application.
+He continues by pointing out, that the times when one large \ac{CSS} was used to style an application are over and styles apply at the component level.
+
+This requirement is considered crucial by \textciteRehm{} and \textciteSteyer{} and difficult by \textciteOlleck{}.

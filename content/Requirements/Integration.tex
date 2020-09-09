@@ -1,0 +1,352 @@
+%!TEX root = ../../documentation.tex
+
+\section{Integration requirements and approaches}\label{cha:requirement_detail_integration}
+
+This section explains the integration requirements.
+The requirements from \textit{\nameref{cha:requirement_detail_integration_loading}} until \textit{\nameref{cha:requirement_detail_integration_sharedlogic}} are described in greater detail, than the requirements from \textit{\nameref{cha:requirement_detail_integration_widget}} to \textit{\nameref{cha:requirement_detail_integration_extensible}}, due to their score.
+
+
+
+
+
+\subsection{Loading}\label{cha:requirement_detail_integration_loading}
+
+The \textit{\nameref{cha:requirement_detail_integration_loading} (\textbf{Score 14})} requirement is about the shell's ability to load a \ac{MF} when needed.
+Before describing the approaches, it is important to consider what data needs to be loaded.
+A \ac{MF} consists of at least one \ac{JS} file.
+Other files are for instance, \ac{CSS}, \ac{HTML}, \ac{JSON} and image files.
+Depending on the \ac{MF} the number of files which need to be loaded may vary.
+Therefore, the loading approach must be flexible.
+End-users also expect the application to be fast \cite[p.~244p]{Zhou.2008}.
+Thus, the number of files needed for running the \ac{MF} should be small.
+Finally, the shell application needs to know which files need to be loaded.
+This is further discussed in the \textit{\nameref{cha:requirement_detail_integration_configuration}} requirement.
+There are two approaches on loading a \ac{MF} as well as an optional approaches that can be used on top.
+
+The first approach uses the browser \ac{API} to load the files.
+\textciteMezzalira{} proposes that one \ac{HTML} file per \ac{MF} is exposed and it contains all tags needed to load and startup the application.
+A little \ac{JS} code is responsible to load the \ac{HTML} file and integrate all tags into the application.
+The Browser then automatically starts downloading the needed files.
+Another variant of this, which also utilizes the browser \ac{API}, is to add each loading tag individually in the current application.
+This was mentioned by \textcite{Dornenburg.2019} and \textcite{Laug.2018}.
+
+The second approach only addresses \ac{JS} files.
+It uses \ac{JS} module import for loading the files.
+As soon as the file is fully loaded, it is executed.
+So, in this approach no tags are added to the current application and the \ac{JS} file is only loaded and executed within \ac{JS} \cite{Vogel.2020.Olleck}.
+According to \citeauthorMezzalira{} it is quicker to let the browser load the files, than executing \ac{JS} upfront to load it.
+
+Finally, on top of the named approaches a Service Worker can be used for caching and preloading, which was mentioned by \textciteRehm{} and \textciteSteyer{}.
+Service Workers run in a separate thread from the \ac{UI} and can cache images, scripts, styles or even pages \cite[p.~24f.]{Sheppard.2017}.
+
+This requirement has the highest score for the Integration category.
+It is considered crucial from \textciteHuber{} and difficult from \textciteMezzalira{}, \textciteSteyer{}, \textciteOlleck{} and \textciteJovanovic{}.
+
+
+
+
+
+\subsection{Lifecycle management}\label{cha:requirement_detail_integration_lifecycle}
+
+The requirement \textit{\nameref{cha:requirement_detail_integration_lifecycle} (\textbf{Score 10})} is an extension to the \textit{\nameref{cha:requirement_detail_integration_integration}} requirement.
+In general \textit{\nameref{cha:requirement_detail_integration_integration}} is about which technique is used to include a \ac{MF} into the application, the \textit{\nameref{cha:requirement_detail_integration_lifecycle}} is about the \acp{MF} visibility and loading state.
+A \ac{MF} lifecycle can consist of multiple events which represent its current state.
+These events could be triggered by the shell application or by the \ac{MF} itself.
+\textciteOlleck{} named states he used in a project, which are \textit{bootstrap}, \textit{display}, \textit{hide} and \textit{destroy (or clear)}.
+\textit{Bootstrap} represents the integration and startup, \textit{display} represents that a \ac{MF} is shown to the user, \textit{hide} is the opposite of display and \textit{destroy} or \textit{clear} represents that the \ac{MF} is unloaded and its occupied resources are free.
+Note, that this is one example and not all applications need such an extensive lifecycle.
+Another example from \textciteRehm{} provides only the \textit{bootstrap} event, which is raised when a \ac{MF} is in the integration process.
+\citeauthorRehm{} and \textciteSteyer{} state that lifecycle management an optional feature.
+
+For this requirement, no explicit approach is mentioned other than raising events and this is part of the \textit{\nameref{cha:requirement_detail_state_intercommunication}} requirement.
+The only explicit description of a functionality is, that in case of a destroy or clear event the \ac{MF} must provide a function which is called to remove all event listener.
+\textciteMezzalira{} points out, that in this case an interface which provides such a function is needed.
+This requirements was mentioned as difficult from \textciteJovanovic{} and \citeauthorMezzalira{}, and as crucial from \textciteHuber{}.
+
+
+
+
+
+\subsection{Routing}\label{cha:requirement_detail_integration_routing}
+
+\textit{\nameref{cha:requirement_detail_integration_routing} (\textbf{Score 9})} is about
+\ac{URL} changes that are reflected in the \ac{UI}.
+Updating the \ac{UI} consists of either changing the current page layout or swapping \acp{MF} accordingly.
+The idea of changing the page layout based on the route is further described in the \textit{\nameref{cha:requirement_detail_integration_pagelayout}} requirement.
+
+There is an important first differentiation in terms of how the application functions.
+The differentiation depends on the business domain size which each \ac{MF} covers.
+But the important part for routing is, that a \ac{MF} either has only one page or multiple pages.
+In the first case, only the shell needs routing functionality, while the latter is a combination of both.
+No matter which approach is used, all experts mention splitting the \ac{URL} into different sections.
+These sections have different responsibilities.
+The base route of the \ac{URL} is mentioned in the following two examples.
+It is the value between the first and second slash in the \ac{URL}.
+
+\textcite{Grijzen.2019} provides an example where only the shell is responsible for routing.
+No implementation details are shared, but his example is combined with the \textit{\nameref{cha:requirement_detail_integration_pagelayout}} requirement.
+The base route determines which \ac{MF} is shown, while a query parameter\footnotemark  is added to save the page layout and distribution of other \acp{MF}.
+\footnotetext{\url{https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams} (Visited on 09/06/2020)}
+
+Another example provided by \textciteRehm{} and \textciteSteyer{} addresses the idea of splitting the routing responsibility between the shell and \acp{MF}.
+In the example, the shell manages the base route.
+Based on this value one \ac{MF} is shown and it is responsible for the rest of the \ac{URL}.
+Therefore, it provides its own router that handles page changes which are within itself.
+This results in a hierarchical setup, where the shell sits on top and is essentially a meta router between \acp{MF}, which in turn routes on their own.
+
+\textciteSteyer{} points out, that there are some difficulties with this approach and it boils down to the fact, that the browser \ac{API} does not support an event for \enquote{\ac{URL} has changed}.
+He goes on to say, that there is a workaround for this problem, which is monkey patching\footnotemark the browser to support such an event.
+\footnotetext{\url{https://web.archive.org/web/20080604220320/http://plone.org/documentation/glossary/monkeypatch} (Visited on 09/06/2020)}
+The only browser \ac{API} event which is close to the needed event is \textit{HashChangeEvent}\footnotemark{}.
+\footnotetext{\url{https://www.w3schools.com/jsref/obj_hashchangeevent.asp} (Visited on 08/12/2020)}
+It is fired when the hash value in the \ac{URL} changes.
+However, \citeauthorSteyer{} points out that not every customer wants this approach.
+\textciteRehm{} tackled this problem by creating navigation events, which are distributed between all \acp{MF} and the shell.
+The event is raised when a \ac{MF} or shell changes the \ac{URL}, so that other \acp{MF} or the shell are notified about the change.
+More on events is described in the \textit{\nameref{cha:requirement_detail_state_intercommunication}} requirement.
+Lastly,  \textciteJovanovic{} considers \textit{\nameref{cha:requirement_detail_integration_routing}} requirement to be difficult and \citeauthorSteyer{} believes it is critical.
+
+
+
+
+
+\subsection{Configuration}\label{cha:requirement_detail_integration_configuration}
+
+The requirement \textit{\nameref{cha:requirement_detail_integration_configuration} (\textbf{Score 8})} is the only requirement which can be part of two requirement categories.
+On one hand, it is part of \textit{\nameref{cha:requirement_detail_integration_integration}}, because it provides information on how to integrate a \ac{MF} and on the other hand, it improves the \textit{\nameref{cha:requirement_detail_developer_experience}} by simplifying changing behavior.
+Both factors will be explained in the following paragraphs.
+
+An application configuration should contain everything which changes between deployments.
+To simplify this, some configuration is stored in environment variables \cite{Wiggins.2017}.
+In order to access the environment variables in the frontend, they must be stored in a file or they are provided by endpoint.
+Another aspect to consider is that configuration removes coupling from code, which is mentioned by \textcite{Dornenburg.2019} and \textciteMezzalira{}.
+More about coupling is described in the \textit{\nameref{cha:requirement_detail_developer_autonomy}} requirement.
+\citeauthorMezzalira{} says that being able to define which \ac{MF} should be loaded enables practices like Canary releases\footnotemark{} or loading different \ac{MF} per country.
+\footnotetext{\url{https://martinfowler.com/bliki/CanaryRelease.html} (Visited on 09/06/2020)}
+Other practices which are enabled by such a config, are Blue-Green deployments\footnotemark and quick rollbacks to the previous version, which is mentioned by \textciteRehm{}.
+\footnotetext{\url{https://martinfowler.com/bliki/BlueGreenDeployment.html} (Visited on 09/06/2020)}
+
+Apart from the release aspects, a configuration enables caching for \ac{JS} and other files.
+A few conditions must be met in order to achieve this.
+First, the configuration must contain \acp{URL} to the \ac{MF} files which need to be loaded.
+Then, these files should include a hash value in their names, so that a cache miss occurs in case of a file change.
+Finally, the configuration file itself should not be cached and available at a default location which itself does not change.
+This approach was mentioned by \textciteOlleck{}, \textcite{Leitner.2020} and \textcite{Dornenburg.2019}.
+The result would be, that the \ac{MF} files are loaded once and as soon as the entry within the configuration changes, a cache miss occurs in the browser and the new file is downloaded.
+Another approach mentioned by \citeauthor{Leitner.2020} is passing the configuration to the client is to directly include it into the shell \ac{HTML} file.
+One way to achieve this is to use Edge-Side-Includes\footnotemark and to update the \enquote{index.html} from the shell which is passed to the user.
+\footnotetext{\url{https://www.w3.org/TR/esi-lang/} (Visited on 09/06/2020)}
+Therefore, reducing the total request count.
+
+Apart from the \ac{MF} file \acp{URL}, the configuration file could include information like the backend \ac{URL} that each \ac{MF} should use or what the base route of a \ac{MF} is.
+This is mentioned by \textciteRehm{}, \textciteOlleck{} and \textcite{Dornenburg.2019}.
+Defining the file locations and backend \ac{URL} via environment variables allows the deployment to multiple environments.
+\citeauthorOlleck{} points out, that for the configuration information, which is passed to the \ac{MF}, there should be a clear interface.
+This overlaps with the \textit{\nameref{cha:requirement_detail_state_exchange}} requirement.
+Besides passing information to the \ac{MF}, \textcite{Grijzen.2019} points out, that meta data like a display name for a \ac{MF} could be included as well.
+The display name could be used in the navigation panel as label for the \ac{MF}.
+This allows to dynamically build the navigation pane without the need to first load the \ac{MF} or create unnecessary coupling between the navigation panel and all \acp{MF}.
+
+This requirement is considered crucial by \textcite{Vogel.2020.Rehm}.
+The actual content of the configuration file depends on the scenario.
+For example, the scenario \textit{\nameref{cha:scenarios_offshelf}} could be customized mainly via such a configuration file in combination with Blue-Green deployment or other similar processes are a common practice in \textit{\nameref{cha:scenarios_enterprise}}s.
+
+
+
+
+
+\subsection{Integration}\label{cha:requirement_detail_integration_integration}
+
+The  \textit{\nameref{cha:requirement_detail_integration_integration} (\textbf{Score 7})} requirement revolves around the possibilities to add a \ac{MF} to an application.
+While the \textit{\nameref{cha:requirement_detail_integration_lifecycle}} requirement addresses the \ac{MF} visibility and loading state, the \textit{\nameref{cha:requirement_detail_integration_integration}} requirement addresses the technique used to integrate a \ac{MF}.
+Before explaining which approaches are available, it is important to point out, that the integration process is the new breaking point of a \ac{MF} application.
+\textciteOlleck{} points out, that some errors are only visible at run-time, while they were obvious in monoliths at compile-time.
+He believes that an important question is how to get certainty in the integration process, before a user gets to see the new release.
+There is no clear answer to this question, but \textcite{Laug.2018} mentioned a possible integration check, which is discussed in the \textit{\nameref{cha:requirement_detail_developer_testing}} requirement.
+\citeauthor{Laug.2018} also points out, that the shell is responsible to handle integration errors.
+
+There are three different ways to integrate \acp{MF}.
+The first one is using Web Components, mentioned by \textciteMezzalira{}, \textciteRehm{}, \textciteHuber{} and \textciteOlleck{}.
+Using Web Components enables the definition of a technology agnostic interface, which uses a browser \ac{API} to integrate itself into the application.
+A drawback is that not all browser support Web Components, but the current modern browsers do\footnotemark.
+\footnotetext{\url{https://www.webcomponents.org/} (Visited on 08/29/2020)}
+This can be partially fixed by using polyfills\footnotemark, but \citeauthorMezzalira{} points out, that they do not work in all browsers.
+\footnotetext{\url{https://developer.mozilla.org/en-US/docs/Glossary/Polyfill} (Visited on 09/06/2020)}
+For example, some console or TV browsers are not compatible to use Web Components with these polyfills.
+\citeauthorOlleck{} adds that the polyfills in Internet Explorer are difficult to work with.
+Another drawback is that if the feature shadow \ac{DOM} is used, a search engine crawler will not pickup content which is in the shadow \ac{DOM} as pointed out by \citeauthorMezzalira{}.
+More about shadow \ac{DOM} in the section \ref{cha:theory_practice_webcomponent}.
+
+The next approach was mentioned by \textciteMezzalira{} and it uses \ac{IIFE} to integrate a \ac{MF}.
+\acp{IIFE} are used to fully encapsulate \ac{JS}.
+This technique works in all browsers and is also used by a feature from \textit{Webpack} called \textit{Module Federation}\footnotemark, which was also mentioned \citeauthorMezzalira{}.
+\footnotetext{\url{https://webpack.js.org/concepts/module-federation/} (Visited on 09/06/2020)}
+The last approach uses iFrames, which allow integrating technology agnostic \acp{MF}.
+\textciteSteyer{} mentions that using iFrames comes with some overhead.
+He solved that problem, by implementing an abstraction in the shell to managing iFrames.
+He further says that he used this approach before Web Components were as broadly supported as nowadays.
+Because the browser support is now there, he will probably use Web Components instead of iFrames for future projects.
+Finally, the \textit{\nameref{cha:requirement_detail_integration_integration}} requirement is considered difficult from \textciteOlleck{}.
+
+
+
+
+\subsection{Shared logic}\label{cha:requirement_detail_integration_sharedlogic}
+
+\textit{\nameref{cha:requirement_detail_integration_sharedlogic} (\textbf{Score 6})} is about including logic or \ac{UI} into the shell application.
+The shared logic can be accessed by all \acp{MF} and the shared \ac{UI} elements are displayed by the shell instead of the \acp{MF}.
+
+The opinions about what should be shared in the shell vary between the experts.
+On the one hand, \textciteRehm{}, \textciteOlleck{}, \textcite{Grijzen.2019} and \textcite{Dornenburg.2019} support the idea of sharing logic and \ac{UI} elements.
+An example was brought up by  \textciteSteyer{}, which is sharing the navigation or footer panel, because it is the same for the entire application.
+Another example was mentioned by \citeauthorRehm{} and \citeauthor{Dornenburg.2019}, where a toast feature is shared via the shell.
+The shell listens for a specific event to show a toast, which can be invoked by any \ac{MF}.
+Therefore, it is a combination of shared logic and \ac{UI}.
+The third example for shared logic only was provided by \citeauthorOlleck{}, where the shell provides a service to handle backend calls.
+The service has an optional feature to freeze the application and show a loading spinner until the call is finished.
+This is a cross cutting concern, which was required for some backend calls and only the shell can handle it.
+Eventually, \citeauthor{Grijzen.2019} says that the shell should expose a platform \ac{API} which handles cross cutting concerns.
+
+On the other hand, \textcite{Laug.2018} is against sharing anything through the shell.
+Instead there should rather be copy-paste ready code for the developers.
+He makes one exception, which is authentication.
+Authentication is a critical task and should be handled by the shell, but authorization is up to each \ac{MF}.
+More about this in the \textit{\nameref{cha:requirement_detail_state_security}} requirement.
+\textciteSteyer{} also advises to share as little business logic via the shell as possible.
+He mentioned one exception, and this is, if the bundle size is a concern for the application.
+In this case, the shell should be responsible for loading shared dependencies once, like a shared core.
+Bundle size is further addressed in the \textit{\hyperref[cha:requirement_detail_performance]{Performance}} requirement.
+
+This requirement was only mentioned by \textciteRehm{}, \textciteSteyer{}, \textciteOlleck{}, \textcite{Dornenburg.2019}, \textcite{Laug.2018} and \textcite{Grijzen.2019}
+No expert thinks that it is critical or difficult to realize.
+
+
+
+\subsection{Other requirements}
+
+In the following requirements with a score less than 5 are outlined.
+
+
+
+\paragraph{Widgets} \label{cha:requirement_detail_integration_widget}
+
+The requirement \textit{\nameref{cha:requirement_detail_integration_widget} (\textbf{Score 4})} evolves around the idea, that a \ac{MF} is able to share components with other \acp{MF}.
+These components could be anything from a button to a page.
+This requirement is needed if the \ac{UI} needs to handle cross cutting concerns, like an e-commerce application.
+An example scenario would be a web shop with a product detail and shopping cart page.
+Each page is in another subdomain and thus, in different \acp{MF}
+
+Assume the user is visiting a product and wants to add it to the shopping cart.
+The \ac{MF} responsible for the product page does not know the \ac{MF} responsible for the shopping cart.
+In order to still allow this cross cutting user action, the product page needs to include this functionality from the shopping cart \ac{MF}.
+The solution is that the shopping cart \ac{MF} provides an \enquote{add to cart} button as widget, which can be used and integrated by the product page.
+
+An approach which was mentioned by \textciteRehm{} and \textciteHuber{} is to use Web Components to expose widgets.
+The widgets are registered by their parent \ac{MF} and can be used by other \acp{MF} as needed.
+This introduces coupling between \acp{MF}, but it is rather low, because the other \acp{MF} only need to know the name of a Web Component and not where it comes from or who exposes it.
+However, \citeauthorRehm{} points out, that coupling is the cost for cross cutting \acp{UI} and keeping a good \ac{UX}.
+It is important to note, that the shell needs to make sure, that a \ac{MF} is loaded, even if only its widget is needed.
+This was mentioned by \citeauthorRehm{} and he also thinks, that the \textit{\nameref{cha:requirement_detail_integration_widget}} requirement is difficult to realize.
+
+
+
+\paragraph{Page layout}\label{cha:requirement_detail_integration_pagelayout}
+
+The requirement \textit{\nameref{cha:requirement_detail_integration_pagelayout} (\textbf{Score 4})} introduces a concept of pages which contain more than one \ac{MF}.
+There are different extents to which this requirement can be realized.
+The simplest form is a tab-based separation of \acp{MF}.
+Then there is the tile-based arrangement of multiple \acp{MF} and finally the template-based arrangement.
+
+A tab-based separation was mentioned by \textciteOlleck{}.
+The tab functionality is handled by the shell.
+The next implementation is the tile-based arrangement.
+This was proposed by \citeauthorOlleck{} and \textcite{Laug.2018}.
+While \citeauthorOlleck{} explained, that the tile functionality was part of the shell, \citeauthor{Laug.2018} used a separate Web Component to handle this feature solely.
+\citeauthor{Laug.2018} did not use the shell for this feature, because he believes that the shell should not contain business logic.
+More on that in the \textit{\nameref{cha:requirement_detail_integration_sharedlogic}} requirement.
+
+The last approach was mentioned by \textcite{Grijzen.2019} and \textciteMezzalira{}, but \citeauthorMezzalira{} only referenced to \citeauthor{Grijzen.2019}.
+\citeauthor{Grijzen.2019} explained an approach which uses templates to determine the page layout.
+These templates contain placeholders which can be filled with a \acp{MF}.
+The template handling and filling of the placeholders is included into the shell.
+As described in the \textit{\nameref{cha:requirement_detail_integration_routing}} requirement, \citeauthor{Grijzen.2019} uses a routing mechanism which changes the current active \ac{MF} based on the base route.
+Therefore, the \ac{URL} only reflects the current \ac{MF}.
+If the \ac{URL} is stored in a bookmark or shared with a colleague, then the layout is missing.
+Hence, the inclusion of a state query parameter is required.
+The value is an encoded reflection of the current template and all \acp{MF} that are placed in it.
+Consequently, the state query parameter allows to save or share a \ac{URL}.
+
+
+
+\paragraph{Indexable via crawler}\label{cha:requirement_detail_integration_crawler}
+
+The requirement \textit{\nameref{cha:requirement_detail_integration_crawler} (\textbf{Score 2})} is relevant for \nameref{cha:scenarios_consumer}, because it probably is a publicly available application.
+If an application is indexable via a crawler, then its page content can be analyzed by search engine crawlers.
+This analysis is required to make it available in the respective search engine \cite[p.~1]{Qureshi.2010}.
+
+\textciteMezzalira{} pointed out, that current crawler do not support content which is rendered inside the shadow \ac{DOM}.
+To validate this claim, it is important to first check if the search engines support \ac{JS} rendered content, because the main approach of this thesis is Client-side integration, which implies \ac{JS} rendered content.
+Only \textit{Google} and \textit{Ask} are able to index such content\footnotemark{}.
+\footnotetext{\url{https://moz.com/blog/search-engines-ready-for-javascript-crawling} (Visited on 08/17/2020)}
+When also considering the usage statistics of search engines, only \textit{Google} remains as a possible candidate, able to index Web Components\footnotemark{}.
+\footnotetext{\url{https://www.oberlo.com/statistics/search-engine-market-share} (Visited on 08/17/2020)}
+
+The \textit{Google} crawler does support Web Components, but the content inside a shadow \ac{DOM} must be appended into its slot (see \ref{cha:theory_practice_webcomponent}).
+Otherwise the content is not picked up by the crawler\footnotemark{}.
+\footnotetext{\url{https://developers.google.com/search/docs/guides/javascript-seo-basics\#web-components} (Visited on 08/17/2020)}
+Therefore, populated content from the Web Component itself needs to be appended into the slot, if it needs to be picked up.
+This is not always possible, especially when the slot is used as intended.
+
+This requirement was mentioned by \textciteMezzalira{} and \textcite{Dornenburg.2019}.
+
+
+
+\paragraph{\ac{MF} interoperable}\label{cha:requirement_detail_integration_interoperable}
+
+In \nameref{cha:scenarios_enterprise}s there can be a requirement, that a \ac{MF} needs to be interoperable (\textbf{Score 2}).
+There are two interpretations of this requirement.
+Either the \ac{MF} is used in multiple applications or it is used in multiple locations in the same application.
+
+In order to achieve reusability over multiple applications, an \ac{API} definition is needed.
+This definition must be the same for both applications, so that a \ac{MF} can simply be integrated in both.
+Such an \ac{API} needs to provide everything that the \ac{MF} needs.
+The second interpretation can be easily be achieved if the \ac{MF} consists of only one page.
+But if the \ac{MF} consists of multiple pages, this would require a flexible router within the \ac{MF}.
+Both approaches are described in the \textit{\nameref{cha:requirement_detail_integration_routing}} requirement.
+Also, it is common to use a base route to determine which \ac{MF} should be displayed.
+Hence, if the \ac{MF} has an internal router, it must support that the base route is passed in as property, in order to support the \textit{\nameref{cha:requirement_detail_integration_interoperable}} requirement.
+Both approaches were mentioned by \textciteRehm{}, who works on an \nameref{cha:scenarios_enterprise}.
+
+Another impulse for this requirement was provided by \textcite{Grijzen.2019}.
+He works on a \nameref{cha:scenarios_offshelf} and it has a standard technology stack (platform) as base.
+This allows to create third party extensions, which can be included into any of the \nameref{cha:scenarios_offshelf}.
+More on this approach in \textit{\nameref{cha:requirement_detail_integration_extensible}}.
+
+
+
+\paragraph{Abstraction layer}\label{cha:requirement_detail_integration_abstraction}
+
+The requirement \textit{\nameref{cha:requirement_detail_integration_abstraction} (\textbf{Score 1})} was mentioned by \textciteMezzalira{}.
+He pointed out, that the application DAZN is used by multiple platforms.
+These platforms do not all share the same browser \ac{API}.
+In this case, the application shell can be used as abstraction layer for all \ac{API} functionalities which differ between platforms.
+To achieve this, there are two approaches:
+
+Either there is one application shell per platform or only a part of the shell is loaded depending on the platform.
+An example for the latter would be, that an interface is defined, which handles all differing browser \ac{API} calls.
+The interface is then implemented per platform and bundled into a library.
+Following that, the library is dynamically loaded depending on the platform.
+
+
+
+\paragraph{Third party extensible}\label{cha:requirement_detail_integration_extensible}
+
+In case of a \nameref{cha:scenarios_offshelf}, a requirement can be that it is  \textit{\nameref{cha:requirement_detail_integration_extensible} (\textbf{Score 1})}.
+Therefore, anyone can create a \ac{MF} for the application, which can be included if needed.
+The requirement \textit{\nameref{cha:requirement_detail_integration_interoperable}} provides more information about reusable \acp{MF}.
+
+\textcite{Grijzen.2019} explains an approach where the third-party extensions are included via an iFrame.
+An iFrame is fully encapsulated from the application, like a sandbox.
+In order to enable the third-party \ac{MF} to communicate with the host application, an \ac{RPC} like communication library is provided.
+\citeauthor{Grijzen.2019} further explains, that the communication library restricts some features for the third-party \ac{MF}.
+For example, critical functions are excluded to ensure that extensions do not gain control over the host application.

@@ -1,0 +1,227 @@
+%!TEX root = ../documentation.tex
+
+%
+% Nahezu alle Einstellungen koennen hier getaetigt werden
+%
+
+\RequirePackage[l2tabu, orthodox]{nag}	% weist in Commandozeile bzw. log auf veraltete LaTeX Syntax hin
+
+\documentclass[%
+    pdftex,
+    oneside,			% Einseitiger Druck.
+    12pt,				% Schriftgroesse
+    parskip=half,		% Halbe Zeile Abstand zwischen Absätzen.
+    %	topmargin = 10pt,	% Abstand Seitenrand (Std:1in) zu Kopfzeile [laut log: unused]
+    headheight = 12pt,	% Höhe der Kopfzeile
+    %	headsep = 30pt,	% Abstand zwischen Kopfzeile und Text Body [laut log: unused]
+    headsepline,		% Linie nach Kopfzeile.
+    footsepline,		% Linie vor Fusszeile.
+    footheight = 16pt,	% Höhe der Fusszeile
+    abstracton,		% Abstract Überschriften
+    DIV=calc,		% Satzspiegel berechnen
+    BCOR=8mm,		% Bindekorrektur links: 8mm
+    headinclude=false,	% Kopfzeile nicht in den Satzspiegel einbeziehen
+    footinclude=false,	% Fußzeile nicht in den Satzspiegel einbeziehen
+    listof=totoc,		% Abbildungs-/ Tabellenverzeichnis im Inhaltsverzeichnis darstellen
+    toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
+]{scrreprt}	% Koma-Script report-Klasse, fuer laengere Bachelorarbeiten alternativ auch: scrbook
+
+% Einstellungen laden
+\usepackage{xstring}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\newcommand{\einstellung}[1]{%
+    \expandafter\newcommand\csname #1\endcsname{}
+    \expandafter\newcommand\csname setze#1\endcsname[1]{\expandafter\renewcommand\csname#1\endcsname{##1}}
+}
+\newcommand{\langstr}[1]{\einstellung{lang#1}}
+
+\input{ads/einstellungen_liste} % verfügbare Einstellungen
+\input{einstellungen} % lese Einstellungen
+
+\input{lang/strings} % verfügbare Strings
+\input{lang/\sprache} % Übersetzung einlesen
+
+% Einstellung der Sprache des Paketes Babel und der Verzeichnisüberschriften
+\iflang{de}{\usepackage[english, ngerman]{babel}}
+\iflang{en}{\usepackage[ngerman, english]{babel}}
+
+
+%%%%%%% Package Includes %%%%%%%
+
+\usepackage[margin=\seitenrand,foot=1cm]{geometry}	% Seitenränder und Abstände
+\usepackage[activate]{microtype} %Zeilenumbruch und mehr
+\usepackage[onehalfspacing]{setspace}
+\usepackage{makeidx}
+\usepackage[autostyle=true,german=quotes]{csquotes}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{enumitem}	% mehr Optionen bei Aufzählungen
+\usepackage{graphicx}
+%\usepackage[usenames,dvipsnames,table,xcdraw]{xcolor} 	%xcolor für HTML-Notation
+\usepackage{float}
+\usepackage{array}
+\usepackage{calc}		% zum Rechnen (Bildtabelle in Deckblatt)
+\usepackage[right]{eurosym}
+\usepackage{wrapfig}
+\usepackage{pgffor} % für automatische Kapiteldateieinbindung
+\usepackage[perpage, hang, multiple, stable]{footmisc} % Fussnoten
+%\usepackage[nohyperlinks]{acronym} % falls gewünscht kann die Option footnote eingefügt werden, dann wird die Erklärung nicht inline sondern in einer Fußnote dargestellt
+\usepackage{acronym}
+
+\usepackage{listings}
+
+% Eigene zusätzliche packages
+\usepackage{xfrac}
+\usepackage{tikz}
+\usepackage{subcaption}
+%\usepackage[leqno]{amsmath}
+%\usepackage{remreset}
+
+% Wurzel mit schießendem Strich am ende
+% New definition of square root: % it renames \sqrt as \oldsqrt
+\let\oldsqrt\sqrt % it defines the new \sqrt in terms of the old one 
+\def\sqrt{\mathpalette\DHLhksqrt} \def\DHLhksqrt#1#2{
+    \setbox0=\hbox{$#1\oldsqrt{#2\,}$}\dimen0=\ht0 \advance\dimen0-0.2\ht0 \setbox2=\hbox{\vrule height\ht0 depth -\dimen0}{\box0\lower0.4pt\box2}}
+
+%\makeatletter
+%\@removefromreset{equation}{chapter}
+%\makeatother
+%\renewcommand*{\theequation}{\arabic{equation}}
+
+% eine Kommentarumgebung "k" (Handhabe mit \begin{k}<Kommentartext>\end{k},
+% Kommentare werden rot gedruckt). Wird \% vor excludecomment{k} entfernt,
+% werden keine Kommentare mehr gedruckt.
+\usepackage{comment}
+\specialcomment{k}{\begingroup\color{red}}{\endgroup}
+%\excludecomment{k}
+
+
+%%%%%% Configuration %%%%%
+
+%% Anwenden der Einstellungen
+
+\usepackage{\schriftart}
+\ladefarben{}
+
+% Titel, Autor und Datum
+\title{\titel}
+\author{\autor}
+\date{\datum}
+
+% PDF Einstellungen
+\usepackage[%
+    pdftitle={\titel},
+    pdfauthor={\autor},
+    pdfsubject={\arbeit},
+    pdfcreator={pdflatex, LaTeX with KOMA-Script},
+    pdfpagemode=UseOutlines, 		% Beim Oeffnen Inhaltsverzeichnis anzeigen
+    pdfdisplaydoctitle=true, 		% Dokumenttitel statt Dateiname anzeigen.
+    pdflang={\sprache}, 			% Sprache des Dokuments.
+]{hyperref}
+
+% (Farb-)einstellungen für die Links im PDF
+\hypersetup{%
+    colorlinks=true, 		% Aktivieren von farbigen Links im Dokument
+    linkcolor=LinkColor, 	% Farbe festlegen
+    citecolor=LinkColor,
+    filecolor=LinkColor,
+    menucolor=LinkColor,
+    urlcolor=LinkColor,
+    linktocpage=true, 		% Nicht der Text sondern die Seitenzahlen in Verzeichnissen klickbar
+    bookmarksnumbered=true 	% Überschriftsnummerierung im PDF Inhalt anzeigen.
+}
+% Workaround um Fehler in Hyperref, muss hier stehen bleiben
+\usepackage{bookmark} %nur ein latex-Durchlauf für die Aktualisierung von Verzeichnissen nötig
+
+% Schriftart in Captions etwas kleiner
+\addtokomafont{caption}{\small}
+
+% Literaturverweise (sowohl deutsch als auch englisch)
+\iflang{de}{%
+    \usepackage[
+        backend=bibtex,		% empfohlen. Falls biber Probleme macht: bibtex
+        bibwarn=true,
+        bibencoding=utf8,	% wenn .bib in utf8, sonst ascii
+        sortlocale=de_DE,
+        style=\zitierstil,
+        backref=true
+    ]{biblatex}
+}
+\iflang{en}{%
+    \usepackage[
+        % backend=bibtex,		% empfohlen. Falls biber Probleme macht: bibtex
+        backend=biber,		% empfohlen. Falls biber Probleme macht: bibtex
+        bibwarn=true,
+        bibencoding=utf8,	% wenn .bib in utf8, sonst ascii
+        sortlocale=en_US,
+        style=\zitierstil,
+        maxcitenames=1,     % nur den ersten namen anzeigen, wenn mehrere
+        giveninits=true         % kein vornamen anzeigen
+    ]{biblatex}
+}
+
+% Mehr Platz zwischen einzelnen Items im Literaturverzeichnis bei Verwendung von authoryear
+\setlength{\bibitemsep}{\baselineskip}
+\DeclareNameAlias{sortname}{last-first}
+
+\ladeliteratur{}
+
+% Glossar
+\usepackage[nonumberlist,toc]{glossaries}
+
+%%%%%% Additional settings %%%%%%
+
+% Hurenkinder und Schusterjungen verhindern
+% http://projekte.dante.de/DanteFAQ/Silbentrennung
+\clubpenalty = 10000 % schließt Schusterjungen aus (Seitenumbruch nach der ersten Zeile eines neuen Absatzes)
+\widowpenalty = 10000 % schließt Hurenkinder aus (die letzte Zeile eines Absatzes steht auf einer neuen Seite)
+\displaywidowpenalty=10000
+
+% Bildpfad
+\graphicspath{{images/}}
+
+% Einige häufig verwendete Sprachen
+\lstloadlanguages{PHP,Python,Java,C,C++,bash,XML}
+\listingsettings{}
+% Umbennung des Listings
+\renewcommand\lstlistingname{\langlistingname}
+\renewcommand\lstlistlistingname{\langlistlistingname}
+\def\lstlistingautorefname{\langlistingautorefname}
+
+% Umlaute ermöglichen in listings
+\lstset{literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+{Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+{à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+{À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+{ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+{Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+{â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+{Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+{œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+{ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+{€}{{\EUR}}1 {£}{{\pounds}}1
+}
+
+% Weitere Keyword Highlights
+\lstset{
+    emph=[1]{
+            mkdir, jps, sudo, wget, mv, chown, su, adduser, addgroup, grep, sort, print, max, WARNING
+        },
+    emphstyle=[1]{\color[rgb]{0.133,0.133,0.6}},
+    emph=[2]{
+            LFAConfiguration, Driver, Set, Exception, Configuration, FileInputFormat, FileOutputFormat, Job, Path, Text, IntWritable, Mapper, Matcher, Pattern, PatternMapper, Logger, Level, Context, IOException, InterruptedException, Reducer, CountReducer, TextInputFormat, TextOutputFormat, RecordReader, PDFInputFormat, PDFLineRecordReader, InputSplit, TaskAttemptContext, JobContext, CharSequence
+        },
+    emphstyle=[2]{\color[HTML]{006400}},
+    emph=[3]{
+            String, int, Object, Iterable, boolean, Class, float
+        },
+    emphstyle=[3]{\color{Mulberry}}
+}
+
+% Abstände in Tabellen
+\setlength{\tabcolsep}{\spaltenabstand}
+\renewcommand{\arraystretch}{\zeilenabstand}

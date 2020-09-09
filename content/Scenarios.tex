@@ -1,0 +1,103 @@
+%!TEX root = ../documentation.tex
+
+\chapter{Application scenarios}\label{cha:scenarios}
+
+One aspect while researching the \ac{MFA} became apparent, namely that it is relevant to consider that requirements change depending on the application scenario.
+There are several requirements for \ac{MF} applications, and it is not apparent which requirements are needed or useful for any given application.
+Therefore, the intent of the second question in the expert  interviews (see \ref{cha:appendix_expertinterview_questions}) is to collect information on different \ac{MF} application scenarios and connect the information with requirements.
+Initially, the intent of the second question was to gain intel about real world examples and later link the examples to requirements.
+The goal was to provide in-depth information of which requirement is needed for which kind of application.
+Therefore, the experts should name suitable scenarios for the \ac{MFA}.
+But all experts believe that it can not be pinpointed to scenarios, but rather criteria.
+As a result, the experts' information for the first question are summarized in \ref{cha:scenarios_types} and the named criteria are summarized in \ref{cha:scenarios_criteria}.
+
+
+
+
+
+\section{General application types for micro frontend architecture}\label{cha:scenarios_types}
+
+Based on the expert interviews and conference presentations, three general application types have been identified where \ac{MFA} can be used.
+These general types are collections of statements.
+
+
+
+\paragraph{Enterprise Application}\label{cha:scenarios_enterprise}
+
+The first application type is an \nameref{cha:scenarios_enterprise}.
+Generally this application type is used company-internal and the devices for access are typically known or at least the minimum performance is known.
+Therefore, they can be device specific and do not necessarily support multiple platforms.
+This narrows the supported device scope and hence more platform specific approaches can be used.
+Furthermore, such an application is likely to be used frequently or it is at least accessed via a fast and stable internet connection, like for example a \ac{LAN} connection.
+As a result an extensive caching approach is recommendable and the application size is not as relevant as in the other application types.
+Another aspect is that multiple companies could work on the same application, which requires enforcing autonomy of the teams.
+In the end, such an application can have a user base ranging from a few experts to an enterprise-wide tool with 15.000 or more users.
+This type of application was mostly named by experts and in conference presentations, namely by \textcite{Laug.2018}, \textciteRehm{}, \textciteHuber{}, \textciteSteyer{} and \textciteOlleck{}.
+
+
+
+\paragraph{Consumer Application}\label{cha:scenarios_consumer}
+
+The second application type is the \nameref{cha:scenarios_consumer}.
+Other than the \nameref{cha:scenarios_enterprise}, this application type is used from any kind of network or device.
+Moreover, it is to be expected that these devices or networks are slow.
+As a result, performance aspects like application size and request amount to the backend are important to ensure a good \ac{UX}.
+In the expert interview with \textciteJovanovic{}, he pointed out that performance is the most critical requirement for these applications.
+Also, the application probably has a varying active user base, which means that caching is only effective for the active user base.
+Depending on the application, it could even be used from a smart TVs for instance.
+\textciteMezzalira{} pointed out, that the browsers in such devices support less features than a regular desktop or mobile browser.
+For example Web Components are currently not supported.
+
+
+
+\paragraph{Off-the-shelf Application}\label{cha:scenarios_offshelf}
+
+An \nameref{cha:scenarios_offshelf} is a product from a company which is distributed and customized for customers.
+It is similar to an \nameref{cha:scenarios_enterprise}, but due to the customization requirement it has a slightly shifted focus.
+For example, the application needs to be extendable via custom build features from the customer or even third-party companies.
+To enable such behavior, the application probably needs to provide an interface for these features.
+Another fact which changes from the \nameref{cha:scenarios_enterprise} is that the performance of the user devices is probably not known.
+Therefore, it is important to invest into performance to ensure a good \ac{UX} for the customers \cite{Grijzen.2019}.
+As a result, this application type can be placed between \nameref{cha:scenarios_enterprise} and \nameref{cha:scenarios_consumer}.
+
+
+
+
+
+\section{Typical criteria to consider micro frontend architectures}\label{cha:scenarios_criteria}
+
+After describing the general application types, the experts also pointed out which criteria needs to apply to at least consider a \ac{MFA}.
+The criteria mostly mentioned is a large team size.
+It was named by \textciteRehm{}, \textciteOlleck{}, \textciteJovanovic{} and \textciteMezzalira{}.
+\citeauthorMezzalira{} provides more detail by indicating that at least 50 developers should work on the application.
+
+Another criterion is bound to the project or team structure.
+If a project is developed in an agile environment, follows the DevOps culture, or has cross-functional teams in general, then using the \ac{MFA} could maintain the development speed.
+This was pointed out by \textciteRehm{}.
+\textciteJovanovic{} suggested that the \ac{MFA} should be used if it suits the organization.
+This includes the named structures, but possibly also other practices like \textit{Extreme Programming}.
+The next criteria named by \textciteOlleck{} is, that the project consists of strongly separated business functionalities.
+
+Consequently, he points out that enforcing the strong separation with the \ac{MFA} will most likely maintain development speed over time.
+Besides that, \textciteOlleck{} and \textciteJovanovic{} mention that a big application is also a criteria.
+Moreover, \citeauthorOlleck{} mentioned the criteria, that if multiple companies work on the same project, the \ac{MFA} will reduce the communication needed between these companies making an independent deployment simpler.
+Lastly, an \nameref{cha:scenarios_enterprise} is well suited for the \ac{MFA}.
+\textciteSteyer{} points out, that the micro-architecture trend also started with \nameref{cha:scenarios_enterprise}s, which started to implement the microservice architecture first.
+
+Another criterion or rather scenario is gradually converting from a monolith to a \ac{MF} application.
+\textciteSteyer{} mentioned that it is not a common scenario, while \textciteJovanovic{} worked on such a project and \textcite{Jackson.2019} also supports the idea.
+Hence, this scenario can be considered as a criterion for considering the \ac{MFA}.
+Finally, \citeauthorSteyer{} experienced that nearly all \ac{MF} applications were green field projects, which he supervised.
+A green field project is a project which starts from scratch, therefore the term \enquote{green field}, because there is nothing implemented yet.
+
+To sum up this chapter, there are three application types for \ac{MFA}, namely \textit{\nameref{cha:scenarios_enterprise}}, \textit{\nameref{cha:scenarios_consumer}} and \textit{\nameref{cha:scenarios_offshelf}}.
+Still, they practically cover all applications.
+Therefore, some criteria should be met in order to start considering using the architecture.
+
+\begin{itemize}
+    \item Large teams
+    \item Suiting the project or organization structure
+    \item Strongly separated business functionalities
+    \item Application size
+    \item Multiple companies working on the same application
+\end{itemize}

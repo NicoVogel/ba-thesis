@@ -1,0 +1,61 @@
+%!TEX root = ../documentation.tex
+
+\chapter{Conclusion}\label{cha:conclusion}
+
+Even though the \acf{MFA} is gaining traction nowadays, there are many developers and architects who are still uncomfortable with it.
+One aspect that contributes to this, is that there is a lack of knowledge and experience in this field.
+In addition, newcomers and experts would also prefer a general implementation for reusing parts in a \ac{MF} application.
+This need is satisfied to a certain extent in this thesis, but only for the approach \textit{Client-Side} integration via shell application.
+
+
+To address the lack of knowledge, the chapter \ref{cha:Theory} introduces the \ac{MFA} fundamentals.
+This is then followed up by outlining when to use the architecture, in chapter \ref{cha:scenarios}.
+After describing what it is and when to use it, the next step is to show different facades of it.
+This is done in chapter \ref{cha:requirement}, by detailing different requirements and their approaches, as well as highlighting overlapping facts about the approaches in the end.
+The final chapter \ref{cha:evaluation} uses the collected information to address thesis questions.
+
+The first question is if there is a general need for a generalized shell application.
+This could be confirmed by all interviewed experts, see \ref{cha:evaluation_experts}.
+However, this leaves the question open how such a generalized shell application looks like.
+All features which should be supported are outlined in the requirement analysis.
+Also, to further provide insights about the structure of such an application, the section \ref{cha:evaluation_example} provides example applications that a shell application must be able to handle.
+As a result, a fresh view about the \ac{MFA} implementation is provided.
+It is compared to the approach which is provided by \textit{Single-SPA}.
+This shows, that \textit{Single-SPA} can fulfill all needs outlined by the requirements analysis. 
+However, many requirements are realized via the shared utility feature, which is explained in \ref{cha:evaluation_singlespa}.
+
+In addition to the introductory question, further results have been identified in the course of this work.
+First and foremost, as it turns out, the requirement analysis section from \ref{cha:requirement_detail_integration} till \ref{cha:requirement_detail_developer} are a good approach reference guide for most of the requirements.
+Secondly, the section \ref{cha:requirements_conclusion} outlines approaches that are used in multiple requirements and most interestingly a metric to assess \ac{MF} applications and their shell implementations.
+
+Regardless of the results of this work, there are still points that need further investigation.
+First of all, the experts opinions are mostly not challenged and considered as the truth.
+This means that further practical work would be required to check if the expert opinions can be applied in general.
+Although there is an overview of which expert mentioned which requirement, which allows to sort the requirements based on the amount of mentions, see \ref{tbl:adx_requirements_references}.
+This simplifies the continuation of this work in terms of checking the requirement importance.
+Furthermore, in the beginning a differentiation between the two types of experts who have already used \acp{MF} for a while and experts which are currently learning and implementing the architecture, is drawn.
+This differentiation was not taken into consideration while scoring any requirements.
+The reason for this is that the number of experts per type is not enough to be significantly comparable.
+It could have provided insights into what are challenges at the start and and later on.
+However, this is not further investigated in this work, which leaves it open for future work.
+
+After considering several requirements and expert opinions on the topic of \acp{MF}, the question remains open as to how to proceed.
+An important feature that is missing for developer experience is a client-side \ac{CDC} testing approach.
+This is also addressed in the \nameref{cha:requirement_detail_developer_testing} requirement.
+A possible concept could be to define a standardized \ac{MF} intercommunication and using this standard environment to build a tool that enables testing this environment.
+A practical solution could be to use a global Redux store that tracks the internal actions of a \ac{MF} and a mock \ac{MF} as communication partner.
+The mock \ac{MF} either consumes messages and either records these or publishes recorded messages.
+These recordings could be in line with the Redux stores recorded actions to get the timing right.
+This approach would limit the freedom of the developer in terms of choosing a lighter approach than a Redux store.
+
+In addition, a further question remains open in regards to the section \ref{cha:requirements_conclusion_assessment}. It could not be clarified in more detail whether the scenario implies a certain score in the assessment.
+One could make the following assumption, that an \nameref{cha:scenarios_enterprise} would typically require a simple shell as well as autonomous teams, while \nameref{cha:scenarios_consumer} tends to a more complex shell which could improve the performance of the application.
+Consequent evaluations whether there is such a connection may be interesting, but will require further research.
+Such an evaluation would imply the need to assess the scoring of the assessment as well.
+This is due to the fact that currently only the amount of approaches taken into a certain direction are considered, rather than the actual property.
+
+
+To conclude, it can be summarized that some experts believe that a framework would be a better solution than a generalized application for the shell implementation.
+It would still be necessary to evaluate by means of a practical example whether a framework would really be better than an own customized implementation for the shell.
+In this regard, the framework \textit{Single-SPA} can be used as a reference, since it already covers many requirements.
+

@@ -1,0 +1,37 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or the definition README at
+// https://github.com/microsoft/vscode-dev-containers/tree/master/containers/debian-9-git
+{
+    "name": "Latex",
+    // "dockerComposeFile": ["../docker-compose.yml"],
+    "dockerFile": "Dockerfile",
+    // "workspaceFolder": "/workspace/doc",
+    // [Optional] Copy the contents to the correct location and set permissions
+    "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/* ",
+    // Use 'settings' to set *default* container specific settings.json values on container create.
+    // You can edit these settings after create using File > Preferences > Settings > Remote.
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "editor.wordWrapColumn": 92,
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.fontFamily": "Cambria,Anonymous Pro for Powerline,Consolas, 'Courier New', monospace",
+        "workbench.colorTheme": "Atom One Light",
+        "terminal.integrated.fontFamily": "monospace",
+        "editor.formatOnSave": true,
+        "hediet.vscode-drawio.theme": "atlas"
+    },
+    "runArgs": [
+        "--privileged"
+    ],
+    // Use 'appPort' to create a container with published ports. If the port isn't working, be sure
+    // your server accepts connections from all interfaces (0.0.0.0 or '*', not just localhost.
+    // "appPort": [],
+    // Add the IDs of extensions you want installed when the container is created in the array below.
+    "extensions": [
+        "james-yu.latex-workshop",
+        "streetsidesoftware.code-spell-checker",
+        "hediet.vscode-drawio",
+        "akamud.vscode-theme-onelight",
+        "eamodio.gitlens",
+        "Gruntfuggly.triggertaskonsave"
+    ]
+}

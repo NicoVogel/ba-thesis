@@ -1,0 +1,117 @@
+% !TeX root = ../../documentation.tex
+
+\section{Interview with Pirmin Rehm}
+
+This paraphrase of the expert interview with Pirmin Rehm.
+If any information of this is used in the thesis, its marked with \cite{Vogel.2020.Rehm}.
+\textbf{V} is the abbreviation for \textit{Nico Vogel} and \textbf{R} for \textit{Pirmin Rehm}.
+
+\setspeaker{PirminRehm}[R]
+
+\begin{description}
+    \NicoVogel Have you worked with micro frontends shell applications? I know you worked with micro frontends. Therefore, could you name which framework you used, what team's sizes, and some general facts about the structure?
+
+    \PirminRehm I worked for two months in a micro frontend setup project. It is a one pizza size team project, and we used mainly Angular, but we also had some components which were built by Stencil. Not by us, but by another team, and we reused them in our application. The general team structure is full-stack. So, from UX, over design to deployment and infrastructure. From the team, 2 to 3 people worked full time on the frontend.
+
+    \NicoVogel What do you think are suitable scenarios for micro frontends architecture?
+
+    \PirminRehm If we want to use micro frontend architecture, we must heavily rely on its benefits. Because there are so many downsides and challenges, one aspect which indicates that micro frontend architecture is needed is a huge team, which is not capable of working on one application. Another scenario would be if cross-functional teams are required. For example, if the microservice architecture is used in the backend, then each team can be cross-functional, to ensure fast delivery of new features. This follows the actual Lean enterprise or DevOps culture.
+    But as I said, using micro frontends comes with a lot of costs. I believe that for enterprise applications, it is mostly not needed. Two examples where it does not fit would be an application that is developed over a long time until something fresh is available or if the organization uses a waterfall project management practice.
+    On the other hand, if the organization uses an agile practice, then micro frontends fit a lot better because an agile environment allows for cross-functional teams.
+
+
+
+
+    \NicoVogel Could you outline the scenario you are working in?
+
+    \PirminRehm It is a greenfield project, and the customer requested that we use micro frontends. IN the end, the project will consist of between 10 to 20 micro frontends. Each micro frontend has its own corresponding microservice. Furthermore, there are some third-party services and frontends which need to be included. All in all, the final development setup for the project will be 3 teams over 6 months of time. After that, the initial scope with the most important features should be covered.
+
+    \NicoVogel Who is the end-user, and on which devices will it be used?
+
+    \PirminRehm The application is only for employees of the customer. Also, the smallest device it will be used from an iPad. The application is for sails agents, and they are mostly on their PCs, and sometimes they show somethings to a customer via the iPad.
+
+    \NicoVogel What are other suitable scenarios for the micro frontend's architecture in general?
+
+    \PirminRehm So, micro frontends are a widely used term, and there are a lot of approaches. The approach we are using is client-side integration via a shell application. I believe this is a fitting approach for enterprise applications. In the case of non-enterprise applications, there are other approaches used. Also, in our case, a micro frontend represents one subdomain, which can cover 5 to7 pages. I have also seen other micro frontends, which are only one feature of one page, like a product cart or something similar. These are very tiny micro frontends. In this case, I do not think they use a shell application as we do.
+
+    \NicoVogel What do you think of my requirements categories? Am I missing anything? Would you change the order of importance?
+
+    \PirminRehm In the case of routing, it depends on the micro frontend size. For example, if each micro frontend is effectively a SPA on its own, then it is important that they provide some kind of sub routing on their own. When introducing such a capability, it is important to make bookmarks into consideration. Therefore, the URL must reflect the application state, so it can be saved as a bookmark or shared with someone. On the other hand, browser routing is not as important if the application consists of tiny micro frontends. In this case, the micro frontend does not need any kind of routing for itself. Performance is a good point. Shared state and micro frontend intercommunication techniques are something to tackle. Styling and developer experience are also good points.
+
+    \NicoVogel Do you think the order of the requirement categories is correct, or would you change it?
+
+    \PirminRehm No, the order is ok.
+
+    \NicoVogel What are requirements for the named shell application scenario which you had from a customer? And if possible, add the approaches you took.
+
+    \PirminRehm Our customer just gave us business requirements and not a single nonfunctional requirement.
+
+    \NicoVogel Ok, then which nonfunctional requirements did you derive from the business requirements?
+
+    \PirminRehm The application has to work on well-performing tablets and desktop browsers. Other things we want to achieve is to quickly release new features and keep the development speed up.
+
+    \NicoVogel Do you also have requirements like, a micro frontend can be placed at multiple routes or can be used in multiple applications. Is there something like that?
+
+    \PirminRehm Yeah. We had a requirement that maybe some micro frontends get reused in other applications. Therefore, we defined an interface that describes how to interact with a micro frontend. The shell needs to be able to handle the fact that some part of the routing is handled by the micro frontend. In our case, the shell only handles the top-level route. Another feature that our shell needs to cover is preloading micro frontends. Currently, the shell can only lazily load frontends.
+    In general, our shell application is the glue between the micro frontends. A micro frontend feature, which complicates the shell's job, is that micro frontends can expose widgets. These widgets can be used by any other micro frontend, and it is possible that they are needed before the main micro frontend is displayed. Therefore, the shell needs to handle this edge case. Widgets are one of the most important features for us, and they are wrapped as a Web Component. A widget satisfies our cross-functional needs, and cross-functional pages are needed for a good UX.
+
+    \NicoVogel How did you implement the widgets?
+
+    \PirminRehm Our micro frontends are a single bundle Angular application which itself is exposed as a Web Component. This Web Component implements the interface I explained earlier, and it is used to pass the context to the micro frontend. Each micro frontend can expose Angular Elements that are also wrapped up via Web Components. Therefore, one JavaScript bundle can contain multiple Web Components.
+
+    \NicoVogel What kind of communication requirements do you have?
+
+    \PirminRehm First and foremost, loosely coupling between micro frontends is important for us. If you couple them tightly, then communication will be a mess. We use three communication channels in our application. The first one is the URL. The URL can contain simple state information like a customer ID.
+    Next up are events. These can vary widely, but one example would be the navigation event. This event ensures that the shell and all micro frontends are in sync about the current URL. Another example would be notifications the shell should display as a popup. We defined that only the shell can show notifications so that they are identical. The last example of events is life cycle events. For example, a bootstrap event is published by a micro frontend, when it is currently bootstrapped.
+    Finally, we pass context to a micro frontend via HTML attributes or properties. This is possible because each micro frontend is wrapped in a Web Component, and they provide the property API. The property API allows us to pass objects or even functions to a Web Component. Which context information and how it is passed to a micro frontend, is defined in the previously mentioned interface. This can be any context information, even what the base-route of the micro frontend is or what its backend URL is. Therefore, we have a very flexible setup.
+    I also pointed out that we use widgets, and they also are Web Components. They cannot use the URL communication channel because it is not clear when or where they are included. Therefore, the only way to pass context into them is to use the property API. Events are not suited to exchange context. This leads us to one approach that each widget has a definition of which properties need to be passed for the context in order to use the widget.
+
+    \NicoVogel Can you outline how you handle styling?
+
+    \PirminRehm We have a two-way system. The first being that the customer provides a design system, which is used as a basis. The second way is a utility CSS file, which contains a spacing system, grid system, and similar style information. Later is available as CSS and SCSS, which also includes mixings. These two things ensure that the application has a consistent look and feel.
+    Another aspect we need to use is a Web Component library from the customer. It is built up with Stencil. The Web Component library is included by the shell. Therefore, it is available for all micro frontends, but also there is only one version of it. In the case of a major version upgrade, all micro frontends need to use the new version as well. This could be resolved by adding the version number into the Web Component name, but we cannot do that, because it is owned by the customer.
+    The design system, utility CSS and Web Component library do not provide everything we need. Therefore, we also create an Angular component library. We could upgrade it to a technology agnostic component library by building it with Stencil or wrapping each component in a Web Component, but for now, we use this approach. The upgrade would be no problem because our interface allows the use of other frameworks if it can be wrapped inside a Web Component. As far as I know, there are some limitations with React.
+    Finally, our UX developer extended the customer design system with some smaller utility CSS classes. Because we rely on so much shared stuff, it should be easier to have the same look and feel.
+
+    \NicoVogel What kind of requirements did you define to ensure developer experience?
+
+    \PirminRehm I believe that our styling approach already adds value for the UX developer. This should make it easier for them to create a page. This is further enhanced by the tool Zepplin, which helps to visualize which components are used per page and sizings.
+    Another tool we may use is Storybook, which simplifies creating a component in isolation and document it.
+    It should also be easy for a developer to work on a single micro frontend. For this, we provide a standalone mode for each micro frontend. This is realized by adding a mock shell. It can be modified as needed, which simplifies end to end testing. But the mock shell is not part of the actual build. It is only for development. In our case, we use Angular for all micro frontends. This allows us to use the mock shell as the main application, and the child application is the actual micro frontend. When developing, the micro frontend is loaded via an import statement in the mock shell, to provide live reload. A second mode allows us to integrate the micro frontend in the same way as in production. This allows us to locally test if everything works as intended.
+    Another convenient feature is to run the entire application locally. For this, each micro frontend is provided via another port, and using the Angular proxy configuration allows us to stitch it together. For the backend, we prepared three ways to provide it.
+    The first is simply running the entire backend and making it available over one port. The next is a single packed backend, which starts the entire backend with one click. However, it is not capable of connecting to a Kafka cluster. And finally, the third and my favorite way is to forward the backend via Kubernetes port forwarding from a dev-cluster. We added one command into each micro frontend, which automatically sets this up.
+
+    \NicoVogel Do you also mock the backend to allow for contract-driven testing?
+
+    \PirminRehm We discussed if a micro frontend is an individual part, like a microservice, but we concluded that this is not the case. We develop one micro frontend in combination with one microservice, which is its counterpart on the server-side. Because of this decision, we do not implement contract-driven tests between the micro frontends and microservices.
+
+    \NicoVogel Can you name any requirements which are needed for all shell application scenarios? And if possible, which approach would be used?
+
+    \PirminRehm Some are individual deployments, individual testing, and performance optimization.
+
+    \NicoVogel Do you mean loading performance?
+
+    \PirminRehm Every performance aspect. Other requirements would be a unified UX, state handling, context handling, dynamic configuration of resources, loading strategies, independent deployments, and switching versions without rebuild or redeployment.
+
+    \NicoVogel Can you maybe give some approach examples for these points?
+
+    \PirminRehm Individual deployment is mainly achieved by providing a CI/CD pipeline for each micro frontend. Also, a versioned container, default routes, and versioned routes are important as well. An example of where this is helpful would be a rollback. Imagine that your micro frontend is upgraded to version 20, and you realize that there is a major bug that slipped through. In this case, we can quickly revert to version 19, by changing a Kubernetes environment variable.
+    Next is individual testing. The first thing, which is different is the usage of the mock shell to host the application. Then each micro frontend is tested end to end individually. Lastly, are the integration test of all micro frontends in combination with the shell.
+    Next is performance optimization. A must is that all dependencies are loading optimized. Other things to consider are caching, lazy loading, and maybe sharing dependencies. One approach here is the shared core, which shared the framework core between micro frontends. I am no fan of this approach because it introduces tight coupling between the micro frontends. But in the end, I don't know if it becomes a performance problem. For example, I never ran 15 Angular applications in one browser, but I believe it is like having 15 tabs open. Therefore, I think it is not a problem.
+
+    \NicoVogel I think it depends if the micro frontends are mounted or not. In your example, to achieve 15 active cores, this implies that 15 Angular micro frontends are active on the same page.
+
+    \PirminRehm Yes, but they mostly export widgets. Therefore, they are active. The question is if the change detection cycles drop.
+    Back to the requirements. I already explained unified UX, state handling, context handling. Therefore, the next requirement is dynamic configuration.
+    As I said, the backend runs on a Kubernetes cluster. Each micro frontend is provided by its own Nginx container. On the container startup, we dynamically create a configuration file based on Kubernetes environment variables. One entry in this configuration file is the backend URL. A practice we follow when releasing a new version is Blue-Green deployment. We leave the old version up for some time, so in case of a problem or increased number of error logs, we can rollback by changing the Kubernetes environment variables and restart the container.
+    Next would be the loading strategy, but I already explained it in combination with performance. And I just explained switching versions too.
+
+    \NicoVogel What are the most difficult requirements to archive, and why?
+
+    \PirminRehm Lazy loading is difficult if you need a lot of widgets from the beginning. This can result in losing lazy loading because everything is needed form the start. Another uncertainty is that I do not know what will happen if we increase the number of Angular cores. In general, all requirements are complex and take effort, but in the end, everything can be solved. UX developer will ask for feature X, which is currently not possible with the shell, and so you might need to extend it. This also contains risk.
+
+    \NicoVogel The last question is my thesis question. Do you think that there is a need for a generalized shell application?
+
+    \PirminRehm Of course. I think there are some good approaches like Single-SPA. I did not have the time to take a deeper look at it. In our approach, everything is implemented as an Angular application, even the shell. So, we utilize the Angular router in the shell and in the micro frontends. Having an extension that handles this kind of routing and integrates itself with the Angular router would be great.
+
+\end{description}

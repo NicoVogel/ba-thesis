@@ -1,0 +1,157 @@
+% !TeX root = ../../documentation.tex
+
+\section{Interview with Philipp Huber}
+
+This paraphrase of the expert interview with Philip Huber.
+If any information of this is used in the thesis, its marked with \cite{Vogel.2020.Huber}.
+\textbf{V} is the abbreviation for \textit{Nico Vogel} and \textbf{H} for \textit{Philipp Huber}.
+
+\setspeaker{PhilippHuber}[H]
+
+\begin{description}
+    \NicoVogel First Question: have you worked with micro frontend shell applications?
+
+    \PhilippHuber Ich habe noch nicht produktiv mit Micro Frontend Shell Applications gearbeitet. Wir sind ein Entwicklerteam aus drei Personen. Wir evaluieren zurzeit verschiedene Shell Applications und Frameworks was der Markt hergibt und ob eine Eigenimplementierung bei unseren Usecases in Frage kommt. Bisher haben wir Luigi von SAP und Piral von einer Münchener Firma uns angeschaut.
+
+    \NicoVogel Hast du schon von Single-SPA gehört?
+
+    \PhilippHuber Ist mir noch nicht bekannt.
+
+    \NicoVogel What are suitable scenarios for the micro frontend architecture in general?
+
+    \PhilippHuber Ich würde sagen, dass jedes Szenario, das gerade in Web existiert die Micro Frontend Architektur verwenden kann. Die Frage ist, was ist „suitable“. Beispiel bahn.de ist ein Multipage Web Application, welche aus Portalen besteht. Um diese Portale zu integrieren werden aktuell iFrames verwendet. Da kann man sich vorstellen, dass diese Portale stattdessen über Micro Frontends abgebildet werden könnte. Andererseits ist auch ein valides Szenario, was man gerade über Single Page Application löst. Dabei zieht man Teilbereiche raus, welche dann über Micro Frontend abgebildet werden. Die Frage ist mir zu generisch, weil es so viele "suitable" Szenarion gibt.
+
+    \NicoVogel Gibt es ein Szenario, wo du es nicht verwenden würdest?
+
+    \PhilippHuber Wenn ich weiß, dass ich nie wieder Elemente austauschen werde. Wenn ich alles selbst in der Hand habe und nur ein Team entwickelt, da stellt sich die Frage, ob Micro Frontend genutzt werden muss.
+
+    \NicoVogel What do you think about my requirements? Would you change the order?
+
+    \PhilippHuber Security würde ich noch mit aufnehmen, da das sicherlich für manche eine Sorge ist. In unserem Fall ist es nicht kritisch, weil die Anwendung ausschließlich Inhouse von Experten genutzt wird. Transaktionssicherheit über Micro Frontends würde ich noch ergänzen.
+
+    \NicoVogel Kannst du das Thema Transaktionssicherheit nochmal genauer beschreiben?
+
+    \PhilippHuber Es kann sein, dass man aus zwei Web Components heraus Daten für eine backend Transaktion braucht. Klassisches Beispiel was nicht Transaktionssicher gelöst werden kann: Ich buche einen Flug, dann das Hotel, dann ein Mietauto. Momentan lasse ich ein Rollback immer offen. Ist der Flug schon gebucht und ich bekomme kein Mietauto, dann kann ich wieder zurück gehen.
+
+    \NicoVogel Müsste so etwas nicht über Microservice Architektur laufen statt die Micro Frontends?
+
+    \PhilippHuber Genau, aber die Frage ist inwiefern das Requirement mit einfließt in die Micro Frontends.
+
+    \NicoVogel Würdest du die Reihenfolge der Requriements ändern?
+
+    \PhilippHuber Shared State muss vor Performance.
+
+    \NicoVogel Von Oben, Browser Routing Integration ist Punkt eins.
+
+    \PhilippHuber Ja
+
+    \NicoVogel Dann Shared State an zweiter Stelle. Was siehst du an dritter Stelle?
+
+    \PhilippHuber Ja und dann die Performance.
+
+    \NicoVogel Und die letzten beiden?
+
+    \PhilippHuber Aus Entwickler Sicht? Ich denke, dass kann man so lassen, da es ja mehr um die User Experience geht. Generell mit Styling Handling meinst du vermutlich, wie sieht es aus?
+
+    \NicoVogel Genau es geht um eine consistent User Experience.
+
+    \PhilippHuber Statt Styling könntest du auch „User Experience“ reinschreiben, da du ja auch Developer Experience hast. Auch wenn das abgedroschen klingt.
+
+    \NicoVogel What do you think are requirements for a shell application scenario?
+
+    \PhilippHuber Der Kunde hat aktuell Fat Clients (C++), die sehr performant sind.
+
+    \NicoVogel Auch das Frontend in C++?
+
+    \PhilippHuber Ja genau. Das soll über Web Applications abgelöst werden. Diese Fachlichkeit, das ist im Moment ein Client und der soll über Vertikale Micro Frontends abgelöst werden. Also Micro Frontend mit einem Microservice dahinter. Für das Projekt gibt es Gegebenheiten, die den Einsatz von performanten Lösungen verhindern, im Vergleich zu einer nativen Anwendung. Beispielsweise Tabs verwenden.
+    Der Kunde möchte eine Shell Application, die der Fachlichkeit gerecht wird, damit der Kunde den normalen Prozess durchgehen kann.
+
+    \NicoVogel Du meinst also ein Vertikaler Schnitt - eine Seite?
+
+    \PhilippHuber Genau! Use Case einer Vertikalen ist z.B. aufnehmen, verifizieren und weiterleiten von Daten einer Person. Weiterleiten kann beispielsweise Micro Frontend „Formular Ausdrucken“ oder „zum nächsten Sachbearbeiter weiterleiten“ sein. Jede Fachlichkeit integriert dann wiederum verschiedene Generische Micro Frontends / Web Components so zu sagen. Das ist der Generelle Aufbau der Applikationen.
+
+    \NicoVogel Also diese Generischen sind dann Shared Features wie eine Tabelle?
+
+    \PhilippHuber Bisschen fachlicher schon, also z.B. Fahrtkosten.
+
+    \NicoVogel Also ein Mini Tool für Fahrtkosten?
+
+    \PhilippHuber Genau. Oder z.B. Formular ausdrucken, Stammdaten aufnehmen. Aber diese Stammdaten können in verschiedenen Verfahren abgefragt werden.
+
+    \NicoVogel Wenn ich dich richtig verstehe ist es generell so, dass ein Micro Frontend einer Seite gehört. Allerdings können kleine Bestandteile davon als Web Components in andere Micro Frontends mit einfließen. Damit Cross Concern UIs gebaut werden können?
+
+    \PhilippHuber Genau. Und darunter liegt dann wiederum das was wir bauen. Wir stellen Web Components, wie beispielsweise eine Tabelle oder Buttons zur Verfügung und diese sind völlig Fachlichkeitsfrei.
+
+    \NicoVogel Das ist dann Teil des Design Systems?
+
+    \PhilippHuber Genau. So dass alle Micro Frontends denselben Look and Feel haben. Ein weiteres Requirement ist, dass die Anwendung aus mehreren Tabs bestehen soll. Das kann jeder Browser bereits out of the Box. Dabei soll der Nutzer sich nur in einem Tab anmelden müssen und in allen anderen die Session verwenden können. Inter Tab Kommunikation muss allerdings nicht sein. Noch offen ist, "wie funktioniert es, wenn ich ein Design System ausliefere", ob das die Shell übernimmt oder ob jedes Micro Frontend selbst dafür verantwortlich ist. Also ob das Styling geshared wird oder nicht. Was in diesem Zuge auch getestet werden muss ist, "wie funktioniert Shared wenn ich das Design auf eine Version anhebe".
+
+    \NicoVogel Kannst du was zu Routing sagen? Nutzt ihr dafür die URL oder einen anderen Ansatz?
+
+    \PhilippHuber Routing soll über URL Laufen, dann entscheidet die Shell welches Micro Frontend geladen werden soll. Am besten mit einem JWT Token, sodass wirklich nur das Frontend geladen wird, wenn der User autorisiert ist. Es gibt ein Rolle-Rechtekonzept. Der Sachbearbeiter Y hat die Rolle X und darf damit Frontend Z nutzen. Dann loggt er sich in die Shell ein und geht auf die URL W. Im Hintergrund wird das JavaScript geladen und in seinen Browser gerendert. Nutzdaten werden dann über HTTP Calls abgerufen.
+
+    \NicoVogel Habe ich das richtig verstanden, dass der JWT Token wichtig ist um das Laden des JavaScripts zu Autorisieren?
+
+    \PhilippHuber Genau! Das Backend, darf die JavaScript Dateien nur ausliefern, wenn der entsprechende JWT Token übergeben wird.
+
+    \NicoVogel Routing über URL kannst du da nochmal drauf eingehen? Ich habe bis jetzt gehört, dass es eine Top Level Route gibt, anhand derer die Shell entscheidet welches Micro Frontend angezeigt werden soll. Der Rest ist dem Micro Frontend überlassen. Ist das bei euch ähnlich?
+
+    \PhilippHuber Bei uns ist es etwas anders. Top Level Domain, dann die Fachliche Domain, dann der Microservice, dann erst das Applikationsspezifische. Das ist bis jetzt nur angedacht und noch nicht festgelegt.
+
+    \NicoVogel Sollen eure Micro Frontends auch in der Lage sein an verschiedenen Positionen in der Anwendung wieder verwendet werden zu können. Oder in verschiedenen Anwendungen. Sind sie gebunden an eine Anwendung?
+
+    \PhilippHuber Das kommt auf das Micro Frontend darauf an. Wenn es eine Fachliche Vertikale ist, dann an einer Stelle. Es kann aber auch sein, dass es eine Fahrtkosten/ Stammdaten Web Component ist, dann an mehreren Stellen.
+
+    \NicoVogel Habt ihr besondere Performance Eigenschaften. Wenn C++ die Vorläufer waren, war das vermutlich sehr schnell.
+
+    \PhilippHuber Wir haben keine Bedenken, die man nicht hätte, wenn man auf andere Web Technologien setzen würde. Die Einschränkung ist hier tatsächlich nur die HTML/JavaScript Welt und nicht die spezifische Web Components Welt.
+
+    \NicoVogel Inwiefern wollt ihr Technologieagnostik zulassen? Also dass Micro Frontends theoretisch in einer anderen Sprache geschrieben werden könnten?
+
+    \PhilippHuber Also das Design System wird in StencilJS gebaut. So dass alle gängigen Frameworks (Angular, React und Vue) dieses Konsumieren können. Der Kunde ist heute schon Framework agnostisch unterwegs und nutzt Angular und Vue.
+
+    \NicoVogel Das heißt ihr nutzt nicht Shared Core?
+
+    \PhilippHuber Nein, keinen Shared Core.
+
+    \NicoVogel Somit besteht eure Performance aus Lazy Loading, also die Shell lädt die Anwendung, wenn nötig?
+
+    \PhilippHuber Genau. Soweit ich weiß, gibt es da auch noch keine Ideen zum Caching. Ziehe mir jeweils nur die aktuelle Version? Oder Cache ich eine Version ein Tag lang? Dazu gibt es noch keine Gedanken bisher.
+
+    \NicoVogel Nochmal zu Shared State zurück. Hier bist du auf Authentication eingegangen. Habt ihr eine Inter Micro Frontend Kommunikation über Events oder einen Shared Store?
+
+    \PhilippHuber Das muss es geben, da stecke ich aber nicht tief drin. Aber es muss schon so sein, dass ich über Attribute dem Micro Frontend Informationen mitgebe und von diesem im Gegenzug bestimmte Events erwarte. Aber das macht die Shell.
+
+    \NicoVogel Was schon ein Event sein kann ist z.B. Navigate, weil einer muss ja die Navigation übernehmen. Styling und Handling hattest du schon was zu gesagt, da nutzt ihr Design System. Darüber hinaus noch etwas?
+
+    \PhilippHuber Jedes Team hat einen UX Experten dabei, die unsere Micro Frontends nutzen. Das ist allerdings nicht technisch, sondern prozessual.
+
+    \NicoVogel Ich habe auch schon gehört, dass es Design Gilde gibt. Habt ihr darüber nachgedacht?
+
+    \PhilippHuber Nein, aber bei uns ist es so: wir im Design System Team haben 2,5 UX Leute dabei. Aus jedem Fachlichen Team gibt es ebenfalls einen UX-ler die 50% am Design arbeiten, welche die Anforderungen bringen. Wir bauen nichts, was nicht vom Fachbereich gewollt wird. Wenn nur ein UX Team sagt, wir brauchen eine Komponente, die sonst keiner braucht. Dann ist das kein Pattern und wir setzen es nicht um. Das muss der Fachbereich selbst umsetzen. Egoistisch gesagt, wer uns nicht unterstützt, dem wird auch nicht geholfen. Allerdings sind wir natürlich relativ offen, jeder kann es nutzen, wenn er weiß, wo es liegt.
+
+    \NicoVogel Wenn du nichts weiter zu Styling hast, dann ist die nächste Frage: Kannst du was zu Developer Experience sagen?
+
+    \PhilippHuber Bei uns sollen die Feature Team Developer kein CSS schreiben müssen. Sprich alle Komponenten sind Plug and Play. Für den Nutzer des Design Systems (also der Developer) soll es einfach sein. Daher werden die CSS-Klassen schon fertig bereitgestellt und diese müssen lediglich verwendet werden. Debugging soll einfacher sein, das stelle ich mir schwer vor, hab allerdings auch keine Erfahrung dazu.
+
+    \NicoVogel Generelles Tooling. Habt ihr da schon was ausgesucht?
+
+    \PhilippHuber Nein noch nichts in der Pipeline.
+
+    \NicoVogel Can you name any requirements which are needed for all shell application scenarios?
+
+    \PhilippHuber Das Verwalten von Micro Frontends. Am Ende liefert die Shell aus, die Frage ist, wie ist das organisiert und wo liegen die JavaScript Dateien. Das Hosting von Shell und Micro Frontend. Lifetime, wann wird das JavaScript refreshed. Das kann ich mir vorstellen, dass das jeder einmal beantworten muss. Brauche ich einen Shared State oder nicht.
+
+    \NicoVogel What are the most difficult requirements and why?
+
+    \PhilippHuber Ich glaube tatsächlich, dass die Integration an sich am schwierigsten ist. Fachlich gesehen, ist der Schnitt der Micro Frontends oftmals das Problem. Dabei kann ich es mir aus fachlicher Sicht sehr schwer machen. Das hat auch hohes Konflikt Potential. Generell aber, technische Sachen bekomme ich früher oder später gelöst.
+
+    \NicoVogel Do you think that there is a need for generalized shell applications?
+
+    \PhilippHuber Aus meiner Erfahrung: JA. Die ganze Thematik steht noch relativ am Anfang. Es gibt ja bereits erste Ansätze. Daher sehe ich den Bedarf! Also aus meiner Sicht schon.
+
+
+
+
+
+\end{description}

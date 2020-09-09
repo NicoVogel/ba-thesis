@@ -1,0 +1,71 @@
+%!TEX root = ../documentation.tex
+\chapter{Introduction}\label{cha:introdction}
+
+% introduction (background)
+At the end of 2016, the company ThoughtWorks did mention the architecture \textit{micro frontend} for the first time \cite{ThoughtWorks.2016}.
+This architecture is the counterpart of the server-side architecture \textit{microservices} and intends to bring the same benefits from the server-side to the client-side.
+It is not a new architecture, but it gained traction in 2019 \cite{Betts.2020}.
+This leaves the question open on why it is gaining traction now.
+The reason for choosing this architecture differs between projects.
+Experts agree that project characteristics, such as an extensive application or having many developers work on it, are indicators for at least considering the micro frontend architecture \cite{Vogel.2020.Olleck} - \cite{Vogel.2020.Rehm}.
+
+% Generally, there are some effects that slow down the development process, like big teams or having an extensive application.
+% Such problems are addressed in the backend with the \textit{microservice} architecture and now also in the frontend with the \textit{micro frontend} architecture.
+
+The \textit{micro frontend} architecture is generally about splitting a frontend into multiple independent frontends and assemble them back to one application at some point.
+There are two possible approaches to integrate the frontends for web based applications.
+The first approach is called \textit{Web Approach} (or \textit{Hyperlink Integration}), which uses hyperlinks to connect the frontends.
+On the other hand, the second approach is called the \textit{Container Approach} (or \textit{Shell}), which has some form of the host application that integrates the frontends.
+The \textit{Container Approach} has the three integration variances \textit{Build-Time Integration}, \textit{Server-Side Composition}, and \textit{Client-Side Composition} \cite[p.~69ff.]{Wenzel.2020} \cite{Leitner.2020}. %min 22:50
+
+
+% what is the problem
+Since the \textit{micro frontend} architecture is new in the software community and many companies have not used it until now, there is still a high number of details hidden.
+Moreover, for each partial problem, there are multiple approaches, and each has its pros and cons.
+All the knowledge required to start working with micro frontends provides an entry barrier for companies which are new to this architecture.
+
+
+% goal
+This thesis revolves around the requirements and approaches of the integration technique \textit{Client-Side Composition}.
+The goal is to evaluate if there is a need for a generalized container approach that uses this integration approach.
+% Therefore, other integration techniques are not part of this work.
+In order to achieve this goal, it is important to first outline the characteristics of an application that utilizes this type of integration.
+This is done via a requirement analysis, which reveals the general needs.
+After general needs of such an application are known an evaluation can take place to check whether a generalized implementation is actually required and what it needs to fulfill.
+
+
+
+% motivation
+Even though the term \textit{micro frontends} first appeared in 2016, there is already an implementation available called \textit{Single-SPA}, which was first released 2015.
+% https://github.com/single-spa/single-spa/tags?after=v1.2.0
+This implementation aims to provide the features required for the \textit{Client-Side Composition} approach.
+An expert states, that \textit{Single-SPA} has an opinionated architecture \cite{Vogel.2020.Mezzalira}.
+
+This work evaluates on the basis of a requirement analysis which requirements must be fulfilled by a shell application for different scenarios.
+Based on the results, this thesis aims to provide a fresh view of the topic and then evaluates whether one should rely on \textit{Single-SPA}, or alternatively develop an own customized solution.
+
+
+
+% - method
+Currently, the literature regarding \textit{micro frontends} is still limited.
+Therefore, expert interviews are conducted, which will be the base of this work.
+The interviewees are either experts with the \textit{micro frontend} architecture (which are \textciteOlleck{}, \textciteMezzalira{}, \textciteSteyer{} and \textciteJovanovic{}) or are knowledgeable in the field of frontend development, with current efforts to learn and implement the \textit{micro frontend} architecture (\textciteRehm{} and \textciteHuber{}).
+This separation into two different types of experts is useful to get a broader view on the topic.
+\citeauthorJovanovic{} points out, that the \textit{micro frontend} architecture is rather new overall and is perceived as complex by many.
+Therefore, it is important to invest in lowering the entry barrier of this architecture.
+
+For data collection, the interviews are guided by questions that represent different topics.
+The questions are asked in such a way that the experts can also present their view of the topics.
+It is also mandatory to build up a knowledge base of the topics, before interviewing the experts \cite[p.~31]{AlexanderBognerBeateLittigWolfgangMenz.2009}.
+Apart from that, to ensure the comparability of the expert statements, it is important to get more insights about their organizational context \cite[p.~35]{AlexanderBognerBeateLittigWolfgangMenz.2009}.
+Therefore, the first two questions in the interview are used to gain insights of their background (see \ref{cha:appendix_expertinterview_questions}).
+The results are collected and combined into scenarios that are explained in chapter \ref{cha:scenarios}.
+The other questions guide the interview through the topics and the final question is used to get the expert's opinion on the main question of this thesis.
+
+
+
+% - structure of thesis
+This thesis starts with the fundamentals of \textit{micro frontends} (chapter \ref{cha:Theory}).
+Next, some suitable scenarios for the \textit{micro frontend} architecture are described(chapter \ref{cha:scenarios}), which are addressed at various points through out the work.
+The following main part of this thesis is the requirement analysis (chapter \ref{cha:requirement}).
+This leads to the evaluation (chapter \ref{cha:evaluation}) and eventually the conclusion (chapter \ref{cha:conclusion}).

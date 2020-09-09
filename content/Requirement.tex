@@ -1,0 +1,67 @@
+%!TEX root = ../documentation.tex
+
+\chapter{Application requirement analysis}\label{cha:requirement}
+
+In order to evaluate if there is a need for a generalized shell application, it is important to first understand what the requirements for such an application are.
+To get the needed insights a requirement analysis is conducted via literature research and the expert interviews.
+This chapter focuses on outlining requirements and comparing them against each other.
+
+The found requirements can be divided into categories.
+These are explained in section \ref{cha:requirement_categories}.
+After that, an overview of all requirements is provided in the section \ref{cha:requirements_overview}.
+This includes an explanation on how the requirements were compared against each other in terms of importance, and an overview, seen in Table \ref{tbl:overview_requirements}, which contains all found requirements.
+Following that are multiple sections which describe the requirements in detail (section \ref{cha:requirement_detail_integration}, \ref{cha:requirement_detail_performance}, \ref{cha:requirement_detail_state}, \ref{cha:requirement_detail_style} and \ref{cha:requirement_detail_developer}).
+Lastly, a conclusion for this chapter is drawn in section \ref{cha:requirements_conclusion}.
+
+
+
+\input{content/Requirements/Categories.tex}
+
+\section{Requirement analysis result overview}\label{cha:requirements_overview}
+
+The analysis led to many requirements.
+To better outline the importance of each requirement, they need to be scored in some way.
+In order to achieve this, the process of the pairwise comparison technique is used.
+This technique determines the relative importance by comparing requirements against each other and thus, obtaining a score for all requirements \cite[p.~573]{Achimugu.2014}.
+
+The technique was modified in order to use it for the requirement analysis.
+Instead of weighting the requirements, the expert statements are weighted based on the questions.
+In the expert interviews, the questions four, five and six are used to gain insights into requirements and their approaches (see \ref{cha:appendix_expertinterview_questions}).
+Each of the questions is assigned with a different weight.
+
+\begin{itemize}
+    \item Question four, \textit{What are requirements for the named shell application scenario which you had from a customer?}: They can be an any importance and thus, receive a score of 1
+    \item Question five, \textit{Can you name any requirements which are needed for all shell application scenarios?}: These are the most important requirements in context of this thesis and thus, receive a score of 3
+    \item Question six, \textit{What are the most difficult requirements to achieve and why?}: A general goal of architecture is to reduce the complexity of a project \cite[p.~98]{AlSharif.2004} and therefore, these requirements receive a score of 2
+\end{itemize}
+
+By introducing the score the focus can be shifted towards the relevant requirements.
+Therefore, the requirements with a score of 5 or higher are considered relevant.
+The reason is, that a low score makes it less likely that a requirement is actually needed.
+It is important to note, that not all requirements can be part of a generalized shell application.
+Hence, low scoring requirements are considered but they are a optional feature of the generalized shell application.
+
+
+The requirements analysis was not only conducted via the expert interview, but also through a literature research.
+Requirements found in the literature research receive a score of 1, because the context is not the same as in the expert interviews and therefore, comparability is not guaranteed \cite[p.~35]{AlexanderBognerBeateLittigWolfgangMenz.2009}.
+On the other hand, requirements mentioned in literature should be considered as well to ensure a broad view.
+Therefore, a score equivalent of question four in the interview is suitable.
+
+After collecting the weights for each requirement, the weights are added up and resulting in the score.
+In case of a score tie, the respective requirements are considered equally relevant.
+Also, requirements are not only ordered by their score, but also by their respective category.
+The categories are explained in the next section \ref{cha:requirement_categories}.
+
+An overview of the requirement analysis result is shown in Table \ref{tbl:overview_requirements}.
+In addition to this Table, there are two more tables in the appendix \ref{cha:appendix_requirements_overview}.
+The first (\ref{tbl:adx_requirements_scores}) shows the score of each requirement and the second (\ref{tbl:adx_requirements_references}) shows which reference mentioned the requirement, considers it as difficult and as critical.
+Further detail for the requirements will be provided in the following sections from  \ref{cha:requirement_detail_integration} to \ref{cha:requirement_detail_developer}.
+
+\input{content/Requirements/OverviewTable.tex}
+\input{content/Requirements/Integration.tex}
+\input{content/Requirements/Performance.tex}
+\input{content/Requirements/State.tex}
+\input{content/Requirements/Style.tex}
+\input{content/Requirements/Developer.tex}
+\input{content/Requirements/Conclusion.tex}
+

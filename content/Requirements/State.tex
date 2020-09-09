@@ -1,0 +1,210 @@
+%!TEX root = ../../documentation.tex
+
+\section{State requirements and approaches}\label{cha:requirement_detail_state}
+
+This section explains the state requirements.
+The requirements from \textit{\nameref{cha:requirement_detail_state_exchange}} until \textit{\nameref{cha:requirement_detail_state_security}} are described in greater detail, than the requirement \textit{\nameref{cha:requirement_detail_state_internationalization}} due to its score being lower than 5.
+
+
+
+
+
+\subsection{State exchange}\label{cha:requirement_detail_state_exchange}
+
+The requirement \textit{\nameref{cha:requirement_detail_state_exchange} (\textbf{Score 16})} is about transferring the application context into and between \acp{MF}, so that each \ac{MF} can display content accordingly.
+Sharing the context can be achieved with four different approaches.
+
+
+
+\paragraph{\ac{URL} context}
+
+One approach is to use the \ac{URL} to share context information.
+For instance, a \ac{URL} can contain an \ac{ID} for a user or product, accessible by all \acp{MF}.
+\textciteSteyer{} and \textcite{Grijzen.2019} outlined, that this approach allows for deep linking\footnotemark.
+\footnotetext{\url{https://www.w3.org/2001/tag/doc/deeplinking.html} (Visited on 09/06/2020)}
+Therefore, the application allows the usage of bookmarks or sharing a \ac{URL} with a colleagues.
+The approach was also mentioned by \textciteRehm{} and \textcite{Jackson.2019} and is especially useful in case of a \ac{URL} change which results in a \ac{MF} swap.
+This swap causes a new \ac{MF} to be loaded, which needs to gain insights about the current context.
+
+However, using the \ac{URL} for state transfer has limitations.
+At some point of a \ac{URL} length, the usability drops when sharing a \ac{URL}, which is too long or when saving it as a bookmark.
+For example, sharing a \ac{URL} with a length of 10.000 characters is unwieldy.
+On the other hand, some context information like security tokens should not be shared via the \ac{URL}.
+\textciteRehm{} also mentioned, that if widgets are used, the \ac{URL} is not suited for context transfer.
+He explains that the intent of a widget is to be used everywhere and it is not clear what the \ac{URL} looks like for any given \ac{MF}.
+Hence, a standard way of constructing the \ac{URL} would be needed.
+This would create more coupling and therefore, \citeauthorRehm{} advises against using this approach for widget context transfer.
+More information on widgets in the \textit{\nameref{cha:requirement_detail_integration_widget}} requirement.
+
+
+
+\paragraph{\ac{HTML} context}
+Another approach is to use \ac{HTML} attributes.
+This can only be used if the application also uses Web Components.
+More about Web Components in the \textit{\nameref{cha:requirement_detail_integration_integration}} requirement.
+Web Components support two ways to transfer information.
+One is to use \ac{HTML} attributes and the other is via properties.
+This approach was mentioned by \textciteRehm{} and \textciteSteyer{}.
+More on Web Components in the section \ref{cha:theory_practice_webcomponent}.
+
+The former is achieved, by simply adding values into the \ac{HTML} document into the correct node.
+Contrary to that, the latter uses the browser \ac{API} to get the \ac{JS} object of the node and then set the value.
+Using \ac{HTML} attributes is simple to use in a framework like, Angular, React or Vue.
+These have an extensive templating support and therefore, only little work is needed to implement the state exchange via \ac{HTML} attributes.
+However, \ac{HTML} attributes are limited to string values.
+
+\textciteRehm{} suggests, that if there is a need to transfer rich data like an object or array, then it should be transferred via a property.
+Properties can also be used to transfer primitive data like strings, numbers and booleans and it is best practice to reflect these as attributes\footnotemark[1]{}.
+In case of rich data, however, reflecting the values in attributes is needlessly expensive and thus, should not be done\footnotemark[1]{}.
+\footnotetext[1]{\url{https://developers.google.com/web/fundamentals/web-components/best-practices\#attributes-properties} (Visited on 08/19/2020)}
+
+\textciteSteyer{} further suggests defining an interface for the data transfer.
+In case of widgets, both the \ac{HTML} attributes and property data transfer offer a valid solution.
+This was mentioned by \textciteRehm{}.
+
+
+
+\paragraph{Shell provides context}
+
+The third approach to exchange the state is that each \ac{MF} requests the context from the shell.
+\textciteOlleck{} suggests providing an \ac{API} which is publicly available from the shell, that has some function to retrieve the current context.
+He mentions that it could also be split up, so that there is a function for each context type.
+As an example, one function can be used to get language information and another to get user information.
+Moreover, he mentions that the number of versions available should be limited to the current and last two versions for instance.
+
+\textciteSteyer{} recommends that the shell should hold some of the context information to pass it on to newly created \acp{MF}.
+This recommendation suites both the \ac{HTML} attribute and shell context providing approach. The same applies for information which is passed from the configuration to a \ac{MF}.
+This was also mentioned by \textciteOlleck{} in the \textit{\nameref{cha:requirement_detail_integration_configuration}} requirement.
+
+
+
+\paragraph{Global Redux store}
+
+The last approach mentioned was the usage of a global Redux store\footnotemark.
+\footnotetext{\url{https://redux.js.org/api/store} (Visited on 09/06/2020)}
+\textciteJovanovic{} mentions, that a Redux store can contain any data and therefore, it can be used to transfer context information.
+He suggests creating a library which is then used for accessing the context information out of the Redux store.
+In the project he worked on, they did not create such a library, but documented how to access it and each \ac{MF} was responsible to access it on its own.
+Lastly, he encourages to use the Redux store for bug fixing purposes.
+A Redux store contains the application flow and therefore reproducing an error is simplified.
+Another aspect is to consider the autonomy between \acp{MF}.
+To maintain it, either use a prefix for sub stores \cite{Dornenburg.2019} or each \ac{MF} uses its own store \cite{Laug.2018b}.
+
+Regarding the question if a Redux store should be used or not, there are different opinions.
+While \textciteJovanovic{}, \textcite{Dornenburg.2019}, \textcite{Laug.2018b} and \textcite{Jackson.2019} suggest using it,  \textciteSteyer{}, \textcite{Leitner.2020} are against it.
+\citeauthor{Laug.2018} was against the usage of a Redux store in April of 2018 and supported the approach in November 2018 \cite{Laug.2018b}.
+So, there seems to be a diversion of opinions about using a Redux store.
+
+
+
+\paragraph{Conclusion}
+
+Sharing context over the \ac{URL} is a simple and effective approach, while using \ac{HTML} attributes is only possible if Web Components are used.
+Using the shell to provide the context does introduce a certain amount of coupling between the \acp{MF} and the shell but can be used if Web Components are not an option.
+Lastly, the Redux store simplifies the bug fixing process, but seems to be dependent on the architects opinion.
+There is no clear indication that the scenario affects the decision on whether to use a Redux store or not.
+This requirement is considered critical by \textciteRehm{}, \textciteSteyer{}, \textciteJovanovic{} and difficult by \textciteOlleck{}.
+
+
+
+
+
+\subsection{Intercommunication}\label{cha:requirement_detail_state_intercommunication}
+
+The \textit{\nameref{cha:requirement_detail_state_intercommunication} (\textbf{Score 10})} requirement evolves around the need of information exchange between \acp{MF}, which is beyond state exchange.
+There are two approaches to achieve this requirement.
+Either the \acp{MF} communicate in the client with each other or indirectly over the server.
+
+
+
+\paragraph{Client communication}
+
+In case that the communication should be handled in the client itself, a message bus approach is commonly used.
+Using such an approach has a low coupling between the \acp{MF}.
+There are two implementations for this approach.
+Either using Custom Events which are browser native or a library is included which simplifies or enhances the process.
+More on that in the section \ref{cha:theory_practice_customevents}.
+
+The Custom Event implementation was mentioned by \textciteSteyer{}, \textcite{Jackson.2019}, \textcite{Grijzen.2019} and \textcite{Dornenburg.2019}.
+Sending Events to manage lifecycle methods is also a possibility explained in the \textit{\nameref{cha:requirement_detail_integration_lifecycle}} requirement.
+Its main advantage is that no additional library is needed, but in some scenarios, this is not sophisticated enough.
+
+Therefore, \citeauthorSteyer{} and \textcite{Leitner.2020} suggested using a library like RxJS to handle intercommunication.
+\citeauthorSteyer{} mentioned as an example a Behavior Subject.
+It requires an initial value and whenever a \ac{MF} subscribes, the latest value is directly emitted, as well as whenever some \ac{MF} publishes a new value\footnotemark{}.
+\footnotetext{\url{https://www.learnrxjs.io/learn-rxjs/subjects/behaviorsubject} (Visited on 08/19/2020)}
+
+
+
+\paragraph{Server communication}
+
+Another approach to manage intercommunication is by using the backend as a communication platform.
+\citeauthorSteyer{} and \citeauthor{Dornenburg.2019} mention that a WebSocket connection of server send events could be used for this purpose.
+\citeauthorSteyer{} continues by pointing out that this is rarely used but is necessary for the \textit{Hyperlink Integration}.
+A variation of this approach was suggested by not only \citeauthorSteyer{} and \citeauthor{Dornenburg.2019}, but also \textciteJovanovic{} and \textcite{Laug.2018}.
+If the backend architecture \ac{BFF} is used, then these dedicated microservices can be used to communicate with each other.
+\ac{BFF} is further discussed in the Theory chapter in \textit{\nameref{cha:theory_extensions_bff}}.
+Moreover, \citeauthor{Laug.2018} points out that this approach allows a practice called \ac{CDC} testing.
+He also draws attention to the fact, that there is no good \ac{CDC} Testing approach for the client side.
+That is the reason, he was using the server communication approach in the first place.
+\citeauthorJovanovic{} also mentions that in the end, he did not use this approach, because it was too much overhead.
+
+
+
+\paragraph{Conclusion}
+
+In case of intercommunication, there is either the option for a hardly testable approach in the client-side or a testable approach with overhead on the server-side.
+The server-side approach is arguably a workaround for the fact, that there is currently no good client-side \ac{CDC} testing, which was pointed out by \textcite{Laug.2018}
+Apart from that, this requirement is considered critically by \textciteOlleck{}.
+
+
+
+
+
+\subsection{Security}\label{cha:requirement_detail_state_security}
+
+The next requirement is \textit{\nameref{cha:requirement_detail_state_security} (\textbf{Score 5})}, which addresses authentication and authorization for an application.
+All experts mentioned a token-based authentication technique and therefore, only approaches for this technique are explained.
+The first thing to consider is, where to handle authentication and authorization.
+\textcite{Laug.2018} believes that authentication is a critical task and that it should be handled by the shell, while authorization should be handled by each \ac{MF}.
+Hence, sharing the authentication in the shell.
+More about sharing logic over the shell in the \textit{\nameref{cha:requirement_detail_integration_sharedlogic}} requirement.
+
+\textcite{Laug.2018} pointed out, that in his scenario it is not a huge problem if authorization goes wrong, because it is an internal \nameref{cha:scenarios_enterprise}.
+He explains, that by providing the application over the same domain, \ac{HTTP} cookies can be used.
+This is only possible because everything is provided via the same origin.
+Besides \citeauthor{Laug.2018}, this was also mentioned by \textciteSteyer{} and he further points out, that it is the current recommended way of handling tokens\footnotemark.
+\footnotetext{\url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies} (Visited on 08/20/2020)}
+
+There are two other approaches.
+The first is pointed out by \textciteSteyer{} and is sharing the token via a message bus.
+In this case, the shell informs each \ac{MF} about the token.
+More about message bus approaches in the \textit{\nameref{cha:requirement_detail_state_exchange}} requirement.
+On the other hand, the second approach is using the local storage, which was the recommended way prior to \ac{HTTP} cookies.
+This was mentioned by \textciteJovanovic{}.
+
+The experts only mentioned token sharing approaches, apart form \textcite{Laug.2018}.
+He pointed out what the responsibilities in the application are.
+This requirement is considered critical by \textciteSteyer{}.
+
+
+
+
+
+\subsection{Other requirements}
+
+In the state requirement category, only the \textit{\nameref{cha:requirement_detail_state_internationalization}} requirement has a score of less than 5.
+
+\paragraph{Internationalization}\label{cha:requirement_detail_state_internationalization}
+
+The \textit{\nameref{cha:requirement_detail_state_internationalization} (\textbf{Score 2})} requirement addresses either a language change and \ac{MF} changes based on geographical location.
+\textciteSteyer{} points out, that in case of a language change feature, the approach he used was always the same in any project:
+Some part in the application must raise an event that informs all \acp{MF} about the language change and each \ac{MF} is responsible to change its language whenever requested.
+This event is transmitted via a message bus approach.
+More about message bus approaches in the \textit{\nameref{cha:requirement_detail_state_exchange}} requirement.
+
+The second feature is about \ac{MF} changes based on the geographical location.
+This was explained by \textciteMezzalira{}.
+He points out, that the application can swap out \acp{MF} based on the country it is accessed from.
+The application he is working on can only support this feature, because it uses a configuration file.
+More about configuring the application in the \textit{\nameref{cha:requirement_detail_integration_configuration}} requirement.
