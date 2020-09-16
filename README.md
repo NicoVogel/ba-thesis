@@ -2,6 +2,11 @@
 
 # Bachelor Thesis: Evaluation of micro frontend shells for a prototypical generalized shell implementation
 
+A build version can be found in the actions tab.
+
+[Direct download](https://github.com/NicoVogel/ba-thesis/suites/1165276101/artifacts/16928631)
+
+> You need to be logged in to download the document
 
 ## Abstract
 
