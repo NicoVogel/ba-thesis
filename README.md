@@ -6,8 +6,6 @@ A build version can be found in the releases.
 
 [Direct download](https://github.com/NicoVogel/ba-thesis/releases/download/final/BA_NicoVogel.pdf)
 
-> You need to be logged in to download the document
-
 ## Abstract
 
 Micro frontend is a concept to compose one frontend from multiple decoupled frontend applications.
